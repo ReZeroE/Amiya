@@ -1,0 +1,1 @@
+recursive-include src/amiya_module/apps *.json

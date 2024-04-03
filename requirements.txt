@@ -1,0 +1,5 @@
+pynput
+pyautogui
+tabulate
+setuptools
+elevate
