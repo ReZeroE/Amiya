@@ -2,5 +2,9 @@
     "id": 1,
     "name": "Final Fantasy XIV",
     "exe_path": "abc/abc.exe",
+    "tags": [
+        "final-fantasy-xiv",
+        "ffxiv"
+    ],
     "verified": false
 }

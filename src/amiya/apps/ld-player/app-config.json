@@ -2,5 +2,9 @@
     "id": 2,
     "name": "LD Player",
     "exe_path": "E:\\LDPlayer\\LDPlayer9\\dnplayer.exe",
+    "tags": [
+        "ld-player",
+        "ld"
+    ],
     "verified": true
 }

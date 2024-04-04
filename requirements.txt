@@ -1,5 +1,7 @@
+psutil
 pynput
 pyautogui
 tabulate
 setuptools
 elevate
+termcolor

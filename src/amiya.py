@@ -26,4 +26,7 @@ from amiya.apps_manager.apps_manager import AppsManager
 am = AppsManager()
 # am.create_app("Chrome", "C:\Program Files\Google\Chrome\Application\chrome.exe")
 # am.create_app("Final Fantasy XIV", "abc/abc.exe")
-am.delete_app()
+# am.create_app("LD Player", "E:\LDPlayer\LDPlayer9\dnplayer.exe")
+# am.print_apps()
+am.add_tag()
+am.remove_tag()

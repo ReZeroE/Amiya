@@ -38,7 +38,7 @@ setup(
     python_requires='>=3.6, <4',
     entry_points={
         'console_scripts': [
-            'amiya=amiya.entrypoints.entrypoints:main',
+            'amiya=amiya.entrypoints.entrypoints:execute_command',
         ],
     },
     classifiers=[
