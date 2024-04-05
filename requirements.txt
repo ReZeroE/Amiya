@@ -5,3 +5,4 @@ tabulate
 setuptools
 elevate
 termcolor
+schedule

@@ -33,17 +33,29 @@ class AppsManager:
     # ======================================
     # ===========| CREATE APPS | ===========
     # ======================================
+    
     def create_app(self, name, exe_path):
         app = App(name, exe_path)                       # Create a new app object
         app.id = len(self.apps)                         # Assign ID to app (int)
         app.tags = [app.get_reformatted_app_name()]     # Assign a default tag during app creation
         
+        self.print_app(app)                             # Tabulate and print app
+        
+        if app.verified == False:
+            ipt = input(atext(f"The application's path failed to be verified (invalid path to .exe), would you like to add this app anyways? [y/n] ", log_type=LogType.WARNING))
+            if ipt.lower() != "y": return
+        
         if os.path.isfile(app.app_config_filepath):
-            raise Exception("App already exists. Can't be recreated.")    
+            raise Amiya_AppExistsException(app.name)    
         
         self.__create_app_dir(app)                      # Create app dir if it doesn't exist already
         self.__write_app_config(app)                    # Create app config file
         self.apps[app.id] = app                         # Add to apps dict (key: app_id, value: app_obj)
+    
+    def create_app_automated(self):
+        app_name = input(atext(f"New Application's Name: "))
+        app_path = input(atext(r"New Application's Path (E:\SomePath\Application.exe): "))
+        self.create_app(app_name, app_path)
     
     def __create_app_dir(self, app: App):
         if not os.path.exists(app.app_config_dirpath):
@@ -62,10 +74,10 @@ class AppsManager:
     # ======================================
     def delete_app(self):
         self.print_apps()
-        user_input = input(f"Which app would you like to DELETE? (0-{len(self.apps)-1}) ")
+        user_input = input(atext(f"Which app would you like to DELETE? (0-{len(self.apps)-1}) "))
         
         app = self.apps[int(user_input)]
-        user_input = input(f"Are you sure you would like to delete app '{app.name}'? [y/n] ")
+        user_input = input(atext(f"Are you sure you would like to delete app '{app.name}'? [y/n] "))
         if user_input.lower() != "y":
             return
         
@@ -101,6 +113,10 @@ class AppsManager:
     # ======================================
     # ============| VIEW APPS | ============
     # ======================================
+    def print_app(self, app: App, format="fancy_grid"):
+        tabulated_apps = AppsViewer.tabulate_app(app, tablefmt=format)
+        print(tabulated_apps)
+    
     def print_apps(self, format="fancy_grid"):
         tabulated_apps = AppsViewer.tabulate_apps(self.apps, tablefmt=format)
         print(tabulated_apps)

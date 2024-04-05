@@ -22,8 +22,14 @@
 
 class AmiyaBaseException(Exception):
     __module__ = 'builtins'
-    def __init__(self, message):
+    def __init__(self, message="An unknown error has occurred."):
         super().__init__(message)
+
+class Amiya_AppExistsException(Exception):
+    __module__ = 'builtins'
+    def __init__(self, app_name):
+        self.message = f"The app ({app_name}) already exists under Amiya."
+        super().__init__(self.message)
 
 class Amiya_AppInvalidPathException(Exception):
     __module__ = 'builtins'
@@ -42,6 +48,7 @@ class Amiya_NoSuchTagException(Exception):
     def __init__(self, tag):
         self.message = f"The tag ({tag}) does not coorespond to any of the apps."
         super().__init__(self.message)    
+
 
 class AmiyaOSNotSupported(Exception):
     __module__ = 'builtins'

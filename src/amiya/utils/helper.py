@@ -28,5 +28,3 @@ def aprint(text, log_type: LogType = LogType.NORMAL, end="\n"):
     rtext = atext(text, log_type)
     print(rtext, end=end, file=sys.stdout)
     sys.stdout.flush()
-    
-aprint("hello world", log_type=LogType.SUCCESS)

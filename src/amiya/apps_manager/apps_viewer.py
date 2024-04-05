@@ -13,6 +13,12 @@ class AppsViewer:
         return tabulate(table, headers, tablefmt=tablefmt)
     
     @staticmethod
+    def tabulate_app(app: App, tablefmt) -> str:
+        table = [[app.name, app.exe_path, app.verified, ", ".join(app.tags)]]
+        headers = ["App Name", "Path", "Verified", "Tags"]
+        return tabulate(table, headers, tablefmt=tablefmt)
+    
+    @staticmethod
     def tabulate_tags(tags, tablefmt):
         table = [[idx, tag] for idx, tag in enumerate(tags)]
         headers = ["Index", "Tag"]
