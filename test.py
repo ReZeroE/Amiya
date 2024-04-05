@@ -40,11 +40,36 @@
 #     schedule.run_pending()
 #     time.sleep(1)
 
-import webbrowser
-search_terms = [" hello world"]
+import os
+import shutil
 
-# ... construct your list of search terms ...
+def print_centered(text):
+    # Get the size of the terminal
+    terminal_width, terminal_height = shutil.get_terminal_size((80, 20))  # Default size
+    
+    # Split the text into lines
+    lines = text.split('\n')
+    
+    # Find the maximum width of the text block
+    max_width = max(len(line) for line in lines)
+    
+    # Calculate the left padding to center the text
+    left_padding = (terminal_width - max_width) // 2
+    
+    # Print each line with the necessary left padding
+    for line in lines:
+        print(' ' * left_padding + line)
 
-for term in search_terms:
-    url = "https://www.google.com.tr/search?q={}".format(term)
-    webbrowser.open_new_tab(url)
+text = r'''
+      _    __  __ _____   __ _       ____ _     ___  
+     / \  |  \/  |_ _\ \ / // \     / ___| |   |_ _| 
+    / _ \ | |\/| || | \ V // _ \   | |   | |    | |  
+   / ___ \| |  | || |  | |/ ___ \  | |___| |___ | |  
+  /_/   \_\_|  |_|___| |_/_/   \_\  \____|_____|___| 
+  
+A lightweight cross-platform automation tool for daily tasks!
+              https://github.com/ReZeroE/Amiya
+                        By Kevin L.
+'''
+
+print_centered(text)
