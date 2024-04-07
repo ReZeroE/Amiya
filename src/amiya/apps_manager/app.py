@@ -30,6 +30,9 @@ class App:
     
         self.app_config_dirpath     = os.path.join(APPS_DIRECTORY, self.get_reformatted_app_name())
         self.app_config_filepath    = os.path.join(self.app_config_dirpath, APP_CONFIG_FILENAME)
+        
+        self.app_action_handler = None
+        self.app_sequence_handler = None
 
 
     def __str__(self) -> str:
