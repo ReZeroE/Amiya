@@ -31,6 +31,8 @@ class App:
         self.app_config_dirpath     = os.path.join(APPS_DIRECTORY, self.get_reformatted_app_name())
         self.app_config_filepath    = os.path.join(self.app_config_dirpath, APP_CONFIG_FILENAME)
         
+        # TODO: Implement both action and sequence handler here so that any App object can access
+        #   their cooresponding automation/sequence configs (required at the moment for the schedule_handler)
         self.app_action_handler = None
         self.app_sequence_handler = None
 
@@ -95,7 +97,7 @@ class App:
                     config["exe_path"], 
                     config["tags"]
                 )
-                app.id = config["id"]
+                app.id = int(config["id"])
                 return app
         except Exception as ex:
             raise ex

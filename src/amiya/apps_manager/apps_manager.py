@@ -13,7 +13,7 @@ class AppsManager:
         self.__initial_setup()
         self.apps : dict[int, App] = self.__read_apps()
     
-    
+
     # ======================================
     # ============| READ APPS | ============
     # ======================================
@@ -36,7 +36,7 @@ class AppsManager:
     
     def create_app(self, name, exe_path):
         app = App(name, exe_path)                       # Create a new app object
-        app.id = len(self.apps)                         # Assign ID to app (int)
+        app.id = self.__get_next_app_id()               # Assign ID to app (int)
         app.tags = [app.get_reformatted_app_name()]     # Assign a default tag during app creation
         
         self.print_app(app)                             # Tabulate and print app
@@ -72,6 +72,7 @@ class AppsManager:
     # ======================================
     # ===========| DELETE APP | ============
     # ======================================
+    # TODO: Application ID isn't shifted forward when an app is deleted. 
     def delete_app(self):
         self.print_apps()
         user_input = input(atext(f"Which app would you like to DELETE? (0-{len(self.apps)-1}) "))
@@ -179,7 +180,9 @@ class AppsManager:
                 return app
         return None
     
-    
+    def __get_next_app_id(self):
+        return max(self.apps.keys()) + 1
+
     
 # am = AppManager()
 # am.create_app("Arknights", "abc/abc.exe")
