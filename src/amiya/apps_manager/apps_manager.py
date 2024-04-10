@@ -7,6 +7,7 @@ from amiya.apps_manager.apps_viewer import AppsViewer
 from amiya.utils.constants import APPS_DIRECTORY
 from amiya.exceptions.exceptions import *
 from amiya.utils.helper import *
+from amiya.automation_handler.actions_controller.units.sequence import ActionsSequence
 
 class AppsManager:
     def __init__(self):
@@ -183,6 +184,36 @@ class AppsManager:
     def __get_next_app_id(self):
         return max(self.apps.keys()) + 1
 
+
+
+    # =======================================================
+    # ================| AUTOMATION RELATED | ================
+    # =======================================================
+
+    def list_sequences(self):
+        self.print_apps()
+        user_input = input(atext(f"Which app would you like to see the automation sequences of? (0-{len(self.apps)-1}) "))
+        app = self.apps[int(user_input)]
+                          
+        sequences: list[ActionsSequence] = []
+        sequences = app.actions_controller.load_all_sequences()
+        
+        for seq in sequences:
+            print(seq.sequence_name)
+
+    def list_sequences_with_tag(self, tag: str):
+        tag = self.__parse_tag(tag)
+        if self.__verify_tag_exists(tag) == False:  # Tag does not exist!
+            raise Amiya_NoSuchTagException(tag)
+        
+        app = self.__get_app_by_tag(tag)
+        
+        sequences: list[ActionsSequence] = []
+        sequences = app.actions_controller.load_all_sequences()
+        
+        for seq in sequences:
+            print(seq.sequence_name)
+        
     
 # am = AppManager()
 # am.create_app("Arknights", "abc/abc.exe")

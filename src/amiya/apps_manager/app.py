@@ -6,6 +6,7 @@ import psutil
 import subprocess
 from amiya.utils.constants import APPS_DIRECTORY, FOCUS_PID_EXE
 from amiya.exceptions.exceptions import *
+from amiya.automation_handler.actions_controller.actions_controller import ActionsController
 
 
 APP_CONFIG_FILENAME = "app-config.json"
@@ -31,10 +32,9 @@ class App:
         self.app_config_dirpath     = os.path.join(APPS_DIRECTORY, self.get_reformatted_app_name())
         self.app_config_filepath    = os.path.join(self.app_config_dirpath, APP_CONFIG_FILENAME)
         
-        # TODO: Implement both action and sequence handler here so that any App object can access
-        #   their cooresponding automation/sequence configs (required at the moment for the schedule_handler)
-        self.app_action_handler = None
-        self.app_sequence_handler = None
+        AUTOMATION_CONFIG_DIR       = os.path.join(self.app_config_dirpath, "automation")
+        self.actions_controller     = ActionsController(config_dir=AUTOMATION_CONFIG_DIR)
+        
 
 
     def __str__(self) -> str:
@@ -68,7 +68,6 @@ class App:
                         return True
                     return False
                 except Exception as ex:
-                    print(ex.__traceback__)
                     raise AmiyaBaseException("Failed to identify the app's process.")
         return False
     
@@ -114,3 +113,7 @@ class App:
     def __verify_app_path(self):
         return len(self.name) > 0 and os.path.isfile(self.exe_path)
 
+    def __init_path(self, path):
+        if not os.path.isdir(path):
+            os.mkdir(path)
+            

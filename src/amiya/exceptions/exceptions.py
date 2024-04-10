@@ -49,6 +49,11 @@ class Amiya_NoSuchTagException(Exception):
         self.message = f"The tag ({tag}) does not coorespond to any of the apps."
         super().__init__(self.message)    
 
+class Amiya_ConfigDoesNotExistException(Exception):
+    __module__ = 'builtins'
+    def __init__(self, config_file):
+        self.message = f"The config file '{config_file}' does not exist and therefore cannot be read."
+        super().__init__(self.message) 
 
 class AmiyaOSNotSupported(Exception):
     __module__ = 'builtins'

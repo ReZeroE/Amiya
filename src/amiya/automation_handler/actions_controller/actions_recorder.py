@@ -1,19 +1,16 @@
 import time
 from pynput import mouse, keyboard
 
-try:
-    from amiya.automation_handler.action_controller.actions import Action, MouseAction, KeyboardAction
-except:
-    from actions import Action, MouseAction, KeyboardAction
-
-class ActionRecorder():
-    def __init__(self):
-        self.actions: list[Action] = []
+from amiya.automation_handler.actions_controller.units.action import Action, MouseAction, KeyboardAction
+from amiya.automation_handler.actions_controller.units.sequence import ActionsSequence
+class ActionsRecorder():
+    def __init__(self, new_sequence_name):
+        self.sequence = ActionsSequence(new_sequence_name)
         self.last_click_time = None
         self.is_recording = False
         
     def record(self):
-        from elevate import elevate; elevate()
+        # from elevate import elevate; elevate()
         print("Recording starting after the UP-ARROW key is pressed.")
         
         mouse_listener = mouse.Listener(on_click=self.__on_mouse_action)
@@ -23,9 +20,7 @@ class ActionRecorder():
             keyboard.Listener(on_press=self.__on_keyboard_action) as keyboard_listener:
             keyboard_listener.join()
             
-        for action in self.actions:
-            print(action)
-            
+        self.sequence.print_sequence()
         time.sleep(1)
     
     def __on_mouse_action(self, x, y, button, pressed):
@@ -33,22 +28,23 @@ class ActionRecorder():
             now = time.time()
             delay = now - self.last_click_time if self.last_click_time else float(0)
             clicked = button == mouse.Button.left # If left is clicked, the click is registered as "clicked", else if right is clicked, only the mouse movement will be registered.
-            self.actions.append(MouseAction((x, y), delay, clicked))
+            self.sequence.add(MouseAction((x, y), delay, clicked))
             self.last_click_time = now
 
     def __on_keyboard_action(self, key):
         if key == keyboard.Key.up and self.is_recording == False:
             print("Recording in-progress...")
-            self.is_recording = True                                    # Start recording on Enter key press
+            self.is_recording = True                                    # Start recording on up key press
         elif key == keyboard.Key.up and self.is_recording == True:
-            self.is_recording = False                                   # Optional: Use to pause recording instead of stopping
+            self.is_recording = False
             return False                                                # Stop listener on Enter key press (2nd time)
 
-        now = time.time()
-        delay = now - self.last_click_time if self.last_click_time else float(0)
-        self.actions.append(KeyboardAction(key, delay))
-        self.last_click_time = now
+        if self.is_recording:                                           # Record only if is_recording is set to True
+            now = time.time()
+            delay = now - self.last_click_time if self.last_click_time else float(0)
+            self.sequence.add(KeyboardAction(key, delay))
+            self.last_click_time = now
         
 if __name__ == "__main__":
-    ar = ActionRecorder()
+    ar = ActionsRecorder()
     ar.record()
