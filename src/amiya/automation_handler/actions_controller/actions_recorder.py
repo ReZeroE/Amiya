@@ -3,15 +3,21 @@ from pynput import mouse, keyboard
 
 from amiya.automation_handler.actions_controller.units.action import Action, MouseAction, KeyboardAction
 from amiya.automation_handler.actions_controller.units.sequence import ActionsSequence
+
+from amiya.utils.helper import *
+
 class ActionsRecorder():
     def __init__(self, new_sequence_name):
         self.sequence = ActionsSequence(new_sequence_name)
+        self.sequence.set_date_created_to_current()
+        
         self.last_click_time = None
         self.is_recording = False
         
+        
     def record(self):
         # from elevate import elevate; elevate()
-        print("Recording starting after the UP-ARROW key is pressed.")
+        aprint("Recording starting after the UP-ARROW key is pressed.", log_type=LogType.WARNING)
         
         mouse_listener = mouse.Listener(on_click=self.__on_mouse_action)
         keyboard_listener = keyboard.Listener(on_press=self.__on_keyboard_action)
@@ -33,7 +39,7 @@ class ActionsRecorder():
 
     def __on_keyboard_action(self, key):
         if key == keyboard.Key.up and self.is_recording == False:
-            print("Recording in-progress...")
+            aprint("Recording in-progress (press the UP-ARROW key again to stop)...")
             self.is_recording = True                                    # Start recording on up key press
         elif key == keyboard.Key.up and self.is_recording == True:
             self.is_recording = False
@@ -46,5 +52,5 @@ class ActionsRecorder():
             self.last_click_time = now
         
 if __name__ == "__main__":
-    ar = ActionsRecorder()
+    ar = ActionsRecorder() 
     ar.record()

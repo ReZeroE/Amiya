@@ -3,15 +3,16 @@ import os
 # ==================================
 # ==========| CONSTANTS | ==========
 # ==================================
-BASENAME = "Amiya Arknights Assistant"
-CONFIG_NAME = "Amiya Config"
+BASENAME        = "Amiya"
+CONFIG_NAME     = "Amiya Config"
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 # ==================================
 # ============| PATHS | ============
 # ==================================
 __AMIYA_DIRECTORY   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 APPS_DIRECTORY      = os.path.join(__AMIYA_DIRECTORY, "apps")
-BIN_DIRECTORY       = os.path.join(__AMIYA_DIRECTORY, "bins")
+BIN_DIRECTORY       = os.path.join(__AMIYA_DIRECTORY, "bin")
 
 # ==================================
 # =========| EXECUTABLES | =========

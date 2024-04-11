@@ -1,7 +1,9 @@
 import os
+import re
 import sys
 from enum import Enum
 from termcolor import colored
+from amiya.utils.constants import BASENAME # "Amiya"
 
 def check_platform():
     """
@@ -19,12 +21,17 @@ class LogType(Enum):
     WARNING = "yellow"
     ERROR   = "red"
 
-def atext(text, log_type: LogType = LogType.NORMAL):
-    prefix = colored("Amiya", "cyan")
+def atext(text: str, log_type: LogType = LogType.NORMAL):
+    prefix = colored(BASENAME, "cyan")
     rtext = colored(text, log_type.value)
     return f"[{prefix}] {rtext}"
+
+def aprint(text: str, log_type: LogType = LogType.NORMAL, end="\n", new_line_no_prefix=True):
+    # The new_line_no_prefix param coupled with \n in the text param will put the
+    # text after the new line character on the next line, but without a prefix.
+    if "\n" in text and new_line_no_prefix == True:
+        text = text.replace("\n", f"\n        ")
     
-def aprint(text, log_type: LogType = LogType.NORMAL, end="\n"):
     rtext = atext(text, log_type)
     print(rtext, end=end, file=sys.stdout)
     sys.stdout.flush()

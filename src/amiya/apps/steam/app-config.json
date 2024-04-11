@@ -1,0 +1,9 @@
+{
+    "id": 6,
+    "name": "Steam",
+    "exe_path": "E:\\Steam\\steam.exe",
+    "tags": [
+        "steam"
+    ],
+    "verified": true
+}

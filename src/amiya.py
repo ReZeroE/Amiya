@@ -25,5 +25,21 @@ from amiya.automation_handler.actions_controller.actions_controller import Actio
 
 am = AppsManager()
 
+# am.record_sequence()
+# am.list_sequences()
+am.run_sequence()
 
+# # am.create_app("Chrome", "C:\Program Files\Google\Chrome\Application\chrome.exe")
+# # am.create_app("Final Fantasy XIV", "abc/abc.exe")
+# # am.create_app("LD Player", "E:\LDPlayer\LDPlayer9\dnplayer.exe")
+# # am.print_apps()
+# am.remove_tag()
+
+
+
+
+# ac = ActionsController("D:/Workspace/Amiya/src/amiya/apps/chrome/automation")
+# ac.record_new_sequence("test_auto2", overwrite=False)
+# sequence = ac.load_sequence("test_auto.json")
+# sequence.run()
 

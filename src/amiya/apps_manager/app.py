@@ -7,12 +7,13 @@ import subprocess
 from amiya.utils.constants import APPS_DIRECTORY, FOCUS_PID_EXE
 from amiya.exceptions.exceptions import *
 from amiya.automation_handler.actions_controller.actions_controller import ActionsController
+import elevate
 
-
-APP_CONFIG_FILENAME = "app-config.json"
+APP_AUTOMATION_DIRNAME  = "automation"
+APP_CONFIG_FILENAME     = "app-config.json"
 
 class App:
-    def __init__(self, name: str, exe_path: str, tags: list = []):
+    def __init__(self, name: str, exe_path: str, tags: list = [], new: bool = False):
         self.id         = None      # Assigned automatically by the AppManager at creation
         self.name       = name
         self.exe_path   = exe_path
@@ -31,10 +32,10 @@ class App:
     
         self.app_config_dirpath     = os.path.join(APPS_DIRECTORY, self.get_reformatted_app_name())
         self.app_config_filepath    = os.path.join(self.app_config_dirpath, APP_CONFIG_FILENAME)
-        
-        AUTOMATION_CONFIG_DIR       = os.path.join(self.app_config_dirpath, "automation")
-        self.actions_controller     = ActionsController(config_dir=AUTOMATION_CONFIG_DIR)
-        
+        self.app_automation_dirpath = os.path.join(self.app_config_dirpath, APP_AUTOMATION_DIRNAME)
+
+        self.actions_controller = ActionsController(config_dir=self.app_automation_dirpath)
+
 
 
     def __str__(self) -> str:
@@ -43,22 +44,54 @@ class App:
     def __repr__(self) -> str:
         return self.__str__()
 
-    def run(self):
-        if self.verified == True:
+
+    # ========================================
+    # ============| APP CREATOR | ============
+    # ========================================
+    
+    def create_app(self):
+        self.__create_app_dir_strucure()        # Create the app directory structure to hold all the configs (base config and automation config)
+        self.__save_app_config()                # Write the base app config (creates the app)
+        
+    def __create_app_dir_strucure(self):
+        if not os.path.exists(self.app_config_dirpath):     # Create the base app directory (amiya/apps/<app_name>)
+            os.mkdir(self.app_config_dirpath)
+        if not os.path.exists(self.app_automation_dirpath): # Create the app automation directory (amiya/apps/<app_name>/<automation>)
+            os.mkdir(self.app_automation_dirpath)
+
+    def __save_app_config(self):
+        try:
+            with open(self.app_config_filepath, "w") as wf:
+                json.dump(self.to_json(), wf, indent=4)
+        except Exception as ex:
+            raise ex
+
+    # =======================================
+    # ============| APP DRIVER | ============
+    # =======================================
+
+    def run(self) -> bool:
+        if self.verified == True:   
+            elevate.elevate()                                   # Elevate permission to admin
             subprocess.Popen([self.exe_path], shell=True)
             
-            TIMEOUT = 30
-            APP_EXE_NAME = os.path.basename(self.exe_path)
-            starting_time = time.time()
-            while time.time() - starting_time < TIMEOUT:
-                if self.is_running():
-                    return True
-                time.sleep(1)
+            if self.started_successfully():
+                self.bring_to_foreground()
+                return True
             return False
         else:
             raise Amiya_AppInvalidPathException(path=self.exe_path)
 
-    def is_running(self):
+    def started_successfully(self) -> bool:
+        TIMEOUT = 30
+        starting_time = time.time()
+        while time.time() - starting_time < TIMEOUT:
+            if self.is_running():
+                return True
+            time.sleep(1)
+        return False
+
+    def is_running(self) -> bool:
         APP_EXE_NAME = os.path.basename(self.exe_path)
         for p in psutil.process_iter():
             if p.name() == APP_EXE_NAME:
@@ -68,14 +101,19 @@ class App:
                         return True
                     return False
                 except Exception as ex:
-                    raise AmiyaBaseException("Failed to identify the app's process.")
+                    raise AmiyaBaseException("Failed to identify the app's process due to an unknown error.")
         return False
     
     def bring_to_foreground(self):
-        if self.is_running():
-            subprocess.run([FOCUS_PID_EXE, self.process.pid])
-        else:
+        try:
+            if self.is_running():
+                subprocess.run([FOCUS_PID_EXE, str(self.process.pid)], shell=True)
+        except:
             raise AmiyaBaseException(f"The app '{self.name}' is currently not running, therefore can't be brought to foreground.")
+
+    # ==========================================
+    # ============| APP UTILITIES | ============
+    # ==========================================
 
     def to_json(self):
         return {
@@ -110,10 +148,12 @@ class App:
     def get_reformatted_app_name(self):
         return self.name.lower().strip().replace(" ", "-")
     
+    
+    # ==========================================
+    # ==========| HELPER FUNCTIONS | ===========
+    # ==========================================
+    
     def __verify_app_path(self):
         return len(self.name) > 0 and os.path.isfile(self.exe_path)
 
-    def __init_path(self, path):
-        if not os.path.isdir(path):
-            os.mkdir(path)
-            
+

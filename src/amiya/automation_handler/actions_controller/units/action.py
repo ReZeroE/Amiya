@@ -37,7 +37,7 @@ class MouseAction(Action):
         self.delay = delay
         self.click = click
         
-    def execute(self, _):
+    def execute(self):
         '''
         The delay represent the time lag between the current click and the previous click,
         therefore time.sleep() is executed at the start of a new action.
@@ -90,21 +90,23 @@ class KeyboardAction(Action):
 
     def press_key(self, key: str, pynput_keyboard: pynput.keyboard.Controller):
         '''
-        This is going to be difficult to explain, but essentially the keys are recorded using
-        pynput and will be executed using pyautogui. The two packages uses different keyboard's key 
-        formats. Unfortuanately I can't think of a better way implement this at the moment so here it is. 
+        This is going to be a difficult to explain, but essentially the string format keys
+        recorded by pynput can't be re-recognized by pynput for execution. Therefore, a mapping
+        between the string formated keys (collected by pynput itself) and the actual Key object
+        is used to convert the key when trying to execute the keyboard action.
         
-        This will "forcefully" reformat the key value from pynput's version into something 
-        accepted by pyautogui.  
+        There are going to be a wide range of keys that aren't supported including "hotkeys" or
+        a combination of two different keys. This will need to be specified in the documentation.
         '''
-        # TODO: not sure if I can, but find a better way to convert the keys into strings
+        # TODO: find a better way to implement this, if possible
         pynput_key = PYNPUT_KEY_MAPPING.get(key, key)
-        
         try:
             pynput_keyboard.press(pynput_key)
             pynput_keyboard.release(pynput_key)
-        except keyboard.Controller.InvalidKeyException:
-            print(f"Unsupported key: <{key}>")
+        except (keyboard.Controller.InvalidKeyException, ValueError) as ex:
+            # TODO: log this unsupported key as opposed to print it
+            # print(f"Unsupported key: <{key}>")
+            pass
         
     def reformat_key(self, key: keyboard.Key) -> str:
         key: str = str(key).strip().replace("'", "")

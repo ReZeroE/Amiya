@@ -1,5 +1,6 @@
 # Ignore Test Filetest.py
 **/test.py
+**/test*.py
 
 
 # Byte-compiled / optimized / DLL files

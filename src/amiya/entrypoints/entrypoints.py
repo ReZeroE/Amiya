@@ -52,6 +52,28 @@ class AmiyaEntrypointHandler:
             self.search_handler.search_automated()
 
 
+    def list_automation_sequences(self, args):
+        if args.tag:
+            self.apps_manager.list_sequences_with_tag(args.tag)
+        else:
+            self.apps_manager.list_sequences()
+
+    def record_automation_sequences(self, args):
+        if args.tag:
+            self.apps_manager.record_sequence_with_tag(args.tag)
+        else:
+            self.apps_manager.record_sequence()
+
+    def run_automations_sequences(self, args):
+        if args.tag:
+            if args.seq_name:
+                self.apps_manager.run_sequence_with_tag(args.tag, args.seq_name)
+            else:
+                self.apps_manager.run_sequence_with_tag(args.tag)
+        else:
+            self.apps_manager.run_sequence()
+
+
 def execute_command():
     entrypoint_handler = AmiyaEntrypointHandler()
     
@@ -93,11 +115,25 @@ def execute_command():
     start_parser.set_defaults(func=entrypoint_handler.remove_tag)
     
     
-    
     start_parser = subparsers.add_parser('search', help='Initiate a search on the default browser')
     start_parser.add_argument('search_content', nargs='*', default=None, help='Content of the search')
     start_parser.set_defaults(func=entrypoint_handler.search)
     
+    
+    
+    start_parser = subparsers.add_parser('list-auto', help='List all the automation sequences of the application')
+    start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application')
+    start_parser.set_defaults(func=entrypoint_handler.list_automation_sequences)
+    
+    start_parser = subparsers.add_parser('record-auto', help='Record an automation sequences of the application')
+    start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application')
+    start_parser.set_defaults(func=entrypoint_handler.record_automation_sequences)
+
+    
+    start_parser = subparsers.add_parser('run-auto', help='Record an automation sequences of the application')
+    start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application')
+    start_parser.add_argument('seq_name', nargs='?', default=None, help='Name of the sequence to run')
+    start_parser.set_defaults(func=entrypoint_handler.run_automations_sequences)
     
     
     args = parser.parse_args()
@@ -105,6 +141,6 @@ def execute_command():
         try:
             args.func(args)
         except KeyboardInterrupt:
-            print("\nKeybord Interupt!")
+            print("\n\nKeybord Interupt! Amiya Exited.")
     else:
         parser.print_help() # If no arguments were provided, show help

@@ -6,10 +6,10 @@ from amiya.automation_handler.actions_controller.units.sequence import ActionsSe
 from amiya.automation_handler.actions_controller.actions_recorder import ActionsRecorder
 from amiya.exceptions.exceptions import *
 
+
 class ActionsController:
     def __init__(self, config_dir):
         self.actions_config_dir = config_dir
-        self.__create_actions_dir()
         
         
     def load_sequence(self, sequence_name) -> ActionsSequence:
@@ -27,7 +27,7 @@ class ActionsController:
         try:
             raw_sequence_json_config = config_handler.load_config()         # Loads the sequence config file
             
-            sequence = ActionsSequence(SEQUENCE_NAME)                       # Create new empty sequence object
+            sequence = ActionsSequence()                                    # Create new empty sequence object
             sequence.parse_config(raw_sequence_json_config)                 # Parses the json config into a sequence object
             
         except Amiya_ConfigDoesNotExistException:
@@ -35,7 +35,7 @@ class ActionsController:
         return sequence
         
     
-    def load_all_sequences(self):
+    def load_all_sequences(self) -> list[ActionsSequence]:
         sequences: list[ActionsSequence] = []
         sequence_name_list = os.listdir(self.actions_config_dir)                            # List all file/dir names in the automation folder
         for seq_filename in sequence_name_list:
@@ -45,13 +45,15 @@ class ActionsController:
         return sequences
     
     
-    def record_new_sequence(self, new_seq_name, overwrite=False):
+    def record_new_sequence(self, new_seq_name, overwrite=False) -> ActionsSequence:
         """
         Function responsible for recording new action sequences.
         
         1. Initializes a ActionsRecorder object that is responsible for recording and tracking all user actions.
         2. Convert the recording (ActionsRecorder's ActionsSequence object) into JSON format
         3. Saves the JSON in the corresponding automation folder for the App (using the ConfigHandler). 
+        
+        Returns the recorded action sequence
         """
         NEW_SEQUENCE_NAME = self.__reformat_sequence_name(new_seq_name)
         NEW_SEQUENCE_FILENAME = self.__get_sequence_filename(new_seq_name)
@@ -61,15 +63,15 @@ class ActionsController:
         
         action_recorder.record()                                                    # Record mouse actions until "up-arrow" is pressed
         json_actions = action_recorder.sequence.to_json()                           # Convert the ActionsSequence object into a list of JSON objects
-        json_actions = json_actions[1:]                                             # Remove the leading action (the recording startup action)
         success = config_handler.save_config(json_actions, overwrite=overwrite)     # Write JSON actions to config
         assert(success == True)
+        
+        return action_recorder.sequence # Returns the recorded action sequence if successful
     
-    
-    def __create_actions_dir(self):
-        if not os.path.exists(self.actions_config_dir):
-            os.mkdir(self.actions_config_dir)
-            
+
+    # ======================================
+    # ===========| HELPER FUNCTIONS | ===========
+    # ======================================
     def __get_sequence_name(self, filename: str):
         return filename.strip().lower().replace(".json", "")
             
