@@ -153,7 +153,7 @@ class AppsManager:
                 )
         
         app.add_tag(new_tag)
-        self.__save_app_config(app)
+        app.save_app_config()
     
     def remove_tag(self):
         self.print_apps()
@@ -167,7 +167,7 @@ class AppsManager:
             app.remove_tag(removing_tag)
         except ValueError:
             raise Amiya_NoSuchTagException(removing_tag)
-        self.__save_app_config(app)
+        app.save_app_config()
     
     def __parse_tag(self, tag: str):
         return tag.strip()

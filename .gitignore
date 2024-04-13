@@ -1,7 +1,7 @@
 # Ignore Test Filetest.py
 **/test.py
 **/test*.py
-
+**/tmp.*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

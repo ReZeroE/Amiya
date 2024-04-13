@@ -52,7 +52,14 @@ class App:
     
     def create_app(self):
         self.__create_app_dir_strucure()        # Create the app directory structure to hold all the configs (base config and automation config)
-        self.__save_app_config()                # Write the base app config (creates the app)
+        self.save_app_config()                # Write the base app config (creates the app)
+        
+    def save_app_config(self):
+        try:
+            with open(self.app_config_filepath, "w") as wf:
+                json.dump(self.to_json(), wf, indent=4)
+        except Exception as ex:
+            raise ex
         
     def __create_app_dir_strucure(self):
         if not os.path.exists(self.app_config_dirpath):     # Create the base app directory (amiya/apps/<app_name>)
@@ -60,12 +67,6 @@ class App:
         if not os.path.exists(self.app_automation_dirpath): # Create the app automation directory (amiya/apps/<app_name>/<automation>)
             os.mkdir(self.app_automation_dirpath)
 
-    def __save_app_config(self):
-        try:
-            with open(self.app_config_filepath, "w") as wf:
-                json.dump(self.to_json(), wf, indent=4)
-        except Exception as ex:
-            raise ex
 
     # =======================================
     # ============| APP DRIVER | ============
