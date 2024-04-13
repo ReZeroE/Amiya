@@ -14,10 +14,11 @@ Amiya is a easy-to-use and versatile cross-platform application and game automat
 
 <div align="center">
     <p style="padding-bottom: 0">
-        <img src="src/amiya/resources/amiya-cli-3.png" alt="Amiya Icon" width="70%" height="auto" style="border-radius: 10px;">
+        <img src="src/amiya/resources/amiya-cli-3.png" alt="Amiya Icon" width="80%" height="auto" style="border-radius: 10px;">
     </p>
     <!-- <span style="color: #093163">A lightweight cross-platform automation tool for daily tasks!</span> -->
 </div>
+
 
 
 The primary features supported by the `amiya` package are:
@@ -61,7 +62,7 @@ $ amiya add-app
 ╘════════════╧══════════════════════════════╧════════════╧════════╛
 ``` -->
 
-<img src="src/amiya/resources/code_snippets/add-app.png" alt="Amiya Icon" width="70%" height="auto" style="border-radius: 10px;">
+<img src="src/amiya/resources/code_snippets/add-app.png" alt="Amiya Icon" width="80%" height="auto" style="border-radius: 10px;">
 
 
 Notice in the *Tags* column, a new tag named `chrome` has been auto-generated. When a new application gets added to `amiya`'s apps manager, a default tag will always be generated.
@@ -90,7 +91,7 @@ $ amiya add-tag
 ╘══════╧════════════════╧═════════════════════════════╛
 [Amiya] The tag `crm` has been successfully added.
 ``` -->
-<img src="src/amiya/resources/code_snippets/add-tag.png" alt="Amiya Icon" width="70%" height="auto" style="border-radius: 10px;">
+<img src="src/amiya/resources/code_snippets/add-tag.png" alt="Amiya Icon" width="80%" height="auto" style="border-radius: 10px;">
 
 #### Start the application
 You can now start the application by using the new tag (`crm`) you have just added in the previous step:
