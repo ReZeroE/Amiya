@@ -3,7 +3,7 @@ Amiya - a lightweight cross-platform automation tool that allows scheduled start
 
 <div align="center">
     <p style="padding-bottom: 0">
-        <img src="src/amiya/resources/amiya_with_border.png" alt="Amiya Icon" width="20%" height="auto"/>
+        <img src="src/amiya/resources/amiya_with_border.png" alt="Amiya Icon" width="30%" height="auto"/>
     </p>
     <!-- <span style="color: #093163">A lightweight cross-platform automation tool for daily tasks!</span> -->
 </div>
@@ -31,7 +31,7 @@ Designed to be lightweight and fully CLI-based, Amiya is perfect for users who n
 
 
 
-## Installation
+## Installation Guide
 To install the `amiya` package locally, run:
 ```bash
 $ pip install amiya
@@ -45,7 +45,7 @@ $ pip install .
 
 ## How to use
 
-#### Add new application
+#### 1. Add new application
 To start off, an application must be configured with `amiya`'s app manager. To add and configure a new application, run:
 ```
 $ amiya add-app
@@ -69,7 +69,7 @@ Notice in the *Tags* column, a new tag named `chrome` has been auto-generated. W
 
 The tag is used to identify the application in all other commands (more on this later).
 
-#### Add tag to application
+#### 2. Add tag to application
 You may also add a tag to any application by running:
 ```
 $ amiya add-tag
@@ -93,7 +93,7 @@ $ amiya add-tag
 ``` -->
 <img src="src/amiya/resources/code_snippets/add-tag.png" alt="Amiya Icon" width="80%" height="auto" style="border-radius: 10px;">
 
-#### Start the application
+#### 3. Start the application
 You can now start the application by using the new tag (`crm`) you have just added in the previous step:
 ```
 $ amiya start crm

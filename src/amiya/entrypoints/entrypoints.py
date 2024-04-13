@@ -17,7 +17,7 @@ class AmiyaEntrypointHandler:
         self.apps_manager.create_app_automated()
     
     def remove_app(self, args):
-        self.apps_manager.delete_app()
+        self.apps_manager.delete_app(args.tag)
     
     def show_apps(self, args):
         if args.with_tag:
@@ -29,13 +29,8 @@ class AmiyaEntrypointHandler:
     
     
     def start(self, args):
-        if args.tag:
-            self.apps_manager.run_app_with_tag(tag=args.tag)
-        else:
-            self.apps_manager.run_app()
+        self.apps_manager.run_app(args.tag)
             
-    def delete(self, args):
-        self.apps_manager.delete_app()
         
             
     def add_tag(self, args):
@@ -108,6 +103,7 @@ def execute_command():
     start_parser.set_defaults(func=entrypoint_handler.add_app)
     
     start_parser = subparsers.add_parser('remove-app', help='Remove an existing application')
+    start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application to remove')
     start_parser.set_defaults(func=entrypoint_handler.remove_app)
     
     show_apps_parser = subparsers.add_parser('show-apps', help='Show applications')
@@ -120,10 +116,6 @@ def execute_command():
     start_parser = subparsers.add_parser('start', help='Start an application')
     start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application to start')
     start_parser.set_defaults(func=entrypoint_handler.start)
-    
-    start_parser = subparsers.add_parser('delete', help='Delete an application')
-    start_parser.set_defaults(func=entrypoint_handler.delete)
-    
     
     
     start_parser = subparsers.add_parser('add-tag', help='Add a new tag to an application')

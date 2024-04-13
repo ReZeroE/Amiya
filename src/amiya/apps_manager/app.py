@@ -16,7 +16,7 @@ class App:
     def __init__(self, name: str, exe_path: str, tags: list = [], new: bool = False):
         self.id         = None      # Assigned automatically by the AppManager at creation
         self.name       = name
-        self.exe_path   = exe_path
+        self.exe_path   = self.__parse_exe_path(exe_path)
         self.tags       = tags
         self.verified   = self.__verify_app_path()
         
@@ -148,12 +148,22 @@ class App:
         self.tags.remove(tag_name)
     
     def get_reformatted_app_name(self):
-        return self.name.lower().strip().replace(" ", "-")
+        # List of characters that are invalid in file and folder names for Windows and most other OS
+        invalid_chars = ['\\', '/', ':', '*', '?', '"', '<', '>', '|']
+        
+        sanitized_name = self.name.lower().strip()
+        for char in invalid_chars:
+            sanitized_name = sanitized_name.replace(char, '')
+        
+        sanitized_name = sanitized_name.replace(" ", "-")
+        return sanitized_name
     
     
     # ==========================================
     # ==========| HELPER FUNCTIONS | ===========
     # ==========================================
+    def __parse_exe_path(self, exe_path: str):
+        return exe_path.replace('"', "").strip()
     
     def __verify_app_path(self):
         return len(self.name) > 0 and os.path.isfile(self.exe_path)

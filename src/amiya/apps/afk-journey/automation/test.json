@@ -1,0 +1,57 @@
+{
+    "metadata": {
+        "sequence_name": "test",
+        "date_created": "2024-04-13 19:15:29",
+        "other_data": null
+    },
+    "actions_sequence": [
+        {
+            "coordinate": {
+                "x": 1121,
+                "y": 502
+            },
+            "delay": 1.098559856414795,
+            "click": true
+        },
+        {
+            "coordinate": {
+                "x": 1505,
+                "y": 1236
+            },
+            "delay": 1.5004539489746094,
+            "click": true
+        },
+        {
+            "coordinate": {
+                "x": 1433,
+                "y": 1241
+            },
+            "delay": 0.9750003814697266,
+            "click": true
+        },
+        {
+            "coordinate": {
+                "x": 1402,
+                "y": 1178
+            },
+            "delay": 0.3899836540222168,
+            "click": true
+        },
+        {
+            "coordinate": {
+                "x": 1447,
+                "y": 1245
+            },
+            "delay": 0.33492231369018555,
+            "click": true
+        },
+        {
+            "coordinate": {
+                "x": 1478,
+                "y": 1536
+            },
+            "delay": 0.3249635696411133,
+            "click": true
+        }
+    ]
+}

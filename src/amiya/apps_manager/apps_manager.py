@@ -3,6 +3,7 @@ import sys
 import json
 import shutil
 import time
+from termcolor import colored
 from amiya.apps_manager.app import App, APP_CONFIG_FILENAME
 from amiya.apps_manager.apps_viewer import AppsViewer
 from amiya.utils.constants import APPS_DIRECTORY
@@ -11,6 +12,8 @@ from amiya.utils.helper import *
 from amiya.automation_handler.actions_controller.units.sequence import ActionsSequence
 from amiya.automation_handler.actions_controller.actions_viewer import ActionsViewer
 from amiya.apps_manager.safty_monitor import SaftyMonitor
+
+
 class AppsManager:
     os.system("")  # Enables ANSI escape characters in terminal
     
@@ -51,6 +54,8 @@ class AppsManager:
         
         app.create_app()                                # Create the app and save to config
         self.apps[app.id] = app                         # Add to apps dict (key: app_id, value: app_obj)
+        
+        aprint(f"Application '{name}' has been successfully created and configured!\n\nTo start the app, run `{colored(f"amiya start {app.get_reformatted_app_name()}", "light_cyan")}`")
     
     def create_app_automated(self):
         app_name = input(atext(f"New Application's Name: "))
@@ -72,37 +77,57 @@ class AppsManager:
     # ===========| DELETE APP | ============
     # ======================================
     # TODO: Application ID isn't shifted forward when an app is deleted. 
-    def delete_app(self):
-        self.print_apps()
-        user_input = input(atext(f"Which app would you like to DELETE? (0-{len(self.apps)-1}) "))
+    
+    def delete_app(self, tag: str = None):
+        app = None
         
-        app = self.apps[int(user_input)]
+        if tag == None:                             # If no application tag is inputted by user
+            self.print_apps()
+            user_input = input(atext(f"Which app would you like to DELETE? (0-{len(self.apps)-1}) "))
+            app = self.apps[int(user_input)]
+        else:                                       # If user inputted an application tag tag
+            tag = self.__parse_tag(tag)
+            app = self.__get_app_by_tag(tag)
+        
         user_input = input(atext(f"Are you sure you would like to delete app '{app.name}'? [y/n] "))
         if user_input.lower() != "y":
             return
         
-        app_dir = os.path.join(APPS_DIRECTORY, app.get_reformatted_app_name())
-        shutil.rmtree(app_dir)
+        self.__safe_delete_app(app)
+        aprint(f"The app '{app.name}' has been deleted.")
+    
+    def __safe_delete_app(self, app: App):
+        try:
+            app_dir = os.path.join(APPS_DIRECTORY, app.get_reformatted_app_name())
+            shutil.rmtree(app_dir)
+        except FileNotFoundError:
+            raise AmiyaBaseException("Application directory does not exist or has already been deleted.")
         
         removed_value = self.apps.pop(app.id, None) 
         if removed_value == None: # If application cannot be found in self.apps
             raise AmiyaBaseException(f"App '{app.name}' can't be found in the apps dict.")
         
-        aprint(f"The app '{app.name}' has been deleted.")
-    
+        # Reset app ID for all of the apps created after this app
+        app_id = app.id
+        for id, app, in self.apps.items():
+            if id > app_id:
+                app.id -= 1
+                app.save_app_config()
     
     # ======================================
     # =============| RUN APP | =============
     # ======================================
-    def run_app(self):
-        self.print_apps()
-        user_input = input(atext(f"Which app would you like to run? (0-{len(self.apps)-1}) "))
-        app = self.apps[int(user_input)]
-        self.__safe_start_app(app)
+    def run_app(self, tag: str = None):
+        app = None
         
-    def run_app_with_tag(self, tag):
-        tag = self.__parse_tag(tag)
-        app = self.__get_app_by_tag(tag)
+        if tag == None:             # If user did not provide a tag
+            self.print_apps()
+            user_input = input(atext(f"Which app would you like to run? (0-{len(self.apps)-1}) "))
+            app = self.apps[int(user_input)]
+        else:                       # If user provided an application tag
+            tag = self.__parse_tag(tag)
+            app = self.__get_app_by_tag(tag)
+            
         self.__safe_start_app(app)
     
     def __safe_start_app(self, app: App):
