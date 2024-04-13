@@ -19,7 +19,7 @@ class SearchHandler:
         success = webbrowser.open_new_tab(url)
         
         if not success:
-            aprint("Search failed due to web browser availablility or invalid request.", log_type=LogType.ERROR)
+            aprint("Search failed due to web browser availablility or invalid request.", log_type=LogType.ERROR); exit()
 
     def search_automated(self):
         search_content = input(atext("What would you like to search? ")).strip()

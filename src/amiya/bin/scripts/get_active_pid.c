@@ -13,7 +13,8 @@ int main() {
     }
 
     GetWindowThreadProcessId(hwnd, &pid);   // get PID
-    printf("Active window PID: %lu\n", pid);
+    // printf("Active window PID: %lu\n", pid);
+    printf("%lu\n", pid);
 
     return 0;
 }

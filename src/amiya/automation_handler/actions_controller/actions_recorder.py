@@ -7,17 +7,22 @@ from amiya.automation_handler.actions_controller.units.sequence import ActionsSe
 from amiya.utils.helper import *
 
 class ActionsRecorder():
-    def __init__(self, new_sequence_name):
-        self.sequence = ActionsSequence(new_sequence_name)
+    def __init__(self):
+        self.sequence = ActionsSequence()
         self.sequence.set_date_created_to_current()
         
         self.last_click_time = None
         self.is_recording = False
         
         
-    def record(self):
-        # from elevate import elevate; elevate()
-        aprint("Recording starting after the UP-ARROW key is pressed.", log_type=LogType.WARNING)
+    def record(self, start_on_callback=False) -> ActionsSequence:
+        from elevate import elevate; elevate()
+        if start_on_callback:
+            self.is_recording = True
+            self.last_click_time = time.time()
+            aprint("Recording in-progress (press the UP-ARROW key to stop)...")
+        else:
+            aprint("To start the recording, press the UP-ARROW key.", log_type=LogType.WARNING)
         
         mouse_listener = mouse.Listener(on_click=self.__on_mouse_action)
         keyboard_listener = keyboard.Listener(on_press=self.__on_keyboard_action)
@@ -25,9 +30,9 @@ class ActionsRecorder():
         with mouse.Listener(on_click=self.__on_mouse_action) as mouse_listener, \
             keyboard.Listener(on_press=self.__on_keyboard_action) as keyboard_listener:
             keyboard_listener.join()
-            
-        self.sequence.print_sequence()
-        time.sleep(1)
+
+        time.sleep(0.3)
+        return self.sequence
     
     def __on_mouse_action(self, x, y, button, pressed):
         if self.is_recording and pressed:
@@ -50,6 +55,7 @@ class ActionsRecorder():
             delay = now - self.last_click_time if self.last_click_time else float(0)
             self.sequence.add(KeyboardAction(key, delay))
             self.last_click_time = now
+        
         
 if __name__ == "__main__":
     ar = ActionsRecorder() 

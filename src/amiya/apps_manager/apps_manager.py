@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import shutil
+import time
 from amiya.apps_manager.app import App, APP_CONFIG_FILENAME
 from amiya.apps_manager.apps_viewer import AppsViewer
 from amiya.utils.constants import APPS_DIRECTORY
@@ -9,7 +10,7 @@ from amiya.exceptions.exceptions import *
 from amiya.utils.helper import *
 from amiya.automation_handler.actions_controller.units.sequence import ActionsSequence
 from amiya.automation_handler.actions_controller.actions_viewer import ActionsViewer
-
+from amiya.apps_manager.safty_monitor import SaftyMonitor
 class AppsManager:
     os.system("")  # Enables ANSI escape characters in terminal
     
@@ -97,18 +98,20 @@ class AppsManager:
         self.print_apps()
         user_input = input(atext(f"Which app would you like to run? (0-{len(self.apps)-1}) "))
         app = self.apps[int(user_input)]
-        self.__start_app_and_verbose(app)
+        self.__safe_start_app(app)
         
     def run_app_with_tag(self, tag):
         tag = self.__parse_tag(tag)
         app = self.__get_app_by_tag(tag)
-        self.__start_app_and_verbose(app)
+        self.__safe_start_app(app)
     
-    def __start_app_and_verbose(self, app: App):
+    def __safe_start_app(self, app: App):
         ret = app.run()
         if ret == True:
             aprint(f"[PID {app.process.pid}] Application '{app.name}' started successfully!")
-    
+        else:
+            aprint(f"Application '{app.name}' failed to start.", log_type=LogType.ERROR); exit()
+            
     # ======================================
     # ============| VIEW APPS | ============
     # ======================================
@@ -182,9 +185,9 @@ class AppsManager:
         try:
             app = self.apps[int(user_input_id)]
         except KeyError:
-            aprint(f"Your input (ID {user_input_id}) does not correspond to any apps.", log_type=LogType.ERROR)
+            aprint(f"Your input (ID {user_input_id}) does not correspond to any apps.", log_type=LogType.ERROR); exit()
         except ValueError:
-            aprint(f"Expected an ID (such as 0 or 1) but got '{user_input_id}'.", log_type=LogType.ERROR)
+            aprint(f"Expected an ID (such as 0 or 1) but got '{user_input_id}'.", log_type=LogType.ERROR); exit()
         return app
     
     def __get_app_by_tag(self, tag) -> App | None:
@@ -237,66 +240,66 @@ class AppsManager:
         app = self.__get_app_with_id(user_input_id)
         
         new_sequence_name = input(atext(f"Name of the new automation sequence (i.e. start-game): "))
-        new_sequence_recorded = app.actions_controller.record_new_sequence(new_sequence_name, overwrite=False)
-        
-        self.print_sequence(new_sequence_recorded)
+        self.__start_app_and_record(app, new_sequence_name)
 
     def record_sequence_with_tag(self, tag: str):
         tag = self.__parse_tag(tag)
         app = self.__get_app_by_tag(tag)
         
         new_sequence_name = input(atext(f"Name of the new automation sequence (i.e. start-game): "))
-        new_sequence_recorded = app.actions_controller.record_new_sequence(new_sequence_name, overwrite=False)
-        
-        self.print_sequence(new_sequence_recorded)
+        self.__start_app_and_record(app, new_sequence_name)
     
-    def print_sequence(self, sequence: ActionsSequence, tablefmt="fancy_grid"):
+    def __start_app_and_record(self, app: App, new_sequence_name: str):
+        self.__safe_start_app(app)
+        new_sequence_recorded = app.actions_controller.start_recording(new_sequence_name, start_recording_on_callback=True)
+        self.__print_sequence(new_sequence_recorded)
+        
+    def __print_sequence(self, sequence: ActionsSequence, tablefmt="fancy_grid"):
         viewer = ActionsViewer()
         print(viewer.tabulate_sequence(sequence, tablefmt))
 
 
     # =================================================
-    # ==============| RECORD SEQUENCES | ==============
+    # ================| RUN SEQUENCES | ===============
     # =================================================
     def run_sequence(self):
         self.print_apps()
         user_input_id = input(atext(f"Which app would you like to RUN AN AUTOMATION SEQUENCE of? (0-{len(self.apps)-1}) "))
         app = self.__get_app_with_id(user_input_id)
-        
-        sequences: list[ActionsSequence] = []
-        sequences = app.actions_controller.load_all_sequences()
-        self.print_sequences(sequences)
-        
-        seq_name = input(atext(f"Which sequence would you like to run (i.e. start-game)? "))
-        sequence: ActionsSequence = self.get_sequence_with_name(seq_name, sequences)
-        
-        aprint(f"The sequence '{sequence.sequence_name}' will run for {sequence.get_runtime()} seconds.\nContinue? [y/n] ", log_type=LogType.WARNING, end="")
-        if input().lower() == "y":
-            aprint(f"[{sequence.sequence_name}] Running...")
-            sequence.run()
-        
-        aprint(f"[{sequence.sequence_name}] Sequence run completed!", log_type=LogType.SUCCESS)
+        self.__execute_sequence_wrapper(app)
         
     def run_sequence_with_tag(self, tag: str, seq_name: str = None):
         tag = self.__parse_tag(tag)
         app = self.__get_app_by_tag(tag)
+        self.__execute_sequence_wrapper(app, seq_name)
         
+    def __execute_sequence_wrapper(self, app: App, seq_name: str = None):
         sequences: list[ActionsSequence] = []
         sequences = app.actions_controller.load_all_sequences()
-        self.print_sequences(sequences)
         
         if seq_name == None:
+            self.print_sequences(sequences)                             # Verbose all sequences in the CLI and wait for user selection
             seq_name = input(atext(f"Which sequence would you like to run (i.e. start-game)? "))
-        sequence: ActionsSequence = self.get_sequence_with_name(seq_name, sequences)
+        sequence = self.__get_sequence_with_name(seq_name, sequences)
         
-        aprint(f"The sequence '{sequence.sequence_name}' will run for {sequence.get_runtime()} seconds.\nContinue? [y/n] ", log_type=LogType.WARNING, end="")
-        if input().lower() == "y":
-            aprint(f"[{sequence.sequence_name}] Running...")
-            sequence.run()
+        aprint(f"The sequence '{sequence.sequence_name}' will run for {sequence.get_runtime()} seconds. Continue? [y/n] ", log_type=LogType.WARNING, end="")
+        if input().lower() == "y":                                      # Verbose runtime and wait for user confirmation to run
+            aprint(f"[Automation {sequence.sequence_name}] Running...")
+            
+            self.__safe_start_app(app); time.sleep(5)                   # Starts the application for the sequence
+            safty_monitor = SaftyMonitor(app.process.pid)               # Creates a safty monitor object for sequence execution safty (must be created after the app is started)
+            self.__safe_execute_sequence(sequence, safty_monitor)       # Runs the sequence (with the safty monitor)
+
+        aprint(f"[Automation {sequence.sequence_name}] Run Completed!", log_type=LogType.SUCCESS)
         
-        aprint(f"[{sequence.sequence_name}] Sequence run completed!", log_type=LogType.SUCCESS)
-        
-    def get_sequence_with_name(self, seq_name: str, sequence_list: list[ActionsSequence]) -> ActionsSequence:
+    def __safe_execute_sequence(self, sequence: ActionsSequence, safty_monitor: SaftyMonitor):
+        try:       
+            sequence.execute(safty_monitor)
+        except Amiya_AppNotFocusedException:
+            aprint("<Safty-Monitor> The application is unfocused during an automation sequence. Automation stopped.", log_type=LogType.ERROR)
+            return
+     
+    def __get_sequence_with_name(self, seq_name: str, sequence_list: list[ActionsSequence]) -> ActionsSequence:
         seq_name = seq_name.strip().lower().replace(" ", "-")
         
         for seq in sequence_list:
@@ -304,7 +307,3 @@ class AppsManager:
                 return seq
         aprint(f"No sequence with name '{seq.sequence_name}' exists. Exiting.", log_type=LogType.ERROR); exit()
 
-# am = AppManager()
-# am.create_app("Arknights", "abc/abc.exe")
-# am.create_app("Final Fantasy XIV", "abc/abc.exe")
-# print(am.apps)

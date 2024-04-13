@@ -16,10 +16,7 @@ class JSONConfigHandler(ABC):
         except FileNotFoundError:
             raise Amiya_ConfigDoesNotExistException(config_file=self.config_file)
 
-    def save_config(self, json_payload, overwrite=False) -> bool:
-        if self.config_exists() and not overwrite:
-            raise AmiyaBaseException(f"Config file already exists and cannot be overwritten (overwrite set to False).")
-        
+    def save_config(self, json_payload) -> bool:
         try:
             with open(self.config_file, "w") as wf:
                 json.dump(json_payload, wf, indent=4)

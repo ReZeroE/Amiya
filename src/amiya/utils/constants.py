@@ -17,4 +17,5 @@ BIN_DIRECTORY       = os.path.join(__AMIYA_DIRECTORY, "bin")
 # ==================================
 # =========| EXECUTABLES | =========
 # ==================================
-FOCUS_PID_EXE       = os.path.join(BIN_DIRECTORY, "focus_pid.exe")
+FOCUS_PID_EXE           = os.path.join(BIN_DIRECTORY, "focus_pid.exe")
+GET_FOCUSED_PID_EXE     = os.path.join(BIN_DIRECTORY, "get_active_pid.exe")

@@ -102,6 +102,7 @@ class KeyboardAction(Action):
         pynput_key = PYNPUT_KEY_MAPPING.get(key, key)
         try:
             pynput_keyboard.press(pynput_key)
+            time.sleep(0.05)
             pynput_keyboard.release(pynput_key)
         except (keyboard.Controller.InvalidKeyException, ValueError) as ex:
             # TODO: log this unsupported key as opposed to print it

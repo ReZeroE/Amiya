@@ -74,15 +74,33 @@ class AmiyaEntrypointHandler:
             self.apps_manager.run_sequence()
 
 
+    def print_help(self, parser):
+        print_centered(
+r'''
+       _    __  __ _____   __ _       ____ _     ___  
+      / \  |  \/  |_ _\ \ / // \     / ___| |   |_ _| 
+     / _ \ | |\/| || | \ V // _ \   | |   | |    | |  
+    / ___ \| |  | || |  | |/ ___ \  | |___| |___ | |  
+   /_/   \_\_|  |_|___| |_/_/   \_\  \____|_____|___| 
+  
+A lightweight cross-platform automation tool for daily tasks!
+              https://github.com/ReZeroE/Amiya
+                        By Kevin L.
+''')
+        
+        parser.print_help()
+
 def execute_command():
     entrypoint_handler = AmiyaEntrypointHandler()
+    
+    
     
     parser = argparse.ArgumentParser(prog='amiya', description="Amiya CLI Automation Package")
     subparsers = parser.add_subparsers(dest='command', help='commands')
 
     
     help_parser = subparsers.add_parser('help', help='Show this help message and exit')
-    help_parser.set_defaults(func=lambda args: parser.print_help())
+    help_parser.set_defaults(func=lambda args: entrypoint_handler.print_help(parser))
 
 
 

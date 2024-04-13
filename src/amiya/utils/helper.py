@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+import shutil
 from enum import Enum
 from termcolor import colored
 from amiya.utils.constants import BASENAME # "Amiya"
@@ -35,3 +36,13 @@ def aprint(text: str, log_type: LogType = LogType.NORMAL, end="\n", new_line_no_
     rtext = atext(text, log_type)
     print(rtext, end=end, file=sys.stdout)
     sys.stdout.flush()
+
+def print_centered(text):
+    terminal_width, terminal_height = shutil.get_terminal_size((80, 20))  # Default size
+    
+    lines = text.split('\n')
+    max_width = max(len(line) for line in lines)
+    left_padding = (terminal_width - max_width) // 2
+    
+    for line in lines:
+        print(' ' * left_padding + line)

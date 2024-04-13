@@ -5,7 +5,7 @@ from amiya.automation_handler.actions_controller.units.action import Action, Mou
 from amiya.automation_handler.actions_controller.units.sequence import ActionsSequence
 from amiya.automation_handler.actions_controller.actions_recorder import ActionsRecorder
 from amiya.exceptions.exceptions import *
-
+from amiya.utils.helper import *
 
 class ActionsController:
     def __init__(self, config_dir):
@@ -34,7 +34,6 @@ class ActionsController:
             raise AmiyaBaseException(f"No automation sequence with name '{SEQUENCE_NAME}' can be found.")
         return sequence
         
-    
     def load_all_sequences(self) -> list[ActionsSequence]:
         sequences: list[ActionsSequence] = []
         sequence_name_list = os.listdir(self.actions_config_dir)                            # List all file/dir names in the automation folder
@@ -44,8 +43,7 @@ class ActionsController:
                 sequences.append(sequence)
         return sequences
     
-    
-    def record_new_sequence(self, new_seq_name, overwrite=False) -> ActionsSequence:
+    def start_recording(self, new_sequence_name, start_recording_on_callback=True) -> ActionsSequence:
         """
         Function responsible for recording new action sequences.
         
@@ -54,24 +52,31 @@ class ActionsController:
         3. Saves the JSON in the corresponding automation folder for the App (using the ConfigHandler). 
         
         Returns the recorded action sequence
+        
+        :param overwrite: Overwrite a sequence even if the sequence already exist (identified by sequence name).
+        :param start_record_on_callback: Start the recording as soon as the record() function below is called (as opposed to waiting for user input to start).
         """
-        NEW_SEQUENCE_NAME = self.__reformat_sequence_name(new_seq_name)
-        NEW_SEQUENCE_FILENAME = self.__get_sequence_filename(new_seq_name)
+        NEW_SEQUENCE_NAME = self.__reformat_sequence_name(new_sequence_name)
+        NEW_SEQUENCE_FILENAME = self.__get_sequence_filename(new_sequence_name)
         
-        action_recorder = ActionsRecorder(NEW_SEQUENCE_NAME)
-        config_handler = ActionsConfigHandler(config_abs_path=os.path.join(self.actions_config_dir, NEW_SEQUENCE_FILENAME))
+        seq_config_file = os.path.join(self.actions_config_dir, NEW_SEQUENCE_FILENAME)
+        config_handler = ActionsConfigHandler(seq_config_file)
+
+        action_recorder   = ActionsRecorder()
+        recorded_sequence = action_recorder.record(start_recording_on_callback)              # Record mouse actions until "up-arrow" is pressed
+        recorded_sequence.sequence_name = NEW_SEQUENCE_NAME                                  # Set the new sequence name
         
-        action_recorder.record()                                                    # Record mouse actions until "up-arrow" is pressed
-        json_actions = action_recorder.sequence.to_json()                           # Convert the ActionsSequence object into a list of JSON objects
-        success = config_handler.save_config(json_actions, overwrite=overwrite)     # Write JSON actions to config
+        aprint("Saving to configurations...")
+        json_sequence     = recorded_sequence.to_json()                                      # Convert the ActionsSequence object into a list of JSON objects
+        success           = config_handler.save_config(json_sequence)                        # Write JSON actions to config
         assert(success == True)
         
-        return action_recorder.sequence # Returns the recorded action sequence if successful
+        return recorded_sequence                                                             # Returns the recorded action sequence if successful
     
 
-    # ======================================
+    # ===========================================
     # ===========| HELPER FUNCTIONS | ===========
-    # ======================================
+    # ===========================================
     def __get_sequence_name(self, filename: str):
         return filename.strip().lower().replace(".json", "")
             

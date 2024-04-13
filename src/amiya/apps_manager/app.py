@@ -34,6 +34,7 @@ class App:
         self.app_config_filepath    = os.path.join(self.app_config_dirpath, APP_CONFIG_FILENAME)
         self.app_automation_dirpath = os.path.join(self.app_config_dirpath, APP_AUTOMATION_DIRNAME)
 
+        # ActionsController only loads actions sequence on demand.
         self.actions_controller = ActionsController(config_dir=self.app_automation_dirpath)
 
 

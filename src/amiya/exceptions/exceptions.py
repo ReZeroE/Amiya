@@ -54,6 +54,17 @@ class Amiya_ConfigDoesNotExistException(Exception):
     def __init__(self, config_file):
         self.message = f"The config file '{config_file}' does not exist and therefore cannot be read."
         super().__init__(self.message) 
+        
+class Amiya_ConfigAlreadyExistException(Exception):
+    __module__ = 'builtins'
+    def __init__(self, config_file):
+        self.message = f"The config file '{config_file}' already exist and overwrite is set to False."
+        super().__init__(self.message) 
+
+class Amiya_AppNotFocusedException(Exception):
+    __module__ = 'builtins'
+    def __init__(self):
+        super().__init__(f"\nThe application is not focused during an automation sequence run. Automation stopped.")
 
 class AmiyaOSNotSupported(Exception):
     __module__ = 'builtins'

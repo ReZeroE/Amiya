@@ -3,9 +3,10 @@ from datetime import datetime
 from pynput import keyboard
 from amiya.automation_handler.config_controller.config_handler import ActionsConfigHandler
 from amiya.automation_handler.actions_controller.units.action import Action, MouseAction, KeyboardAction
-from amiya.exceptions.exceptions import AmiyaBaseException
+from amiya.exceptions.exceptions import AmiyaBaseException, Amiya_AppNotFocusedException
 from amiya.utils.constants import DATETIME_FORMAT
 from amiya.utils.helper import *
+from amiya.apps_manager.safty_monitor import SaftyMonitor
 
 class ActionsSequence:
     def __init__(
@@ -18,9 +19,17 @@ class ActionsSequence:
         self.other_data     = None
         self.actions: list[Action] = []
     
-    def run(self):
+    def execute(self, safty_monitor: SaftyMonitor):
         pynput_keyboard = keyboard.Controller()
         for action in self.actions:
+            
+            # If the application is no longer focused, then the automation needs to be stopped
+            focused = safty_monitor.is_focused()  
+            if not focused:
+                raise Amiya_AppNotFocusedException()
+            
+            print(action.__repr__(), end="\r")
+            
             if isinstance(action, KeyboardAction):
                 action.execute(pynput_keyboard)
             elif isinstance(action, MouseAction):
