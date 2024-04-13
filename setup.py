@@ -46,6 +46,6 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Development Status :: 1 - Planning'
-    ],
+    ],  
     include_package_data=True,
 )

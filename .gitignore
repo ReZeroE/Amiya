@@ -1,7 +1,8 @@
-# Ignore Test Filetest.py
+# Ignore test files and temp driver files
 **/test.py
 **/test*.py
 **/tmp.*
+**/amiya.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
