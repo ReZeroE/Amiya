@@ -7,7 +7,6 @@ import subprocess
 from amiya.utils.constants import APPS_DIRECTORY, FOCUS_PID_EXE
 from amiya.exceptions.exceptions import *
 from amiya.automation_handler.actions_controller.actions_controller import ActionsController
-import elevate
 
 APP_AUTOMATION_DIRNAME  = "automation"
 APP_CONFIG_FILENAME     = "app-config.json"
@@ -74,7 +73,6 @@ class App:
 
     def run(self) -> bool:
         if self.verified == True:   
-            elevate.elevate()                                   # Elevate permission to admin
             subprocess.Popen([self.exe_path], shell=True)
             
             if self.started_successfully():

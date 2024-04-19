@@ -29,12 +29,12 @@ setup(
     author='Kevin L.',
     author_email='your.email@example.com',
     description='A brief description of your package',
-    long_description=open('README.md').read() if os.path.exists('README.md') else '',
+    long_description=open('README.md', encoding='utf-8').read() if os.path.exists('README.md') else '',
     long_description_content_type="text/markdown",
-    url='http://github.com/yourusername/amiya-assistant-pro',
+    url='http://github.com/yourusername/amiya',
     package_dir={'': 'src'},                                        # Tell setuptools that all packages are under src
     packages=find_packages(where='src'),                            # Find packages in src directory
-    install_requires=open('requirements.txt').read().splitlines(),  # List of dependencies
+    install_requires=open('requirements.txt', encoding='utf-8').read().splitlines(),  # List of dependencies
     python_requires='>=3.6, <4',
     entry_points={
         'console_scripts': [

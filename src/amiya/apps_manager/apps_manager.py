@@ -12,7 +12,7 @@ from amiya.utils.helper import *
 from amiya.automation_handler.actions_controller.units.sequence import ActionsSequence
 from amiya.automation_handler.actions_controller.actions_viewer import ActionsViewer
 from amiya.apps_manager.safty_monitor import SaftyMonitor
-
+# from elevate import elevate; elevate()
 
 class AppsManager:
     os.system("")  # Enables ANSI escape characters in terminal
@@ -120,14 +120,14 @@ class AppsManager:
     def run_app(self, tag: str = None):
         app = None
         
-        if tag == None:             # If user did not provide a tag
+        if tag == None:                         # If user did not provide a tag
             self.print_apps()
             user_input = input(atext(f"Which app would you like to run? (0-{len(self.apps)-1}) "))
             app = self.apps[int(user_input)]
-        else:                       # If user provided an application tag
+        else:                                   # If user provided an application tag
             tag = self.__parse_tag(tag)
             app = self.__get_app_by_tag(tag)
-            
+        
         self.__safe_start_app(app)
     
     def __safe_start_app(self, app: App):
@@ -299,6 +299,7 @@ class AppsManager:
         self.__execute_sequence_wrapper(app, seq_name)
         
     def __execute_sequence_wrapper(self, app: App, seq_name: str = None):
+        
         sequences: list[ActionsSequence] = []
         sequences = app.actions_controller.load_all_sequences()
         
@@ -318,7 +319,7 @@ class AppsManager:
         aprint(f"[Automation {sequence.sequence_name}] Run Completed!", log_type=LogType.SUCCESS)
         
     def __safe_execute_sequence(self, sequence: ActionsSequence, safty_monitor: SaftyMonitor):
-        try:       
+        try:
             sequence.execute(safty_monitor)
         except Amiya_AppNotFocusedException:
             aprint("<Safty-Monitor> The application is unfocused during an automation sequence. Automation stopped.", log_type=LogType.ERROR)

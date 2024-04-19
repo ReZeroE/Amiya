@@ -57,6 +57,6 @@ class ActionsRecorder():
             self.last_click_time = now
         
         
-if __name__ == "__main__":
-    ar = ActionsRecorder() 
-    ar.record()
+# if __name__ == "__main__":
+#     ar = ActionsRecorder() 
+#     ar.record()

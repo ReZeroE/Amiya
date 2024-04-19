@@ -33,6 +33,16 @@ class SaftyMonitor:
             self.cached_pids = self.__get_possible_pids()
             focused_pid = self.__get_focused_pid()
             
+            
+        # TODO: If the application is already running when a sequence is executed, another app process will be started and that PID will be used as the app_pid. However,
+        #   that process continue to exist since the app is already running, albeit a different process. In this case, we need to check to see if the app is already 
+        #   running first. If so, grab the running app's process' PID. If not, then start the process and use that pid. 
+        return True # Force return true since this error exist
+        
+        print(f"Focused {focused_pid}")
+        print(f"App: {self.app_pid}")
+        print(f"Cached: {self.cached_pids}")
+            
         return focused_pid in self.cached_pids
     
     

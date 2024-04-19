@@ -6,4 +6,3 @@ setuptools
 elevate
 termcolor
 schedule
-tkinter

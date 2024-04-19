@@ -2,7 +2,7 @@ import webbrowser
 from amiya.exceptions.exceptions import *
 from amiya.utils.helper import *
 
-class SearchHandler:
+class SearchController:
     def __init__(self):
         self.SERACH_URL = f"https://www.google.com.tr/search?q="
     

@@ -2,102 +2,25 @@ import sys
 import time
 import psutil
 import argparse
-from amiya.apps_manager.apps_manager import AppsManager 
-from amiya.exceptions.exceptions import *
-from amiya.utils.helper import *
-from amiya.search_handler.search_handler import SearchHandler
-
-class AmiyaEntrypointHandler:
-    def __init__(self):
-        self.apps_manager = AppsManager()
-        self.search_handler = SearchHandler()
-    
-    
-    def add_app(self, args):
-        self.apps_manager.create_app_automated()
-    
-    def remove_app(self, args):
-        self.apps_manager.delete_app(args.tag)
-    
-    def show_apps(self, args):
-        if args.with_tag:
-            aprint("With tag")
-        elif args.all:
-            aprint("with all")
-        else:
-            self.apps_manager.print_apps()
-    
-    
-    def start(self, args):
-        self.apps_manager.run_app(args.tag)
-            
-        
-            
-    def add_tag(self, args):
-        self.apps_manager.add_tag()
-        
-    def remove_tag(self, args):
-        self.apps_manager.remove_tag()
+from amiya.entrypoints.entrypoint_handler import AmiyaEntrypointHandler
 
 
-    def search(self, args):
-        if args.search_content:
-            self.search_handler.search(args.search_content)
-        else:
-            self.search_handler.search_automated()
 
-
-    def list_automation_sequences(self, args):
-        if args.tag:
-            self.apps_manager.list_sequences_with_tag(args.tag)
-        else:
-            self.apps_manager.list_sequences()
-
-    def record_automation_sequences(self, args):
-        if args.tag:
-            self.apps_manager.record_sequence_with_tag(args.tag)
-        else:
-            self.apps_manager.record_sequence()
-
-    def run_automations_sequences(self, args):
-        if args.tag:
-            if args.seq_name:
-                self.apps_manager.run_sequence_with_tag(args.tag, args.seq_name)
-            else:
-                self.apps_manager.run_sequence_with_tag(args.tag)
-        else:
-            self.apps_manager.run_sequence()
-
-
-    def print_help(self, parser):
-        print_centered(
-r'''
-       _    __  __ _____   __ _       ____ _     ___  
-      / \  |  \/  |_ _\ \ / // \     / ___| |   |_ _| 
-     / _ \ | |\/| || | \ V // _ \   | |   | |    | |  
-    / ___ \| |  | || |  | |/ ___ \  | |___| |___ | |  
-   /_/   \_\_|  |_|___| |_/_/   \_\  \____|_____|___| 
-  
-A lightweight cross-platform automation tool for daily tasks!
-              https://github.com/ReZeroE/Amiya
-                        By Kevin L.
-''')
-        
-        parser.print_help()
 
 def execute_command():
     entrypoint_handler = AmiyaEntrypointHandler()
     
     
-    
     parser = argparse.ArgumentParser(prog='amiya', description="Amiya CLI Automation Package")
     subparsers = parser.add_subparsers(dest='command', help='commands')
 
-    
     help_parser = subparsers.add_parser('help', help='Show this help message and exit')
     help_parser.set_defaults(func=lambda args: entrypoint_handler.print_help(parser))
 
 
+    # =================================================
+    # ============| ADD/REMOVE/SHOW APPS | ============
+    # =================================================
 
     start_parser = subparsers.add_parser('add-app', help='Add a new application')
     start_parser.set_defaults(func=entrypoint_handler.add_app)
@@ -111,12 +34,19 @@ def execute_command():
     show_apps_parser.add_argument('--all', '-a', action='store_true', help='Show all applications')
     show_apps_parser.set_defaults(func=entrypoint_handler.show_apps)
 
-    
+
+    # =================================================
+    # =================| START APPS | =================
+    # =================================================
     
     start_parser = subparsers.add_parser('start', help='Start an application')
     start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application to start')
     start_parser.set_defaults(func=entrypoint_handler.start)
     
+    
+    # =================================================
+    # ==============| ADD/REMOVE TAGS | ===============
+    # =================================================
     
     start_parser = subparsers.add_parser('add-tag', help='Add a new tag to an application')
     start_parser.set_defaults(func=entrypoint_handler.add_tag)
@@ -125,11 +55,9 @@ def execute_command():
     start_parser.set_defaults(func=entrypoint_handler.remove_tag)
     
     
-    start_parser = subparsers.add_parser('search', help='Initiate a search on the default browser')
-    start_parser.add_argument('search_content', nargs='*', default=None, help='Content of the search')
-    start_parser.set_defaults(func=entrypoint_handler.search)
-    
-    
+    # =================================================
+    # ========| RECORD/LIST/RUN AUTOMATION |===========
+    # =================================================
     
     start_parser = subparsers.add_parser('list-auto', help='List all the automation sequences of the application')
     start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application')
@@ -146,11 +74,32 @@ def execute_command():
     start_parser.set_defaults(func=entrypoint_handler.run_automations_sequences)
     
     
+    # =================================================
+    # =============| UTILITY FEATURES | ===============
+    # =================================================
+        
+    start_parser = subparsers.add_parser('search', help='Initiate a search on the default browser')
+    start_parser.add_argument('search_content', nargs='*', default=None, help='Content of the search')
+    start_parser.set_defaults(func=entrypoint_handler.search)
+    
+    sleep_parser = subparsers.add_parser('sleep', help='Put the PC to sleep after X seconds')
+    sleep_parser.add_argument('delay', nargs='?', default=None, help='Delay in seconds before sleep')
+    sleep_parser.set_defaults(func=lambda args: entrypoint_handler.sleep(args, sleep_parser))
+    
+    shutdown_parser = subparsers.add_parser('shutdown', help='Shutdown PC after X seconds')
+    shutdown_parser.add_argument('delay', nargs='?', default=None, help='Delay in seconds before shutdown')
+    shutdown_parser.set_defaults(func=lambda args: entrypoint_handler.shutdown(args, shutdown_parser))
+    
+    
+    
+    # =================================================
+    # PARSER DRIVER
+    
     args = parser.parse_args()
     if hasattr(args, 'func'):
         try:
             args.func(args)
         except KeyboardInterrupt:
-            print("\n\nKeybord Interupt! Amiya Exited.")
+            print("\n\nKeybord Interupt! Amiya Existing.")
     else:
         parser.print_help() # If no arguments were provided, show help

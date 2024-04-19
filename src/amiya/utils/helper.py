@@ -9,7 +9,7 @@ from amiya.utils.constants import BASENAME # "Amiya"
 def check_platform():
     """
     Verifies whether the OS is supported by the package.
-    Package starrail only support Windows installations of Honkai Star Rail.
+    Package amiya currently only support the Windows OS.
     
     :return: true if running on Windows, false otherwise
     :rtype: bool
@@ -46,3 +46,25 @@ def print_centered(text):
     
     for line in lines:
         print(' ' * left_padding + line)
+        
+        
+import os
+import sys
+import platform
+
+def is_admin():
+    try:
+        # For Windows
+        if platform.system().lower() == "windows":
+            import ctypes
+            return ctypes.windll.shell32.IsUserAnAdmin() != 0
+
+        # For Linux and MacOS
+        else:
+            return os.getuid() == 0  # os.getuid() returns '0' if running as root
+
+    except Exception as e:
+        print(f"Error checking administrative privileges: {e}")
+        return False
+    
+    

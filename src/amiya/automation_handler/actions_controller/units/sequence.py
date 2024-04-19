@@ -19,7 +19,7 @@ class ActionsSequence:
         self.other_data     = None
         self.actions: list[Action] = []
     
-    def execute(self, safty_monitor: SaftyMonitor):
+    def execute(self, safty_monitor: SaftyMonitor, global_delay: int = 0):
         pynput_keyboard = keyboard.Controller()
         for action in self.actions:
             
@@ -28,7 +28,7 @@ class ActionsSequence:
             if not focused:
                 raise Amiya_AppNotFocusedException()
             
-            print(action.__repr__(), end="\r")
+            aprint(f"\nExecuting: {action.__repr__()}", end="\r")
             
             if isinstance(action, KeyboardAction):
                 action.execute(pynput_keyboard)

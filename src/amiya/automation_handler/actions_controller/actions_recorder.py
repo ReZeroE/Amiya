@@ -33,7 +33,7 @@ class ActionsRecorder():
         
         root = tk.Tk()
         root.title("Recording...")
-        root.geometry(f"{WIDTH}x{LENGTH}+800+400")
+        root.geometry(f"{WIDTH}x{LENGTH}+400+400")
         root.overrideredirect(True)  # Remove window decorations
 
         root.attributes('-topmost', True) # STAY ON TOOOOOPPPPPP
