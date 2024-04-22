@@ -32,10 +32,16 @@ class Action(ABC):
 
 
 class MouseAction(Action):
-    def __init__(self, coor: tuple, delay: float, click: bool):
-        self.coordinate = coor
-        self.delay = delay
-        self.click = click
+    def __init__(self, coor: tuple, delay: float, click: bool, window_info: dict):
+        self.coordinate     = coor
+        self.delay          = delay
+        self.click          = click
+        
+        self.window_info    = window_info
+        assert("width" in self.window_info)
+        assert("height" in self.window_info)
+        assert("is_fullscreen" in self.window_info)
+
         
     def execute(self):
         '''
@@ -58,11 +64,12 @@ class MouseAction(Action):
                 "y": self.coordinate[1]
             },
             "delay": self.delay,
-            "click": self.click
+            "click": self.click,
+            "window_info": self.window_info
         }
         
     def __repr__(self):
-        return f"MouseAction(coor={self.coordinate}, delay={self.delay}, click={self.click})"
+        return f"MouseAction(coor={self.coordinate}, delay={round(self.delay, 2)}, click={self.click})"
 
 
 class KeyboardAction(Action):
@@ -86,7 +93,7 @@ class KeyboardAction(Action):
         }
         
     def __repr__(self):
-        return f"KeyboardAction(key={self.key}, delay={self.delay})"
+        return f"KeyboardAction(key={self.key}, delay={round(self.delay, 2)})"
 
     def press_key(self, key: str, pynput_keyboard: pynput.keyboard.Controller):
         '''

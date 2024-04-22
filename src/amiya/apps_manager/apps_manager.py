@@ -12,6 +12,8 @@ from amiya.utils.helper import *
 from amiya.automation_handler.actions_controller.units.sequence import ActionsSequence
 from amiya.automation_handler.actions_controller.actions_viewer import ActionsViewer
 from amiya.apps_manager.safty_monitor import SaftyMonitor
+from amiya.apps_manager.sync_controller.sync_controller import AppSyncController
+
 # from elevate import elevate; elevate()
 
 class AppsManager:
@@ -276,7 +278,12 @@ class AppsManager:
     
     def __start_app_and_record(self, app: App, new_sequence_name: str):
         self.__safe_start_app(app)
-        new_sequence_recorded = app.actions_controller.start_recording(new_sequence_name, start_recording_on_callback=True)
+        safty_monitor = SaftyMonitor(app.process.pid)
+        new_sequence_recorded = app.actions_controller.start_recording(
+            new_sequence_name, 
+            safty_monitor, 
+            start_recording_on_callback=True
+        )
         self.__print_sequence(new_sequence_recorded)
         
     def __print_sequence(self, sequence: ActionsSequence, tablefmt="fancy_grid"):
@@ -308,19 +315,27 @@ class AppsManager:
             seq_name = input(atext(f"Which sequence would you like to run (i.e. start-game)? "))
         sequence = self.__get_sequence_with_name(seq_name, sequences)
         
+        aprint(f"Add global delay to all actions (seconds) [leave empty to default to 0]: ", end="")
+        user_input = input().lower().strip()
+        if user_input:
+            gloab_delay = self.__parse_int(user_input)                              # If user inputted global delay
+        else:
+            gloab_delay = 0                                                         # Default global delay to 0
+        
         aprint(f"The sequence '{sequence.sequence_name}' will run for {sequence.get_runtime()} seconds. Continue? [y/n] ", log_type=LogType.WARNING, end="")
         if input().lower() == "y":                                      # Verbose runtime and wait for user confirmation to run
             aprint(f"[Automation {sequence.sequence_name}] Running...")
             
-            self.__safe_start_app(app); time.sleep(5)                   # Starts the application for the sequence
-            safty_monitor = SaftyMonitor(app.process.pid)               # Creates a safty monitor object for sequence execution safty (must be created after the app is started)
-            self.__safe_execute_sequence(sequence, safty_monitor)       # Runs the sequence (with the safty monitor)
+            self.__safe_start_app(app); time.sleep(5)                               # Starts the application for the sequence
+            safty_monitor = SaftyMonitor(app.process.pid)                           # Creates a safty monitor object for sequence execution safty (must be created after the app is started)
+            self.__safe_execute_sequence(sequence, safty_monitor, gloab_delay)      # Runs the sequence (with the safty monitor)
 
+        print("")
         aprint(f"[Automation {sequence.sequence_name}] Run Completed!", log_type=LogType.SUCCESS)
         
-    def __safe_execute_sequence(self, sequence: ActionsSequence, safty_monitor: SaftyMonitor):
+    def __safe_execute_sequence(self, sequence: ActionsSequence, safty_monitor: SaftyMonitor, global_delay: int):
         try:
-            sequence.execute(safty_monitor)
+            sequence.execute(safty_monitor, global_delay)
         except Amiya_AppNotFocusedException:
             aprint("<Safty-Monitor> The application is unfocused during an automation sequence. Automation stopped.", log_type=LogType.ERROR)
             return
@@ -333,3 +348,39 @@ class AppsManager:
                 return seq
         aprint(f"No sequence with name '{seq.sequence_name}' exists. Exiting.", log_type=LogType.ERROR); exit()
 
+    def __parse_int(self, delay) -> int:
+        if isinstance(delay, int):
+            return delay
+        
+        if isinstance(delay, str):
+            try:
+                return int(delay.strip())
+            except ValueError:
+                aprint("Please input an integer as the delay."); exit()
+        
+        raise AmiyaBaseException(f"Type {type(delay)} ({delay}) delay not supported.")
+    
+    
+    
+    # =====================================================================================================================================
+    # >>>>> UTILITY APP FUNCTIONS
+    
+    # =================================================
+    # ==================| SYNC APPS | =================
+    # =================================================
+    def sync_apps(self):
+        aprint(f"Sync all {len(self.apps)} applications on this machine? (This may take a while) [y/n] ", log_type=LogType.WARNING, end="")
+        if input().strip().lower() != "y": return
+        
+        
+        sync_controller = AppSyncController()
+        
+        apps = list(self.apps.values())
+        app_name = apps[0].name
+        for i in progressbar(range(len(apps)), f"Syncing {app_name}: ", 40):
+            app: App = apps[i]
+            app_name = app.name
+            success = sync_controller.sync(app)
+            
+        aprint("Sync Complete.", log_type=LogType.SUCCESS)
+        self.print_apps()

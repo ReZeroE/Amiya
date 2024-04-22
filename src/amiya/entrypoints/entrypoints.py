@@ -75,6 +75,14 @@ def execute_command():
     
     
     # =================================================
+    # ==========| APP UTILITY FEATURES | ==============
+    # =================================================
+    
+    start_parser = subparsers.add_parser('sync', help='Sync configured applications on new machine')
+    start_parser.set_defaults(func=entrypoint_handler.sync)
+    
+    
+    # =================================================
     # =============| UTILITY FEATURES | ===============
     # =================================================
         
@@ -90,10 +98,29 @@ def execute_command():
     shutdown_parser.add_argument('delay', nargs='?', default=None, help='Delay in seconds before shutdown')
     shutdown_parser.set_defaults(func=lambda args: entrypoint_handler.shutdown(args, shutdown_parser))
     
+    import ctypes
+    def is_admin_windows():
+        try:
+            return ctypes.windll.shell32.IsUserAnAdmin()
+        except:
+            return False
     
+    def elevate_windows():
+        if not ctypes.windll.shell32.IsUserAnAdmin():
+            print("Elevating to admin privileges...")
+            print(sys.executable)
+            print(" ".join(sys.argv))
+            ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
+            sys.exit(0)
+            
     
     # =================================================
     # PARSER DRIVER
+    
+    # print("Elevating...")
+    # elevate_windows()
+    
+    # time.sleep(10)
     
     args = parser.parse_args()
     if hasattr(args, 'func'):

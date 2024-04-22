@@ -6,6 +6,7 @@ from amiya.automation_handler.actions_controller.units.sequence import ActionsSe
 from amiya.automation_handler.actions_controller.actions_recorder import ActionsRecorder
 from amiya.exceptions.exceptions import *
 from amiya.utils.helper import *
+from amiya.apps_manager.safty_monitor import SaftyMonitor
 
 class ActionsController:
     def __init__(self, config_dir):
@@ -43,7 +44,7 @@ class ActionsController:
                 sequences.append(sequence)
         return sequences
     
-    def start_recording(self, new_sequence_name, start_recording_on_callback=True) -> ActionsSequence:
+    def start_recording(self, new_sequence_name, safety_monitor: SaftyMonitor, start_recording_on_callback=True) -> ActionsSequence:
         """
         Function responsible for recording new action sequences.
         
@@ -62,7 +63,7 @@ class ActionsController:
         seq_config_file = os.path.join(self.actions_config_dir, NEW_SEQUENCE_FILENAME)
         config_handler = ActionsConfigHandler(seq_config_file)
 
-        action_recorder   = ActionsRecorder()
+        action_recorder   = ActionsRecorder(safety_monitor)                                  # Create the ActionsRecorder object by passing it a safety monitor (to fetch screen size)
         recorded_sequence = action_recorder.record(start_recording_on_callback)              # Record mouse actions until "up-arrow" is pressed
         recorded_sequence.sequence_name = NEW_SEQUENCE_NAME                                  # Set the new sequence name
         

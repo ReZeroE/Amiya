@@ -1,4 +1,5 @@
 import os
+import time
 from datetime import datetime
 from pynput import keyboard
 from amiya.automation_handler.config_controller.config_handler import ActionsConfigHandler
@@ -21,15 +22,19 @@ class ActionsSequence:
     
     def execute(self, safty_monitor: SaftyMonitor, global_delay: int = 0):
         pynput_keyboard = keyboard.Controller()
-        for action in self.actions:
+        for idx, action in enumerate(self.actions):
             
-            # If the application is no longer focused, then the automation needs to be stopped
+            # If the application is no longer focused, stop the automation
             focused = safty_monitor.is_focused()  
             if not focused:
                 raise Amiya_AppNotFocusedException()
             
-            aprint(f"\nExecuting: {action.__repr__()}", end="\r")
+            # Verbose current action
+            buffer_space = " "*5
+            aprint(f"(CMD {idx+1}/{len(self.actions)}) Executing: {action.__repr__()}{buffer_space}", end="\r")
             
+            # Execute current action after global delay
+            time.sleep(global_delay)
             if isinstance(action, KeyboardAction):
                 action.execute(pynput_keyboard)
             elif isinstance(action, MouseAction):
@@ -64,7 +69,8 @@ class ActionsSequence:
                         raw_action["coordinate"]["y"]
                     ),
                     raw_action["delay"],
-                    raw_action["click"]
+                    raw_action["click"],
+                    raw_action["window_info"]
                 )
                 self.actions.append(mouse_action)
                 

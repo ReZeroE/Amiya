@@ -72,6 +72,13 @@ class App:
     # =======================================
 
     def run(self) -> bool:
+        # If the application is already running
+        if self.is_running():
+            print("App already started, focusing...")
+            self.bring_to_foreground()
+            return True
+        
+        # If the application is not running, then start the application
         if self.verified == True:   
             subprocess.Popen([self.exe_path], shell=True)
             
@@ -156,6 +163,10 @@ class App:
         sanitized_name = sanitized_name.replace(" ", "-")
         return sanitized_name
     
+    def set_new_path(self, new_path):
+        # Used for syncing apps across different machines only
+        self.exe_path = new_path
+        self.verified = self.__verify_app_path()
     
     # ==========================================
     # ==========| HELPER FUNCTIONS | ===========

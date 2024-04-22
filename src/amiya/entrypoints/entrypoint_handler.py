@@ -66,8 +66,8 @@ class AmiyaEntrypointHandler:
             self.apps_manager.record_sequence()
 
     def run_automations_sequences(self, args):
-        print("Elevating...")
-        from elevate import elevate; elevate()
+        # print("Elevating...")
+        # from elevate import elevate; elevate()
         if args.tag:
             if args.seq_name:
                 self.apps_manager.run_sequence_with_tag(args.tag, args.seq_name)
@@ -76,6 +76,13 @@ class AmiyaEntrypointHandler:
         else:
             self.apps_manager.run_sequence()
 
+
+    # =================================================
+    # ==========| APP UTILITY FEATURES | ==============
+    # =================================================
+
+    def sync(self, args):
+        self.apps_manager.sync_apps()
 
     # =================================================
     # =============| UTILITY FEATURES | ===============
