@@ -4,6 +4,7 @@ from amiya.utils.helper import *
 from amiya.module_utilities.search_controller import SearchController
 from amiya.module_utilities.power_controller import PowerUtils
 from amiya.scheduler.scheduler import AmiyaScheduler
+from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
 
 class AmiyaEntrypointHandler:
     def __init__(self):
@@ -91,6 +92,7 @@ class AmiyaEntrypointHandler:
         
     def cleanup(self, args):
         self.apps_manager.cleanup_apps()
+        
 
     # =================================================
     # =============| UTILITY FEATURES | ===============
@@ -114,6 +116,9 @@ class AmiyaEntrypointHandler:
         else:
             parser.print_help()
 
+
+    def display_system_uuid(self, args):
+       SysUUIDController.print_uuid()
 
     # =================================================
     # ================| SCHEDULER | ===================

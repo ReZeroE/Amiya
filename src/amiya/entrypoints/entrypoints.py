@@ -101,6 +101,9 @@ def execute_command():
     shutdown_parser.set_defaults(func=lambda args: entrypoint_handler.shutdown(args, shutdown_parser))
     
     
+    start_parser = subparsers.add_parser('uuid', help='Display system UUID')
+    start_parser.set_defaults(func=entrypoint_handler.display_system_uuid)
+    
     # =================================================
     # ================| SCHEDULER | ===================
     # =================================================
@@ -121,7 +124,7 @@ def execute_command():
             exit()
 
         for name, subparser in subparsers.choices.items():
-            if name != 'sync':
+            if name not in ["sync", "search", "sleep", "shutdown"]:
                 subparser.set_defaults(func=blocked_func)
     
     

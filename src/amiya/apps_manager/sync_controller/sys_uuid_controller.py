@@ -1,4 +1,5 @@
 import subprocess
+from amiya.utils.helper import aprint
 
 class SysUUIDController:
     @staticmethod
@@ -11,3 +12,7 @@ class SysUUIDController:
             return str(e)
     
     system_uuid = get_system_uuid()
+
+    @staticmethod
+    def print_uuid():
+        aprint(f"System UUID: {SysUUIDController.get_system_uuid()}")
