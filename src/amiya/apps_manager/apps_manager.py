@@ -59,7 +59,8 @@ class AppsManager:
         app.create_app()                                # Create the app and save to config
         self.apps[app.id] = app                         # Add to apps dict (key: app_id, value: app_obj)
         
-        aprint(f"Application '{name}' has been successfully created and configured!\n\nTo start the app, run `{colored(f"amiya start {app.get_reformatted_app_name()}", "light_cyan")}`")
+        text = colored(f"amiya start {app.get_reformatted_app_name()}", "light_cyan")
+        aprint(f"Application '{name}' has been successfully created and configured!\n\nTo start the app, run `{text}`")
     
     def create_app_automated(self):
         app_name = input(atext(f"New Application's Name: "))
@@ -393,7 +394,8 @@ class AppsManager:
         self.print_apps()
         
         found = len([app for app in apps if app.verified == True])
-        aprint(f"Sync Complete - successfully synced {found}/{len(apps)} applications.\n\nTo cleanup unverified applications (unavailable on this machine), run '{colored("amiya cleanup", "light_cyan")}' ")
+        text = colored("amiya cleanup", "light_cyan")
+        aprint(f"Sync Complete - successfully synced {found}/{len(apps)} applications.\n\nTo cleanup unverified applications (unavailable on this machine), run '{text}' ")
         
     def verify_apps_synced(self) -> bool: 
         # Verify whether applications configured with Amiya's apps manager needs to be synced with the current machine.

@@ -120,11 +120,12 @@ def execute_command():
     if sync_needed:
         # If sync is needed, restrict all commands except 'sync'
         def blocked_func(args):
-            aprint(f"Applications under Amiya's apps manager are not fully configured to run on this machine.\n\nTo sync the apps to this machine, run `{colored('amiya sync', 'light_cyan')}`")
+            text = colored('amiya sync', 'light_cyan')
+            aprint(f"Applications under Amiya's apps manager are not fully configured to run on this machine.\n\nTo sync the apps to this machine, run `{text}`")
             exit()
 
         for name, subparser in subparsers.choices.items():
-            if name not in ["sync", "search", "sleep", "shutdown"]:
+            if name not in ["sync", "search", "sleep", "shutdown", "uuid"]:
                 subparser.set_defaults(func=blocked_func)
     
     
