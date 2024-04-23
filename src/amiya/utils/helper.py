@@ -6,7 +6,7 @@ from enum import Enum
 from termcolor import colored
 from amiya.utils.constants import BASENAME # "Amiya"
 
-def check_platform():
+def check_platform() -> bool:
     """
     Verifies whether the OS is supported by the package.
     Package amiya currently only support the Windows OS.
@@ -16,13 +16,17 @@ def check_platform():
     """
     return os.name == "nt"
 
+# =================================================
+# =============| DEFAULT LOG TYPE | ===============
+# =================================================
+
 class LogType(Enum):
     NORMAL  = "white"
     SUCCESS = "green"
     WARNING = "yellow"
     ERROR   = "red"
 
-def atext(text: str, log_type: LogType = LogType.NORMAL):
+def atext(text: str, log_type: LogType = LogType.NORMAL) -> str:
     prefix = colored(BASENAME, "cyan")
     rtext = colored(text, log_type.value)
     return f"[{prefix}] {rtext}"
@@ -47,12 +51,16 @@ def print_centered(text):
     for line in lines:
         print(' ' * left_padding + line)
         
+
+# ========================================================
+# =============| PERMISSION VERIFICATION | ===============
+# ========================================================
         
 import os
 import sys
 import platform
 
-def is_admin():
+def is_admin() -> bool:
     try:
         # For Windows
         if platform.system().lower() == "windows":
@@ -68,6 +76,9 @@ def is_admin():
         return False
 
 
+# ===================================================
+# ================| PROGRESS BAR | ==================
+# ===================================================
 
 import time
 def progressbar(it, prefix="", size=60, out=sys.stdout):
@@ -84,3 +95,5 @@ def progressbar(it, prefix="", size=60, out=sys.stdout):
         yield item
         show(i+1)
     print("", flush=True, file=out)
+    
+

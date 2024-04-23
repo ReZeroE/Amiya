@@ -6,16 +6,15 @@ from pynput import mouse, keyboard
 from amiya.automation_handler.actions_controller.units.action import Action, MouseAction, KeyboardAction
 from amiya.automation_handler.actions_controller.units.sequence import ActionsSequence
 from amiya.apps_manager.safty_monitor import SaftyMonitor
+from amiya.pixel_calculator.resolution_detector import ResolutionDetector
 
 from amiya.utils.helper import *
 from amiya.exceptions.exceptions import *
 
 class ActionsRecorder():
-    def __init__(self, safety_monitor: SaftyMonitor):
+    def __init__(self, sequence: ActionsSequence, safety_monitor: SaftyMonitor):
+        self.sequence = sequence
         self.safety_monitor = safety_monitor
-        
-        self.sequence = ActionsSequence()
-        self.sequence.set_date_created_to_current()
         
         self.last_click_time = None
         self.is_recording = False
@@ -134,7 +133,7 @@ class ActionsRecorder():
             now = time.time()
             delay = now - self.last_click_time if self.last_click_time else float(0)
             clicked = button == mouse.Button.left # If left is clicked, the click is registered as "clicked", else if right is clicked, only the mouse movement will be registered.
-            self.sequence.add(MouseAction((x, y), delay, clicked, self.safety_monitor.get_window_size()))
+            self.sequence.add(MouseAction((x, y), delay, clicked, ResolutionDetector.get_window_size()))
             self.last_click_time = now
             self.on_mouse_action_update_window(x, y, delay)
 

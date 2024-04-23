@@ -19,10 +19,10 @@ from amiya.apps_manager.sync_controller.sync_controller import AppSyncController
 class AppsManager:
     os.system("")  # Enables ANSI escape characters in terminal
     
-    def __init__(self):
+    def __init__(self, verbose=True):
         self.__initial_setup()
         self.apps : dict[int, App] = self.__read_apps()
-
+        self.verbose = verbose
 
     # ======================================
     # ============| READ APPS | ============
@@ -89,7 +89,7 @@ class AppsManager:
             app = self.apps[int(user_input)]
         else:                                       # If user inputted an application tag tag
             tag = self.__parse_tag(tag)
-            app = self.__get_app_by_tag(tag)
+            app = self.get_app_by_tag(tag)
         
         user_input = input(atext(f"Are you sure you would like to delete app '{app.name}'? [y/n] "))
         if user_input.lower() != "y":
@@ -128,7 +128,7 @@ class AppsManager:
             app = self.apps[int(user_input)]
         else:                                   # If user provided an application tag
             tag = self.__parse_tag(tag)
-            app = self.__get_app_by_tag(tag)
+            app = self.get_app_by_tag(tag)
         
         self.__safe_start_app(app)
     
@@ -149,6 +149,10 @@ class AppsManager:
     def print_apps(self, format="fancy_grid"):
         tabulated_apps = AppsViewer.tabulate_apps(self.apps, tablefmt=format)
         print(tabulated_apps)
+        
+    def print_apps_list(self, apps: list[App], format="fancy_grid"):
+        tabulated_apps = AppsViewer.tabulate_apps_list(apps, tablefmt=format)
+        print(tabulated_apps)
     
     def print_tags(self, app: App, format="fancy_grid"):
         tabulated_tags = AppsViewer.tabulate_tags(app.tags, tablefmt=format)
@@ -162,7 +166,7 @@ class AppsManager:
         
         def tag_exists(tag):
             try:
-                self.__get_app_by_tag(tag)
+                self.get_app_by_tag(tag)
                 return True
             except Amiya_NoSuchTagException:
                 return False
@@ -208,7 +212,7 @@ class AppsManager:
     def __get_next_app_id(self):
         return max(self.apps.keys()) + 1
 
-    def __get_app_with_id(self, user_input_id: str) -> App:
+    def get_app_with_id(self, user_input_id: str) -> App:
         try:
             app = self.apps[int(user_input_id)]
         except KeyError:
@@ -217,7 +221,7 @@ class AppsManager:
             aprint(f"Expected an ID (such as 0 or 1) but got '{user_input_id}'.", log_type=LogType.ERROR); exit()
         return app
     
-    def __get_app_by_tag(self, tag) -> App | None:
+    def get_app_by_tag(self, tag) -> App | None:
         for _, app in self.apps.items():
             if tag in app.tags:
                 return app
@@ -235,7 +239,7 @@ class AppsManager:
     def list_sequences(self):
         self.print_apps()
         user_input_id = input(atext(f"Which app would you like to see the automation sequences of? (0-{len(self.apps)-1}) "))
-        app = self.__get_app_with_id(user_input_id)
+        app = self.get_app_with_id(user_input_id)
           
         sequences: list[ActionsSequence] = []
         sequences = app.actions_controller.load_all_sequences()
@@ -243,11 +247,11 @@ class AppsManager:
 
     def list_sequences_with_tag(self, tag: str):
         tag = self.__parse_tag(tag)
-        app = self.__get_app_by_tag(tag)
+        app = self.get_app_by_tag(tag)
         
         sequences: list[ActionsSequence] = []
         sequences = app.actions_controller.load_all_sequences()
-        print(sequences)
+        # print(sequences)
         self.print_sequences(sequences)
         
     def print_sequences(self, sequence_list: list[ActionsSequence], tablefmt="fancy_grid"):
@@ -264,14 +268,14 @@ class AppsManager:
     def record_sequence(self):
         self.print_apps()
         user_input_id = input(atext(f"Which app would you like to RECORD A NEW AUTOMATION SEQUENCE of? (0-{len(self.apps)-1}) "))
-        app = self.__get_app_with_id(user_input_id)
+        app = self.get_app_with_id(user_input_id)
         
         new_sequence_name = input(atext(f"Name of the new automation sequence (i.e. start-game): "))
         self.__start_app_and_record(app, new_sequence_name)
 
     def record_sequence_with_tag(self, tag: str):
         tag = self.__parse_tag(tag)
-        app = self.__get_app_by_tag(tag)
+        app = self.get_app_by_tag(tag)
         
         new_sequence_name = input(atext(f"Name of the new automation sequence (i.e. start-game): "))
         self.__start_app_and_record(app, new_sequence_name)
@@ -297,12 +301,12 @@ class AppsManager:
     def run_sequence(self):
         self.print_apps()
         user_input_id = input(atext(f"Which app would you like to RUN AN AUTOMATION SEQUENCE of? (0-{len(self.apps)-1}) "))
-        app = self.__get_app_with_id(user_input_id)
+        app = self.get_app_with_id(user_input_id)
         self.__execute_sequence_wrapper(app)
         
     def run_sequence_with_tag(self, tag: str, seq_name: str = None):
         tag = self.__parse_tag(tag)
-        app = self.__get_app_by_tag(tag)
+        app = self.get_app_by_tag(tag)
         self.__execute_sequence_wrapper(app, seq_name)
         
     def __execute_sequence_wrapper(self, app: App, seq_name: str = None):
@@ -313,7 +317,7 @@ class AppsManager:
         if seq_name == None:
             self.print_sequences(sequences)                             # Verbose all sequences in the CLI and wait for user selection
             seq_name = input(atext(f"Which sequence would you like to run (i.e. start-game)? "))
-        sequence = self.__get_sequence_with_name(seq_name, sequences)
+        sequence = self.get_sequence_with_name(seq_name, sequences)
         
         aprint(f"Add global delay to all actions (seconds) [leave empty to default to 0]: ", end="")
         user_input = input().lower().strip()
@@ -340,7 +344,7 @@ class AppsManager:
             aprint("<Safty-Monitor> The application is unfocused during an automation sequence. Automation stopped.", log_type=LogType.ERROR)
             return
      
-    def __get_sequence_with_name(self, seq_name: str, sequence_list: list[ActionsSequence]) -> ActionsSequence:
+    def get_sequence_with_name(self, seq_name: str, sequence_list: list[ActionsSequence]) -> ActionsSequence:
         seq_name = seq_name.strip().lower().replace(" ", "-")
         
         for seq in sequence_list:
@@ -372,15 +376,40 @@ class AppsManager:
         aprint(f"Sync all {len(self.apps)} applications on this machine? (This may take a while) [y/n] ", log_type=LogType.WARNING, end="")
         if input().strip().lower() != "y": return
         
-        
         sync_controller = AppSyncController()
         
         apps = list(self.apps.values())
-        app_name = apps[0].name
-        for i in progressbar(range(len(apps)), f"Syncing {app_name}: ", 40):
+        for i in progressbar(range(len(apps)), f"Syncing: ", 40):
             app: App = apps[i]
-            app_name = app.name
             success = sync_controller.sync(app)
             
         aprint("Sync Complete.", log_type=LogType.SUCCESS)
-        self.print_apps()
+        self.print_apps() 
+        
+    def cleanup_apps(self):
+        unverified_apps = [app for app in self.apps.values() if app.verified == False]
+        if len(unverified_apps) == 0:
+            aprint('There is no unverified application to cleanup!'); return
+        self.print_apps_list(unverified_apps)
+        
+        aprint(f"Are you sure you want to remove all these unverified apps? [y/n] ", log_type=LogType.WARNING, end="")
+        if input().strip().lower() != "y": return
+        
+        for app in unverified_apps:
+            aprint(f"Removing application '{app.name}'...")
+            self.__safe_delete_app(app)
+            
+        aprint("Cleanup Complete.", log_type=LogType.SUCCESS)
+        
+        
+        
+    # =====================================================================================================================================
+    # >>>>> SCHEDULER FUNCTIONS
+    
+    def sequence_exists(self, app: App, sequence_name: str):
+        sequences: list[ActionsSequence] = []
+        sequences = app.actions_controller.load_all_sequences()
+        self.get_sequence_with_name(sequence_name, sequences)
+    
+            
+        

@@ -41,8 +41,7 @@ class MouseAction(Action):
         assert("width" in self.window_info)
         assert("height" in self.window_info)
         assert("is_fullscreen" in self.window_info)
-
-        
+ 
     def execute(self):
         '''
         The delay represent the time lag between the current click and the previous click,

@@ -8,19 +8,25 @@ from amiya.exceptions.exceptions import AmiyaBaseException, Amiya_AppNotFocusedE
 from amiya.utils.constants import DATETIME_FORMAT
 from amiya.utils.helper import *
 from amiya.apps_manager.safty_monitor import SaftyMonitor
+from amiya.pixel_calculator.resolution_detector import ResolutionDetector
+from amiya.pixel_calculator.pixel_calculator import PixelCalculator
 
 class ActionsSequence:
     def __init__(
         self, 
         sequence_name: str = None, 
-        date_created: datetime = None
+        date_created: datetime = None,
+        
     ):
-        self.sequence_name  = sequence_name
-        self.date_created   = date_created
-        self.other_data     = None
-        self.actions: list[Action] = []
+        self.sequence_name                  = sequence_name                 # Default to None (populated during some __init__() and parse_json())
+        self.date_created: datetime         = date_created                  # Default to None (and set at to_json() and parse_json())
+        self.primary_monitor_info: dict     = None                          # Fetch PRIMARY monitor's size (width x height)
+        self.other_data                     = None
+        self.actions: list[Action]          = []
     
     def execute(self, safty_monitor: SaftyMonitor, global_delay: int = 0):
+        pixel_calculator = PixelCalculator(self.primary_monitor_info)
+        
         pynput_keyboard = keyboard.Controller()
         for idx, action in enumerate(self.actions):
             
@@ -38,6 +44,10 @@ class ActionsSequence:
             if isinstance(action, KeyboardAction):
                 action.execute(pynput_keyboard)
             elif isinstance(action, MouseAction):
+                print(f"Previous coord: {action.coordinate}")
+                new_coordinate = pixel_calculator.calculate_new_coordinate(action.coordinate[0], action.coordinate[1], action.window_info)
+                action.coordinate = new_coordinate
+                print(f"Current coord: {action.coordinate}")
                 action.execute()
             
     def add(self, action: Action):
@@ -47,18 +57,20 @@ class ActionsSequence:
     def to_json(self):
         json_data = dict()
         json_data["metadata"] = {
-            "sequence_name": self.sequence_name,
-            "date_created": self.datetime_to_str(),
-            "other_data": self.other_data
+            "sequence_name" : self.sequence_name,
+            "date_created"  : self.datetime_to_str(),
+            "monitor_info"  : ResolutionDetector.get_primary_monitor_size(),
+            "other_data"    : self.other_data
         }
         json_data["actions_sequence"] = [action.to_json() for action in self.actions]
         return json_data
 
     def parse_config(self, raw_json_config: list):
-        metadata            = raw_json_config["metadata"]
-        self.sequence_name  = metadata["sequence_name"]
-        self.date_created   = self.str_to_datetime(metadata["date_created"])
-        self.other_data     = metadata["other_data"]
+        metadata                    = raw_json_config["metadata"]
+        self.sequence_name          = metadata["sequence_name"]
+        self.date_created           = self.str_to_datetime(metadata["date_created"])
+        self.primary_monitor_info   = metadata["monitor_info"]
+        self.other_data             = metadata["other_data"]
         
         actions_sequence = raw_json_config["actions_sequence"]
         for raw_action in actions_sequence:

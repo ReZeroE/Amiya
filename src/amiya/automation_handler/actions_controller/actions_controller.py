@@ -63,16 +63,18 @@ class ActionsController:
         seq_config_file = os.path.join(self.actions_config_dir, NEW_SEQUENCE_FILENAME)
         config_handler = ActionsConfigHandler(seq_config_file)
 
-        action_recorder   = ActionsRecorder(safety_monitor)                                  # Create the ActionsRecorder object by passing it a safety monitor (to fetch screen size)
-        recorded_sequence = action_recorder.record(start_recording_on_callback)              # Record mouse actions until "up-arrow" is pressed
-        recorded_sequence.sequence_name = NEW_SEQUENCE_NAME                                  # Set the new sequence name
+        recording_sequence = ActionsSequence(NEW_SEQUENCE_NAME)                           # Create new empty actions sequence (later populated during recording)
+        recording_sequence.set_date_created_to_current()                                  # Set current time to creation time
+
+        action_recorder   = ActionsRecorder(recording_sequence, safety_monitor)           # Create the ActionsRecorder object by passing it the empty sequence object to populate and a safety monitor (to fetch app window size)
+        action_recorder.record(start_recording_on_callback)                               # Record mouse actions until "end-recording" is pressed
         
         aprint("Saving to configurations...")
-        json_sequence     = recorded_sequence.to_json()                                      # Convert the ActionsSequence object into a list of JSON objects
-        success           = config_handler.save_config(json_sequence)                        # Write JSON actions to config
+        json_sequence     = recording_sequence.to_json()                                  # Convert the ActionsSequence object into a list of JSON objects
+        success           = config_handler.save_config(json_sequence)                     # Write JSON actions to config
         assert(success == True)
         
-        return recorded_sequence                                                             # Returns the recorded action sequence if successful
+        return recording_sequence                                                         # Returns the recorded action sequence if successful
     
 
     # ===========================================

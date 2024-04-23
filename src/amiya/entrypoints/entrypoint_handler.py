@@ -3,12 +3,14 @@ from amiya.exceptions.exceptions import *
 from amiya.utils.helper import *
 from amiya.module_utilities.search_controller import SearchController
 from amiya.module_utilities.power_controller import PowerUtils
+from amiya.scheduler.scheduler import AmiyaScheduler
 
 class AmiyaEntrypointHandler:
     def __init__(self):
         self.apps_manager = AppsManager()
         self.search_controller = SearchController()
         self.power_utils = PowerUtils()
+        self.scheduler = AmiyaScheduler()
 
     
     # =================================================
@@ -83,6 +85,9 @@ class AmiyaEntrypointHandler:
 
     def sync(self, args):
         self.apps_manager.sync_apps()
+        
+    def cleanup(self, args):
+        self.apps_manager.cleanup_apps()
 
     # =================================================
     # =============| UTILITY FEATURES | ===============
@@ -106,6 +111,13 @@ class AmiyaEntrypointHandler:
         else:
             parser.print_help()
 
+
+    # =================================================
+    # ================| SCHEDULER | ===================
+    # =================================================
+
+    def run_scheduler(self, args):
+        self.scheduler.run_scheduler()
 
     # =================================================
     # ===============| OTHER HELPER | =================
