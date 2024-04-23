@@ -2,14 +2,13 @@ import sys
 import time
 import psutil
 import argparse
+from termcolor import colored
 from amiya.entrypoints.entrypoint_handler import AmiyaEntrypointHandler
-
-
+from amiya.utils.helper import aprint
 
 
 def execute_command():
     entrypoint_handler = AmiyaEntrypointHandler()
-    
     
     parser = argparse.ArgumentParser(prog='amiya', description="Amiya CLI Automation Package")
     subparsers = parser.add_subparsers(dest='command', help='commands')
@@ -111,15 +110,24 @@ def execute_command():
     
     
     
+    # ===========================================================================================
+    # >>> BLOCKING FUNCTIONS
+    # ===========================================================================================
+    sync_needed = not entrypoint_handler.apps_synced()
+    if sync_needed:
+        # If sync is needed, restrict all commands except 'sync'
+        def blocked_func(args):
+            aprint(f"Applications under Amiya's apps manager are not fully configured to run on this machine.\n\nTo sync the apps to this machine, run `{colored('amiya sync', 'light_cyan')}`")
+            exit()
+
+        for name, subparser in subparsers.choices.items():
+            if name != 'sync':
+                subparser.set_defaults(func=blocked_func)
+    
     
     
     # =================================================
     # PARSER DRIVER
-    
-    # print("Elevating...")
-    # elevate_windows()
-    
-    # time.sleep(10)
     
     args = parser.parse_args()
     if hasattr(args, 'func'):

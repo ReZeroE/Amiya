@@ -13,6 +13,7 @@ from amiya.automation_handler.actions_controller.units.sequence import ActionsSe
 from amiya.automation_handler.actions_controller.actions_viewer import ActionsViewer
 from amiya.apps_manager.safty_monitor import SaftyMonitor
 from amiya.apps_manager.sync_controller.sync_controller import AppSyncController
+from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
 
 # from elevate import elevate; elevate()
 
@@ -24,10 +25,11 @@ class AppsManager:
         self.apps : dict[int, App] = self.__read_apps()
         self.verbose = verbose
 
+
     # ======================================
     # ============| READ APPS | ============
     # ======================================
-    def __read_apps(self) -> list[App]:
+    def __read_apps(self) -> dict[int, App]:
         apps_name_list = os.listdir(APPS_DIRECTORY)
         apps_dict: dict[int, App] = dict()
         
@@ -45,7 +47,7 @@ class AppsManager:
     # ======================================
     
     def create_app(self, name, exe_path):
-        app = App(name, exe_path, new=True)             # Create a new app object (new=True tells the App not to initialize the action controller just yet)
+        app = App(name, exe_path)                       # Create a new app object
         app.id = self.__get_next_app_id()               # Assign ID to app (int)
         app.tags = [app.get_reformatted_app_name()]     # Assign a default tag during app creation
         
@@ -74,6 +76,7 @@ class AppsManager:
             aprint(f"The application's path failed to be verified (invalid path to .exe). Would you like to add this app anyways? [y/n] ", log_type=LogType.WARNING, end="")
             if input("").lower()!= "y": 
                 exit()
+    
     
     # ======================================
     # ===========| DELETE APP | ============
@@ -116,6 +119,7 @@ class AppsManager:
                 app.id -= 1
                 app.save_app_config()
     
+    
     # ======================================
     # =============| RUN APP | =============
     # ======================================
@@ -138,6 +142,7 @@ class AppsManager:
             aprint(f"[PID {app.process.pid}] Application '{app.name}' started successfully!")
         else:
             aprint(f"Application '{app.name}' failed to start.", log_type=LogType.ERROR); exit()
+            
             
     # ======================================
     # ============| VIEW APPS | ============
@@ -372,9 +377,11 @@ class AppsManager:
     # =================================================
     # ==================| SYNC APPS | =================
     # =================================================
-    def sync_apps(self):
-        aprint(f"Sync all {len(self.apps)} applications on this machine? (This may take a while) [y/n] ", log_type=LogType.WARNING, end="")
-        if input().strip().lower() != "y": return
+    
+    def sync_apps(self, verbose=True):
+        if verbose:
+            aprint(f"Sync all {len(self.apps)} applications on this machine? (This may take a while) [y/n] ", log_type=LogType.WARNING, end="")
+            if input().strip().lower() != "y": return
         
         sync_controller = AppSyncController()
         
@@ -383,8 +390,18 @@ class AppsManager:
             app: App = apps[i]
             success = sync_controller.sync(app)
             
-        aprint("Sync Complete.", log_type=LogType.SUCCESS)
-        self.print_apps() 
+        self.print_apps()
+        
+        found = len([app for app in apps if app.verified == True])
+        aprint(f"Sync Complete - successfully synced {found}/{len(apps)} applications.\n\nTo cleanup unverified applications (unavailable on this machine), run '{colored("amiya cleanup", "light_cyan")}' ")
+        
+    def verify_apps_synced(self) -> bool: 
+        # Verify whether applications configured with Amiya's apps manager needs to be synced with the current machine.
+        # Sync is only required when transferring the apps manager's configuration data (apps) on to a new machine.
+        for app in self.apps.values():
+            if SysUUIDController.system_uuid != app.sys_uuid:
+                return False
+        return True
         
     def cleanup_apps(self):
         unverified_apps = [app for app in self.apps.values() if app.verified == False]

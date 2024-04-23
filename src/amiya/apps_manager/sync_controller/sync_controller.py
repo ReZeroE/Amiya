@@ -1,7 +1,7 @@
 import os
 import sys
 import string
-import pyautogui
+import subprocess
 from concurrent import futures
 from multiprocessing import Manager
 
@@ -54,13 +54,16 @@ class AppSyncController:
             
             # If app exist on the new machine
             if new_path != None:
-                app.set_new_path(new_path)
-                return True         # New path set successfully
+                app.set_new_path(new_path)  # Set new path
+                app.set_new_uuid()          # Set new system UUID
+                app.save_app_config()       # Save new config
+                return True                 # ---> New path set successfully
             else:
-                return False        # App doesn't exist on new machine
+                app.set_new_uuid()          # Set new system UUID
+                app.save_app_config()       # Save new config
+                return False                # ---> App doesn't exist on new machine
         else:
-            return True             # App original path works on new machine
-        
-                
-        
-            
+            app.set_new_uuid()              # Set new system UUID
+            app.save_app_config()           # Save new config
+            return True                     # ---> App original path works on new machine
+

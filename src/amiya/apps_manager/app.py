@@ -7,17 +7,19 @@ import subprocess
 from amiya.utils.constants import APPS_DIRECTORY, FOCUS_PID_EXE
 from amiya.exceptions.exceptions import *
 from amiya.automation_handler.actions_controller.actions_controller import ActionsController
+from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
 
 APP_AUTOMATION_DIRNAME  = "automation"
 APP_CONFIG_FILENAME     = "app-config.json"
 
 class App:
-    def __init__(self, name: str, exe_path: str, tags: list = [], new: bool = False):
+    def __init__(self, name: str, exe_path: str, tags: list = [], sys_uuid: str = SysUUIDController.system_uuid):
         self.id         = None      # Assigned automatically by the AppManager at creation
         self.name       = name
         self.exe_path   = self.__parse_exe_path(exe_path)
         self.tags       = tags
         self.verified   = self.__verify_app_path()
+        self.sys_uuid   = sys_uuid  # Used to identify whether the application is synced with the current machine
         
         # Note that the process variable is a snapshot of the application's process. 
         # It is not always (and most likely not) up-to-date as the program continues to run. 
@@ -128,7 +130,8 @@ class App:
             "name"      : self.name,
             "exe_path"  : self.exe_path,
             "tags"      : self.tags,
-            "verified"  : self.verified
+            "verified"  : self.verified,
+            "sys_uuid"  : self.sys_uuid
         }
 
     @staticmethod
@@ -139,7 +142,8 @@ class App:
                 app = App(
                     config["name"], 
                     config["exe_path"], 
-                    config["tags"]
+                    config["tags"],
+                    config["sys_uuid"]
                 )
                 app.id = int(config["id"])
                 return app
@@ -167,6 +171,9 @@ class App:
         # Used for syncing apps across different machines only
         self.exe_path = new_path
         self.verified = self.__verify_app_path()
+    
+    def set_new_uuid(self):
+        self.sys_uuid = SysUUIDController.get_system_uuid()
     
     # ==========================================
     # ==========| HELPER FUNCTIONS | ===========

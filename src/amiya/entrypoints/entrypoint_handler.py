@@ -86,6 +86,9 @@ class AmiyaEntrypointHandler:
     def sync(self, args):
         self.apps_manager.sync_apps()
         
+    def apps_synced(self):
+        return self.apps_manager.verify_apps_synced()
+        
     def cleanup(self, args):
         self.apps_manager.cleanup_apps()
 
