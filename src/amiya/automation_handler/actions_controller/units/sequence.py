@@ -45,7 +45,7 @@ class ActionsSequence:
                 action.execute(pynput_keyboard)
             elif isinstance(action, MouseAction):
                 print(f"Previous coord: {action.coordinate}")
-                new_coordinate = pixel_calculator.calculate_new_coordinate(action.coordinate[0], action.coordinate[1], action.window_info)
+                new_coordinate = pixel_calculator.calculate_new_coordinate(action.coordinate, action.window_info)
                 action.coordinate = new_coordinate
                 print(f"Current coord: {action.coordinate}")
                 action.execute()
