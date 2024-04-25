@@ -22,7 +22,7 @@
 
 import os
 from setuptools import setup, find_packages
-from amiya.utils.constants import BASENAME, VERSION
+from src.amiya.utils.constants import BASENAME, VERSION
 
 setup(
     name=BASENAME,
