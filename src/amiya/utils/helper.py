@@ -7,7 +7,7 @@ from datetime import datetime
 from termcolor import colored
 from amiya.utils.constants import BASENAME, DATETIME_FORMAT, TIME_FORMAT # "Amiya"
 
-def check_platform() -> bool:
+def verify_platform() -> bool:
     """
     Verifies whether the OS is supported by the package.
     Package amiya currently only support the Windows OS.
@@ -147,7 +147,7 @@ def is_admin() -> bool:
             return os.getuid() == 0  # os.getuid() returns '0' if running as root
 
     except Exception as e:
-        print(f"Error checking administrative privileges: {e}")
+        aprint(f"Error checking administrative privileges: {e}", log_type=LogType.ERROR)
         return False
 
 

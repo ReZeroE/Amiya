@@ -20,26 +20,32 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from amiya.apps_manager.apps_manager import AppsManager
-from amiya.automation_handler.automation_controller import AutomationController
 
-am = AppsManager()
+#     _    __  __ _____   __ _       ____ _     ___  
+#    / \  |  \/  |_ _\ \ / // \     / ___| |   |_ _| 
+#   / _ \ | |\/| || | \ V // _ \   | |   | |    | |  
+#  / ___ \| |  | || |  | |/ ___ \  | |___| |___ | |  
+# /_/   \_\_|  |_|___| |_/_/   \_\  \____|_____|___|
+#
+# TO INSTALL THE AMIYA CLI MODULE LOCALLY, RUN
+#   
+#     $ pip install amiya
+# OR
+#     $ git clone https://github.com/ReZeroE/Amiya.git
+#     $ cd Amiya/
+#     $ pip install .
+#
+#
+# RUN THIS SCRIPT TO START THE AMIYA CLI WITHOUT INSTALLATION.
 
-# am.record_sequence()
-# am.list_sequences()
-am.run_sequence()
+import sys
+from amiya.utils.helper import verify_platform
+from amiya.entrypoints.entrypoints import start_amiya
+from amiya.exceptions.exceptions import AmiyaOSNotSupported
 
-# # am.create_app("Chrome", "C:\Program Files\Google\Chrome\Application\chrome.exe")
-# # am.create_app("Final Fantasy XIV", "abc/abc.exe")
-# # am.create_app("LD Player", "E:\LDPlayer\LDPlayer9\dnplayer.exe")
-# # am.print_apps()
-# am.remove_tag()
+if verify_platform():
+    sys.argv = ['amiya']; start_amiya()
+else:
+    raise AmiyaOSNotSupported()
 
-
-
-
-# ac = AutomationController("D:/Workspace/Amiya/src/amiya/apps/chrome/automation")
-# ac.record_new_sequence("test_auto2", overwrite=False)
-# sequence = ac.load_sequence("test_auto.json")
-# sequence.run()
 

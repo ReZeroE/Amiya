@@ -4,6 +4,8 @@ import os
 # ==========| CONSTANTS | ==========
 # ==================================
 BASENAME        = "Amiya"
+VERSION         = "0.0.2"
+
 CONFIG_NAME     = "Amiya Config"
 TIME_FORMAT     = "%H:%M:%S"
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"

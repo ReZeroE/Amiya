@@ -4,13 +4,22 @@ import psutil
 import argparse
 from termcolor import colored
 from amiya.entrypoints.entrypoint_handler import AmiyaEntrypointHandler
-from amiya.utils.helper import aprint
+from amiya.utils.helper import aprint, verify_platform, is_admin, Printer
+from amiya.exceptions.exceptions import AmiyaOSNotSupported
 
 
-def execute_command():
+class AmiyaArgParser(argparse.ArgumentParser):
+    def error(self, message):
+        command = message.split("'")[1] if "invalid choice:" in message else None
+        helpt = Printer.to_purple("help")
+        aprint(f"Command not recognized: {command}\nType '{helpt}' for commands list")
+        self.exit(2)
+        
+
+def start_amiya():
     entrypoint_handler = AmiyaEntrypointHandler()
     
-    parser = argparse.ArgumentParser(prog='amiya', description="Amiya CLI Automation Package")
+    parser = AmiyaArgParser(prog='amiya', description="Amiya CLI Automation Package")
     subparsers = parser.add_subparsers(dest='command', help='commands')
 
     help_parser = subparsers.add_parser('help', help='Show this help message and exit')
@@ -62,12 +71,12 @@ def execute_command():
     start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application')
     start_parser.set_defaults(func=entrypoint_handler.list_automation_sequences)
     
-    start_parser = subparsers.add_parser('record-auto', help='Record an automation sequences of the application')
+    start_parser = subparsers.add_parser('record-auto', help='[Admin Permission Req.] Record an automation sequences of the application')
     start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application')
     start_parser.set_defaults(func=entrypoint_handler.record_automation_sequences)
 
     
-    start_parser = subparsers.add_parser('run-auto', help='Record an automation sequences of the application')
+    start_parser = subparsers.add_parser('run-auto', help='[Admin Permission Req.] Record an automation sequences of the application')
     start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application')
     start_parser.add_argument('seq_name', nargs='?', default=None, help='Name of the sequence to run')
     start_parser.set_defaults(func=entrypoint_handler.run_automations_sequences)
@@ -116,6 +125,10 @@ def execute_command():
     # ===========================================================================================
     # >>> BLOCKING FUNCTIONS
     # ===========================================================================================
+    if verify_platform() == False:
+        raise AmiyaOSNotSupported()
+    
+    
     sync_needed = not entrypoint_handler.apps_synced()
     if sync_needed:
         # If sync is needed, restrict all commands except 'sync'
@@ -129,6 +142,16 @@ def execute_command():
                 subparser.set_defaults(func=blocked_func)
     
     
+    isadmin = is_admin()
+    if not isadmin:
+        # Certain commands require admin permissions to execute
+        def blocked_func(args):
+            aprint("Insufficient permission. Please restart the terminal as an administrator.")
+            exit()
+
+        for name, subparser in subparsers.choices.items():
+            if name in ["record-auto", "run-auto"]:
+                subparser.set_defaults(func=blocked_func)
     
     # ===========================================================================================
     # >>> PARSER DRIVER

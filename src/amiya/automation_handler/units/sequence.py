@@ -38,6 +38,11 @@ class AutomationSequence:
             if isinstance(action, KeyboardAction):
                 action.execute(pynput_keyboard)
             elif isinstance(action, MouseAction):
+                new_coord = pixel_calculator.calculate_new_coordinate(action.coordinate, action.window_info)
+                if new_coord == None:
+                    aprint("[Pixel-Calc] Window size does not match monitor size, pixel calculator returning previous coordinate.", log_type=LogType.WARNING)
+                else:
+                    action.coordinate = new_coord
                 action.execute()
             
     def add(self, action: Action):

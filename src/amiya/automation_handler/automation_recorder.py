@@ -23,11 +23,11 @@ class AutomationRecorder():
         self.label = None
         
         
-    def stop_recording(self):
+    def stop_recording(self, root: tk.Tk):
         self.window_event.set()
         self.is_recording = False
         self.sequence.actions = self.sequence.actions[:-1]    # Remove the last key click (user clicks on the Stop Recording button)
-    
+        root.destroy()
     
     def create_indicator_window(self):
         LENGTH = 300
@@ -63,7 +63,7 @@ class AutomationRecorder():
         self.label = tk.Label(canvas, text="Recording...", font=('Helvetica', 11), fg='#FFFFFF', bg=canvas_color)
         self.label.place(relx=0.5, rely=0.4, anchor='center')
 
-        stop_button = tk.Button(canvas, text='Stop Recording', command=self.stop_recording, bg='#14628c', fg='#FFFFFF')
+        stop_button = tk.Button(canvas, text='Stop Recording', command=lambda: self.stop_recording(root), bg='#14628c', fg='#FFFFFF')
         stop_button.place(relx=0.5, rely=0.8, anchor='center', width=200)
 
         # stop_button_2 = tk.Button(canvas, text='Terminate Recording', command=self.stop_recording, bg='#14628c', fg='#FFFFFF')

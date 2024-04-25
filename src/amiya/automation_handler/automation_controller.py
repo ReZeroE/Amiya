@@ -75,7 +75,7 @@ class AutomationController:
 
     # ===========| HELPER FUNCTIONS | ===========
     
-    def parse_sequence_config(raw_json_config: list):
+    def parse_sequence_config(self, raw_json_config: list):
         metadata        = raw_json_config["metadata"]
         sequence_name   = metadata["sequence_name"]
         

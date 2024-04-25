@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from amiya.utils.constants import BASENAME, VERSION
+
 class AmiyaBaseException(Exception):
     __module__ = 'builtins'
     def __init__(self, message="An unknown error has occurred."):
@@ -69,4 +71,4 @@ class Amiya_AppNotFocusedException(Exception):
 class AmiyaOSNotSupported(Exception):
     __module__ = 'builtins'
     def __init__(self):
-        super().__init__(f"\nThe Amiya package is only supported on Windows and Linux at the moment.")
+        super().__init__(f"\n\n\tAs of version {VERSION} (BETA), the {BASENAME} package is only supported on the Windows OS.")

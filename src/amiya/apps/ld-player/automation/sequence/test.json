@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "sequence_name": "test",
+        "date_created": "2024-04-25 16:51:53",
+        "monitor_info": {
+            "width": 3840,
+            "height": 2160
+        },
+        "other_data": null
+    },
+    "actions_sequence": [
+        {
+            "coordinate": {
+                "x": 1670,
+                "y": 845
+            },
+            "delay": 2.0291500091552734,
+            "click": true,
+            "window_info": {
+                "width": 1321,
+                "height": 755,
+                "is_fullscreen": false
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1782,
+                "y": 738
+            },
+            "delay": 0.2023468017578125,
+            "click": true,
+            "window_info": {
+                "width": 1321,
+                "height": 755,
+                "is_fullscreen": false
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1722,
+                "y": 942
+            },
+            "delay": 0.20313143730163574,
+            "click": true,
+            "window_info": {
+                "width": 1321,
+                "height": 755,
+                "is_fullscreen": false
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1801,
+                "y": 904
+            },
+            "delay": 0.19786953926086426,
+            "click": true,
+            "window_info": {
+                "width": 1321,
+                "height": 755,
+                "is_fullscreen": false
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1770,
+                "y": 878
+            },
+            "delay": 0.19363164901733398,
+            "click": true,
+            "window_info": {
+                "width": 1321,
+                "height": 755,
+                "is_fullscreen": false
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1670,
+                "y": 861
+            },
+            "delay": 0.1660456657409668,
+            "click": true,
+            "window_info": {
+                "width": 1321,
+                "height": 755,
+                "is_fullscreen": false
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1632,
+                "y": 866
+            },
+            "delay": 0.1735820770263672,
+            "click": true,
+            "window_info": {
+                "width": 1321,
+                "height": 755,
+                "is_fullscreen": false
+            }
+        }
+    ]
+}

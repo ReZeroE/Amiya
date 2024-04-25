@@ -5,6 +5,7 @@ from amiya.module_utilities.search_controller import SearchController
 from amiya.module_utilities.power_controller import PowerUtils
 from amiya.scheduler.scheduler import AmiyaScheduler
 from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
+from amiya.utils.constants import VERSION
 
 class AmiyaEntrypointHandler:
     def __init__(self):
@@ -128,7 +129,7 @@ r"""
 /_/   \_\_|  |_|___| |_/_/   \_\  \____|_____|___|
 """)
         
-        desc = Printer.to_purple("""A lightweight cross-platform automation tool for daily tasks!""")
+        desc = Printer.to_purple("""A lightweight cross-platform automation tool for games and daily tasks!""")
         postfix = Printer.to_lightgrey("https://github.com/ReZeroE/Amiya")
         author = Printer.to_lightgrey("By Kevin L.")
         
@@ -143,13 +144,14 @@ r"""
         cls_cmd = Printer.to_purple("clear")
         help_cmd = Printer.to_purple("help")
         
-        welcome_str = f"Welcome to Amiya CLI Interactive Mode."
+        welcome_str = f"Welcome to the Amiya CLI Environment (BETA)."
         exit_str = f"Type '{quit_cmd}' to quit amiya CLI"
         cls_str = f"Type '{cls_cmd}' to clear terminal"
         help_str = f"Type '{help_cmd}' to display commands list"
     
         print(f"{welcome_str}\n  {help_str}\n  {exit_str}\n  {cls_str}\n")
     
+        
     
     def check_custom_commands(self, user_input: str):
         # Return 0 to continue loop, 1 to short-circit loop and 'continue' loop, 2 to exit loop
@@ -206,6 +208,6 @@ r"""
                 continue
             except SystemExit:
                 continue
-            except Exception as ex:
-                print(ex)
-                continue
+            # except Exception as ex:
+            #     print(ex)
+            #     continue
