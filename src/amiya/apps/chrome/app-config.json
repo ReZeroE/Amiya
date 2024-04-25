@@ -1,7 +1,7 @@
 {
-    "id": 7,
+    "id": 2,
     "name": "Chrome",
-    "exe_path": "C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe",
+    "exe_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
     "tags": [
         "chrome",
         "crm"

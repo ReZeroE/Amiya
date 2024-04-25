@@ -30,26 +30,26 @@ class PowerUtils:
         print("\n")
         
     def run_confirmation(self, delay: int, type: PowerType):
-        aprint(f"\n\nType: {type.name}\nDelay: {delay} seconds\nProceed? [y/n] ", end="")
+        aprint(f"This machine will {type.name.lower()} after {delay} seconds. Proceed? [y/n] ", end="")
         if input().lower().strip() == "y":
             print("")
             return True
-        aprint("Exiting..."); exit()
+        return False
         
     def sleep_pc(self, delay: int):
-        self.run_confirmation(delay, PowerType.Sleep)
-        self.wait(delay, PowerType.Sleep)
-        
-        ret = 0
-        try:
-            ret = self.__sleep()
-        except Exception as ex:
-            raise AmiyaBaseException(f"Sleep failed to execute due to {ex} with error code {ret}")
+        if self.run_confirmation(delay, PowerType.Sleep) == True:
+            self.wait(delay, PowerType.Sleep)
+            
+            ret = 0
+            try:
+                ret = self.__sleep()
+            except Exception as ex:
+                raise AmiyaBaseException(f"Sleep failed to execute due to {ex} with error code {ret}")
         
     def shutdown_pc(self, delay: int):
-        self.run_confirmation(delay, PowerType.Shutdown)
-        self.wait(delay, PowerType.Shutdown)
-        self.__shutdown()
+        if self.run_confirmation(delay, PowerType.Shutdown) == True:
+            self.wait(delay, PowerType.Shutdown)
+            self.__shutdown()
 
 
     def __sleep(self) -> int:

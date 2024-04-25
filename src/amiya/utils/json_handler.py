@@ -1,6 +1,6 @@
 import os
 import json
-from abc import ABC, abstractclassmethod 
+from abc import ABC 
 from amiya.exceptions.exceptions import *
 
 class JSONConfigHandler(ABC):
@@ -27,6 +27,5 @@ class JSONConfigHandler(ABC):
     def config_exists(self):
         return os.path.isfile(self.config_file)
         
-    @abstractclassmethod
     def validate_config(self):
         ...

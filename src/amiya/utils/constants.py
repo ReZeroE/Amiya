@@ -5,6 +5,7 @@ import os
 # ==================================
 BASENAME        = "Amiya"
 CONFIG_NAME     = "Amiya Config"
+TIME_FORMAT     = "%H:%M:%S"
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 # ==================================

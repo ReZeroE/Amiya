@@ -3,16 +3,16 @@ import threading
 import tkinter as tk
 from pynput import mouse, keyboard
 
-from amiya.automation_handler.actions_controller.units.action import Action, MouseAction, KeyboardAction
-from amiya.automation_handler.actions_controller.units.sequence import ActionsSequence
-from amiya.apps_manager.safty_monitor import SaftyMonitor
+from amiya.automation_handler.units.action import Action, MouseAction, KeyboardAction
+from amiya.automation_handler.units.sequence import AutomationSequence
+from amiya.apps_manager.safety_monitor import SafetyMonitor
 from amiya.pixel_calculator.resolution_detector import ResolutionDetector
 
 from amiya.utils.helper import *
 from amiya.exceptions.exceptions import *
 
-class ActionsRecorder():
-    def __init__(self, sequence: ActionsSequence, safety_monitor: SaftyMonitor):
+class AutomationRecorder():
+    def __init__(self, sequence: AutomationSequence, safety_monitor: SafetyMonitor):
         self.sequence = sequence
         self.safety_monitor = safety_monitor
         
@@ -89,7 +89,7 @@ class ActionsRecorder():
         root.mainloop()
         
         
-    def record(self, start_on_callback=False) -> ActionsSequence:
+    def record(self, start_on_callback=False) -> AutomationSequence:
         from elevate import elevate; elevate()
         
         self.window_event = threading.Event()

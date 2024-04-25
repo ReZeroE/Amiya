@@ -54,7 +54,11 @@ class MouseAction(Action):
         pyautogui.moveTo(x, y, duration=0.1)
         
         if self.click:
-            pyautogui.click(interval=0.1)  
+            # pyautogui.click(interval=0.1)
+            
+            pyautogui.mouseDown()
+            time.sleep(0.1)  
+            pyautogui.mouseUp()
     
     def to_json(self):
         return {

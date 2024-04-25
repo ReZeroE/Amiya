@@ -9,9 +9,9 @@ from amiya.apps_manager.apps_viewer import AppsViewer
 from amiya.utils.constants import APPS_DIRECTORY
 from amiya.exceptions.exceptions import *
 from amiya.utils.helper import *
-from amiya.automation_handler.actions_controller.units.sequence import ActionsSequence
-from amiya.automation_handler.actions_controller.actions_viewer import ActionsViewer
-from amiya.apps_manager.safty_monitor import SaftyMonitor
+from amiya.automation_handler.units.sequence import AutomationSequence
+from amiya.automation_handler.automation_viewer import AutomationViewer
+from amiya.apps_manager.safety_monitor import SafetyMonitor
 from amiya.apps_manager.sync_controller.sync_controller import AppSyncController
 from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
 
@@ -47,7 +47,7 @@ class AppsManager:
     # ======================================
     
     def create_app(self, name, exe_path):
-        app = App(name, exe_path)                       # Create a new app object
+        app = App(name, exe_path, new=True)             # Create a new app object
         app.id = self.__get_next_app_id()               # Assign ID to app (int)
         app.tags = [app.get_reformatted_app_name()]     # Assign a default tag during app creation
         
@@ -61,6 +61,7 @@ class AppsManager:
         
         text = colored(f"amiya start {app.get_reformatted_app_name()}", "light_cyan")
         aprint(f"Application '{name}' has been successfully created and configured!\n\nTo start the app, run `{text}`")
+        print("")
     
     def create_app_automated(self):
         app_name = input(atext(f"New Application's Name: "))
@@ -82,7 +83,6 @@ class AppsManager:
     # ======================================
     # ===========| DELETE APP | ============
     # ======================================
-    # TODO: Application ID isn't shifted forward when an app is deleted. 
     
     def delete_app(self, tag: str = None):
         app = None
@@ -103,6 +103,20 @@ class AppsManager:
         aprint(f"The app '{app.name}' has been deleted.")
     
     def __safe_delete_app(self, app: App):
+        self.__purge_app(app)
+        self.__reset_apps_id(app.id)
+    
+    def __safe_delete_multiple_apps(self, apps: list[App]):
+        # All apps must be deleted at once before the app ID is reset
+        for app in apps:
+            aprint(f"Deleting app '{app.name}'...  ", end="")
+            self.__purge_app(app)
+            print("Done\u2713")
+            
+        max_id = max([app.id for app in apps])
+        self.__reset_apps_id(max_id)
+    
+    def __purge_app(self, app: App):
         try:
             app_dir = os.path.join(APPS_DIRECTORY, app.get_reformatted_app_name())
             shutil.rmtree(app_dir)
@@ -113,13 +127,13 @@ class AppsManager:
         if removed_value == None: # If application cannot be found in self.apps
             raise AmiyaBaseException(f"App '{app.name}' can't be found in the apps dict.")
         
-        # Reset app ID for all of the apps created after this app
-        app_id = app.id
-        for id, app, in self.apps.items():
-            if id > app_id:
-                app.id -= 1
+    def __reset_apps_id(self, max_id=0):
+        self.apps = {new_app_id+1: app for new_app_id, (old_app_id, app) in enumerate(self.apps.items())}       # Reset app IDs
+        for new_id, app in self.apps.items():                                                                   # Save each app's new config
+            if new_id >= max_id:                                                                                # ONLY write config if the new ID is >= the max_ID of the application removed
+                app.id = new_id
                 app.save_app_config()
-    
+        time.sleep(1)
     
     # ======================================
     # =============| RUN APP | =============
@@ -215,7 +229,7 @@ class AppsManager:
         if not os.path.isdir(APPS_DIRECTORY):
             os.mkdir(APPS_DIRECTORY)
             
-    def __get_next_app_id(self):
+    def __get_next_app_id(self) -> int:
         return max(self.apps.keys()) + 1
 
     def get_app_with_id(self, user_input_id: str) -> App:
@@ -234,129 +248,108 @@ class AppsManager:
         raise Amiya_NoSuchTagException(tag)
             
     
-            
+    
+    
+      
     # =====================================================================================================================================
     # >>>>> AUTOMATION RELATED
-    
     
     # =================================================
     # ===============| LIST SEQUENCES | ===============
     # =================================================
-    def list_sequences(self):
-        self.print_apps()
-        user_input_id = input(atext(f"Which app would you like to see the automation sequences of? (0-{len(self.apps)-1}) "))
-        app = self.get_app_with_id(user_input_id)
-          
-        sequences: list[ActionsSequence] = []
-        sequences = app.actions_controller.load_all_sequences()
-        self.print_sequences(sequences)
+    def list_sequences(self, tag: str = None):
+        if tag != None:
+            tag = self.__parse_tag(tag)
+            app = self.get_app_by_tag(tag)
+        else:
+            self.print_apps()
+            user_input_id = input(atext(f"Which app would you like to see the automation sequences of? (0-{len(self.apps)-1}) "))
+            app = self.get_app_with_id(user_input_id)
+        
+        sequence_list = app.automation_controller.get_all_sequences()
+        self.__print_sequences(sequence_list)
 
-    def list_sequences_with_tag(self, tag: str):
-        tag = self.__parse_tag(tag)
-        app = self.get_app_by_tag(tag)
-        
-        sequences: list[ActionsSequence] = []
-        sequences = app.actions_controller.load_all_sequences()
-        # print(sequences)
-        self.print_sequences(sequences)
-        
-    def print_sequences(self, sequence_list: list[ActionsSequence], tablefmt="fancy_grid"):
-        if len(sequence_list) == 0:
-            aprint("No Sequence Recorded For Application."); return
-        
-        viewer = ActionsViewer()
-        print(viewer.tabulate_multi_sequences(sequence_list, tablefmt))
-        
     
     # =================================================
     # ==============| RECORD SEQUENCES | ==============
     # =================================================
-    def record_sequence(self):
-        self.print_apps()
-        user_input_id = input(atext(f"Which app would you like to RECORD A NEW AUTOMATION SEQUENCE of? (0-{len(self.apps)-1}) "))
-        app = self.get_app_with_id(user_input_id)
-        
-        new_sequence_name = input(atext(f"Name of the new automation sequence (i.e. start-game): "))
-        self.__start_app_and_record(app, new_sequence_name)
-
-    def record_sequence_with_tag(self, tag: str):
-        tag = self.__parse_tag(tag)
-        app = self.get_app_by_tag(tag)
+    def record_sequence(self, tag: str = None):
+        if tag != None:
+            tag = self.__parse_tag(tag)
+            app = self.get_app_by_tag(tag)
+        else:
+            self.print_apps()
+            user_input_id = input(atext(f"Which app would you like to RECORD A NEW AUTOMATION SEQUENCE of? (0-{len(self.apps)-1}) "))
+            app = self.get_app_with_id(user_input_id)
         
         new_sequence_name = input(atext(f"Name of the new automation sequence (i.e. start-game): "))
         self.__start_app_and_record(app, new_sequence_name)
     
     def __start_app_and_record(self, app: App, new_sequence_name: str):
         self.__safe_start_app(app)
-        safty_monitor = SaftyMonitor(app.process.pid)
-        new_sequence_recorded = app.actions_controller.start_recording(
+        safety_monitor = SafetyMonitor(app.process.pid)
+        
+        new_sequence_recorded = app.automation_controller.record_sequence(
             new_sequence_name, 
-            safty_monitor, 
-            start_recording_on_callback=True
+            safety_monitor
         )
         self.__print_sequence(new_sequence_recorded)
         
-    def __print_sequence(self, sequence: ActionsSequence, tablefmt="fancy_grid"):
-        viewer = ActionsViewer()
-        print(viewer.tabulate_sequence(sequence, tablefmt))
-
 
     # =================================================
     # ================| RUN SEQUENCES | ===============
     # =================================================
-    def run_sequence(self):
-        self.print_apps()
-        user_input_id = input(atext(f"Which app would you like to RUN AN AUTOMATION SEQUENCE of? (0-{len(self.apps)-1}) "))
-        app = self.get_app_with_id(user_input_id)
-        self.__execute_sequence_wrapper(app)
+    def run_sequence(self, tag: str = None, seq_name: str = None, add_global_delay: bool = False):
+        if tag != None:
+            tag = self.__parse_tag(tag)
+            app = self.get_app_by_tag(tag)
+        else:
+            self.print_apps()
+            user_input_id = input(atext(f"Which app would you like to RUN AN AUTOMATION SEQUENCE of? (0-{len(self.apps)-1}) "))
+            app = self.get_app_with_id(user_input_id)
         
-    def run_sequence_with_tag(self, tag: str, seq_name: str = None):
-        tag = self.__parse_tag(tag)
-        app = self.get_app_by_tag(tag)
-        self.__execute_sequence_wrapper(app, seq_name)
-        
-    def __execute_sequence_wrapper(self, app: App, seq_name: str = None):
-        
-        sequences: list[ActionsSequence] = []
-        sequences = app.actions_controller.load_all_sequences()
+        # ================ GET SEQUENCE ================
+        sequence_list = app.automation_controller.get_all_sequences()
         
         if seq_name == None:
-            self.print_sequences(sequences)                             # Verbose all sequences in the CLI and wait for user selection
+            self.__print_sequences(sequence_list)                             # Verbose all sequences in the CLI and wait for user selection
             seq_name = input(atext(f"Which sequence would you like to run (i.e. start-game)? "))
-        sequence = self.get_sequence_with_name(seq_name, sequences)
+        sequence: AutomationSequence = self.__safe_get_sequence(app, seq_name)
         
-        aprint(f"Add global delay to all actions (seconds) [leave empty to default to 0]: ", end="")
-        user_input = input().lower().strip()
-        if user_input:
-            gloab_delay = self.__parse_int(user_input)                              # If user inputted global delay
-        else:
-            gloab_delay = 0                                                         # Default global delay to 0
+        # ============== GET GLOBAL DELAY ==============
+        global_delay = 0
+        if add_global_delay:
+            aprint(f"Add global delay to all actions (seconds) [leave empty to default to 0]: ", end="")
+            user_input = input().lower().strip()
+            if user_input:
+                global_delay = self.__parse_int(user_input)                     # If user inputted global delay
+        sequence.set_global_delay(global_delay)
         
+        # ============== RUN CONFIRMATION ==============
         aprint(f"The sequence '{sequence.sequence_name}' will run for {sequence.get_runtime()} seconds. Continue? [y/n] ", log_type=LogType.WARNING, end="")
-        if input().lower() == "y":                                      # Verbose runtime and wait for user confirmation to run
-            aprint(f"[Automation {sequence.sequence_name}] Running...")
-            
-            self.__safe_start_app(app); time.sleep(5)                               # Starts the application for the sequence
-            safty_monitor = SaftyMonitor(app.process.pid)                           # Creates a safty monitor object for sequence execution safty (must be created after the app is started)
-            self.__safe_execute_sequence(sequence, safty_monitor, gloab_delay)      # Runs the sequence (with the safty monitor)
+        if input().lower() != "y": return                                       # Verbose runtime and wait for user confirmation to run
+        
+        # =============== START RUNNING ===============
+        aprint(f"[Automation {sequence.sequence_name}] Running...")
+        self.__safe_start_app(app); time.sleep(5)                               # Starts the application for the sequence
+        safety_monitor = SafetyMonitor(app.process.pid)                           # Creates a safety monitor object for sequence execution safety (must be created after the app is started)
+        self.__safe_execute_sequence(sequence, safety_monitor)                   # Runs the sequence (with the safety monitor)
 
         print("")
         aprint(f"[Automation {sequence.sequence_name}] Run Completed!", log_type=LogType.SUCCESS)
         
-    def __safe_execute_sequence(self, sequence: ActionsSequence, safty_monitor: SaftyMonitor, global_delay: int):
+    def __safe_execute_sequence(self, sequence: AutomationSequence, safety_monitor: SafetyMonitor):
         try:
-            sequence.execute(safty_monitor, global_delay)
+            sequence.execute(safety_monitor)
         except Amiya_AppNotFocusedException:
-            aprint("<Safty-Monitor> The application is unfocused during an automation sequence. Automation stopped.", log_type=LogType.ERROR)
-            return
+            aprint("[Amiya Safety-Monitor] The application is unfocused during an automation sequence. Automation stopped.", log_type=LogType.ERROR)
+            exit(1)
      
-    def get_sequence_with_name(self, seq_name: str, sequence_list: list[ActionsSequence]) -> ActionsSequence:
-        seq_name = seq_name.strip().lower().replace(" ", "-")
-        
-        for seq in sequence_list:
-            if seq.sequence_name == seq_name:
-                return seq
-        aprint(f"No sequence with name '{seq.sequence_name}' exists. Exiting.", log_type=LogType.ERROR); exit()
+    def __safe_get_sequence(self, app: App, sequence_name: str) -> AutomationSequence:
+        sequence = app.automation_controller.get_sequence(sequence_name)
+        if sequence == None:
+            aprint(f"No sequence with name '{sequence_name}' exists. Exiting.", log_type=LogType.ERROR); exit()
+        return sequence
 
     def __parse_int(self, delay) -> int:
         if isinstance(delay, int):
@@ -371,6 +364,22 @@ class AppsManager:
         raise AmiyaBaseException(f"Type {type(delay)} ({delay}) delay not supported.")
     
     
+    # ===================================================
+    # ================| SEQUENCE HELPER | ===============
+    # ===================================================
+    def __print_sequences(self, sequence_list: list[AutomationSequence], tablefmt="fancy_grid"):
+        if len(sequence_list) == 0:
+            aprint("No Sequence Recorded For Application."); return
+        
+        viewer = AutomationViewer()
+        print(viewer.tabulate_multi_sequences(sequence_list, tablefmt))
+    
+    def __print_sequence(self, sequence: AutomationSequence, tablefmt="fancy_grid"):
+        viewer = AutomationViewer()
+        print(viewer.tabulate_sequence(sequence, tablefmt))
+    
+    
+
     
     # =====================================================================================================================================
     # >>>>> UTILITY APP FUNCTIONS
@@ -395,7 +404,8 @@ class AppsManager:
         
         found = len([app for app in apps if app.verified == True])
         text = colored("amiya cleanup", "light_cyan")
-        aprint(f"Sync Complete - successfully synced {found}/{len(apps)} applications.\n\nTo cleanup unverified applications (unavailable on this machine), run '{text}' ")
+        aprint(f"Sync Complete - successfully synced {found}/{len(apps)} applications.\n\nTo cleanup unverified applications (unavailable on this machine), run '{text}'")
+        print("")
         
     def verify_apps_synced(self) -> bool: 
         # Verify whether applications configured with Amiya's apps manager needs to be synced with the current machine.
@@ -414,10 +424,7 @@ class AppsManager:
         aprint(f"Are you sure you want to remove all these unverified apps? [y/n] ", log_type=LogType.WARNING, end="")
         if input().strip().lower() != "y": return
         
-        for app in unverified_apps:
-            aprint(f"Removing application '{app.name}'...")
-            self.__safe_delete_app(app)
-            
+        self.__safe_delete_multiple_apps(unverified_apps)
         aprint("Cleanup Complete.", log_type=LogType.SUCCESS)
         
         
@@ -425,10 +432,10 @@ class AppsManager:
     # =====================================================================================================================================
     # >>>>> SCHEDULER FUNCTIONS
     
-    def sequence_exists(self, app: App, sequence_name: str):
-        sequences: list[ActionsSequence] = []
-        sequences = app.actions_controller.load_all_sequences()
-        self.get_sequence_with_name(sequence_name, sequences)
+    # def sequence_exists(self, app: App, sequence_name: str):
+    #     sequences: list[AutomationSequence] = []
+    #     sequences = app.automation_controller.load_all_sequences()
+    #     self.get_sequence_with_name(sequence_name, sequences)
     
             
         

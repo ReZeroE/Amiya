@@ -29,8 +29,8 @@ def execute_command():
     start_parser.set_defaults(func=entrypoint_handler.remove_app)
     
     show_apps_parser = subparsers.add_parser('show-apps', help='Show applications')
-    show_apps_parser.add_argument('--with-tag', action='store_true', help='Show applications with their tags')
-    show_apps_parser.add_argument('--all', '-a', action='store_true', help='Show all applications')
+    show_apps_parser.add_argument('--short', '-s', action='store_true', help='Only show the app ID, name, and verification status')
+    show_apps_parser.add_argument('--full-path', '-f', action='store_true', help='Show the full path of the applications')
     show_apps_parser.set_defaults(func=entrypoint_handler.show_apps)
 
 
@@ -130,14 +130,20 @@ def execute_command():
     
     
     
-    # =================================================
-    # PARSER DRIVER
+    # ===========================================================================================
+    # >>> PARSER DRIVER
+    # ===========================================================================================
     
-    args = parser.parse_args()
-    if hasattr(args, 'func'):
-        try:
-            args.func(args)
-        except KeyboardInterrupt:
-            print("\n\nKeybord Interupt! Amiya Existing.")
+    # Check if no command line arguments are provided
+    if len(sys.argv) == 1:
+        entrypoint_handler.start_cli(parser)
     else:
-        parser.print_help() # If no arguments were provided, show help
+        # Normal command line execution
+        args = parser.parse_args()
+        if hasattr(args, 'func'):
+            try:
+                args.func(args)
+            except KeyboardInterrupt:
+                print("\nKeyboard Interrupt! Amiya Exiting.")
+        else:
+            parser.print_help()

@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 from amiya.apps_manager.apps_manager import AppsManager
-from amiya.automation_handler.actions_controller.actions_controller import ActionsController
+from amiya.automation_handler.automation_controller import AutomationController
 
 am = AppsManager()
 
@@ -38,7 +38,7 @@ am.run_sequence()
 
 
 
-# ac = ActionsController("D:/Workspace/Amiya/src/amiya/apps/chrome/automation")
+# ac = AutomationController("D:/Workspace/Amiya/src/amiya/apps/chrome/automation")
 # ac.record_new_sequence("test_auto2", overwrite=False)
 # sequence = ac.load_sequence("test_auto.json")
 # sequence.run()

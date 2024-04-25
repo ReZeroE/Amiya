@@ -2,7 +2,7 @@ import subprocess
 from amiya.utils.constants import GET_WINDOW_SIZE_EXE
 from screeninfo import get_monitors
 from amiya.exceptions.exceptions import *
-from amiya.apps_manager.safty_monitor import SaftyMonitor
+from amiya.apps_manager.safety_monitor import SafetyMonitor
 
 class ResolutionDetector:
     @staticmethod
@@ -20,7 +20,7 @@ class ResolutionDetector:
     
     @staticmethod
     def get_window_size():
-        pid = SaftyMonitor.get_focused_pid()
+        pid = SafetyMonitor.get_focused_pid()
         if pid == None: return None
         
         try:

@@ -4,19 +4,29 @@ import json
 import time
 import psutil
 import subprocess
+from pathlib import Path
 from amiya.utils.constants import APPS_DIRECTORY, FOCUS_PID_EXE
 from amiya.exceptions.exceptions import *
-from amiya.automation_handler.actions_controller.actions_controller import ActionsController
+from amiya.automation_handler.automation_controller import AutomationController
 from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
 
-APP_AUTOMATION_DIRNAME  = "automation"
-APP_CONFIG_FILENAME     = "app-config.json"
+APP_AUTOMATION_DIRNAME          = "automation"
+APP_AUTOMATION_SEQUENCE_DIRNAME = "sequence"
+APP_AUTOMATION_PLATE_DIRNAME    = "plate"
+APP_CONFIG_FILENAME             = "app-config.json"
 
 class App:
-    def __init__(self, name: str, exe_path: str, tags: list = [], sys_uuid: str = SysUUIDController.system_uuid):
+    def __init__(
+        self, 
+        name        : str, 
+        exe_path    : str, 
+        tags        : list = [], 
+        sys_uuid    : str = SysUUIDController.system_uuid,
+        new         : bool = False
+    ):
         self.id         = None      # Assigned automatically by the AppManager at creation
         self.name       = name
-        self.exe_path   = self.__parse_exe_path(exe_path)
+        self.exe_path   = Path(self.__parse_exe_path(exe_path))
         self.tags       = tags
         self.verified   = self.__verify_app_path()
         self.sys_uuid   = sys_uuid  # Used to identify whether the application is synced with the current machine
@@ -33,10 +43,18 @@ class App:
     
         self.app_config_dirpath     = os.path.join(APPS_DIRECTORY, self.get_reformatted_app_name())
         self.app_config_filepath    = os.path.join(self.app_config_dirpath, APP_CONFIG_FILENAME)
-        self.app_automation_dirpath = os.path.join(self.app_config_dirpath, APP_AUTOMATION_DIRNAME)
-
-        # ActionsController only loads actions sequence on demand.
-        self.actions_controller = ActionsController(config_dir=self.app_automation_dirpath)
+        
+        # Automation directories
+        self.sequence_dirpath = os.path.join(self.app_config_dirpath, APP_AUTOMATION_DIRNAME, APP_AUTOMATION_SEQUENCE_DIRNAME)
+        self.plate_dirpath = os.path.join(self.app_config_dirpath, APP_AUTOMATION_DIRNAME, APP_AUTOMATION_PLATE_DIRNAME)
+        
+        self.new = new
+        self.automation_controller = None
+        if not new:
+            self.automation_controller = AutomationController(
+                self.sequence_dirpath,
+                self.plate_dirpath
+            )
 
 
 
@@ -52,8 +70,12 @@ class App:
     # ========================================
     
     def create_app(self):
-        self.__create_app_dir_strucure()        # Create the app directory structure to hold all the configs (base config and automation config)
-        self.save_app_config()                # Write the base app config (creates the app)
+        if self.new:
+            self.__create_app_dir_strucure()      # Create the app directory structure to hold all the configs (base config and automation config)
+            self.save_app_config()                # Write the base app config (creates the app)
+            self.automation_controller = AutomationController(self.app_automation_dirpath)
+        else:
+            AmiyaBaseException(f"Cannot create app when app instance is not defined as new (self.new=False).")
         
     def save_app_config(self):
         try:
@@ -65,9 +87,10 @@ class App:
     def __create_app_dir_strucure(self):
         if not os.path.exists(self.app_config_dirpath):     # Create the base app directory (amiya/apps/<app_name>)
             os.mkdir(self.app_config_dirpath)
-        if not os.path.exists(self.app_automation_dirpath): # Create the app automation directory (amiya/apps/<app_name>/<automation>)
-            os.mkdir(self.app_automation_dirpath)
-
+        if not os.path.exists(self.sequence_dirpath):       # Create the app automation sequence directory (amiya/apps/<app_name>/automation/sequence)
+            os.mkdir(self.sequence_dirpath)
+        if not os.path.exists(self.plate_dirpath):          # Create the app automation plate directory (amiya/apps/<app_name>/automation/plate)
+            os.mkdir(self.plate_dirpath)
 
     # =======================================
     # ============| APP DRIVER | ============
@@ -76,7 +99,6 @@ class App:
     def run(self) -> bool:
         # If the application is already running
         if self.is_running():
-            print("App already started, focusing...")
             self.bring_to_foreground()
             return True
         
@@ -103,7 +125,7 @@ class App:
     def is_running(self) -> bool:
         APP_EXE_NAME = os.path.basename(self.exe_path)
         for p in psutil.process_iter():
-            if p.name() == APP_EXE_NAME:
+            if APP_EXE_NAME.replace(".exe", "") in p.name():
                 try:
                     self.process = psutil.Process(p.pid)
                     if self.process.is_running():
@@ -128,7 +150,7 @@ class App:
         return {
             "id"        : self.id,
             "name"      : self.name,
-            "exe_path"  : self.exe_path,
+            "exe_path"  : str(self.exe_path),
             "tags"      : self.tags,
             "verified"  : self.verified,
             "sys_uuid"  : self.sys_uuid
@@ -182,6 +204,6 @@ class App:
         return exe_path.replace('"', "").strip()
     
     def __verify_app_path(self):
-        return len(self.name) > 0 and os.path.isfile(self.exe_path)
+        return self.exe_path.exists()
 
 
