@@ -87,10 +87,6 @@ class App:
     def __create_app_dir_strucure(self):
         if not os.path.exists(self.app_config_dirpath):     # Create the base app directory (amiya/apps/<app_name>)
             os.mkdir(self.app_config_dirpath)
-        if not os.path.exists(self.sequence_dirpath):       # Create the app automation sequence directory (amiya/apps/<app_name>/automation/sequence)
-            os.mkdir(self.sequence_dirpath)
-        if not os.path.exists(self.plate_dirpath):          # Create the app automation plate directory (amiya/apps/<app_name>/automation/plate)
-            os.mkdir(self.plate_dirpath)
 
     # =======================================
     # ============| APP DRIVER | ============
