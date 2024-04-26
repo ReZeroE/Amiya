@@ -1,5 +1,8 @@
 #include <windows.h>
+// #include <ShellScalingAPI.h>
 #include <stdio.h>
+
+// C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\ShellScalingApi.h
 
 BOOL isFullscreen(HWND hwnd) {
     // Get the screen size
@@ -42,6 +45,8 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam) {
 }
 
 int main(int argc, char *argv[]) {
+    // SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
+
     if (argc != 2) {
         fprintf(stderr, "Usage: %s <PID>\n", argv[0]);
         return 1;

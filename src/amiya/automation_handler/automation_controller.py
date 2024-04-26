@@ -20,6 +20,11 @@ class AutomationController:
         
         self.__create_automation_dir_structure()
         
+        # TODO: This doesn't work in the CLI environment:
+        # When two sequences with the same name gets recorded/created, he sequence with the same name will get overwritten 
+        # in the config file, but the list structure will not remove the previous automation sequence
+        # 
+        # This needss to be changed into a dictionary with sequence name as the key
         self.__sequence_list: list[AutomationSequence] = self.__load_all_sequences()
         self.__plate_list: list[AutomationPlate] = None
     

@@ -1,3 +1,4 @@
+pywin32
 psutil
 pynput
 pyautogui
