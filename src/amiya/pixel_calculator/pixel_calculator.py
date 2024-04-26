@@ -25,5 +25,11 @@ class PixelCalculator:
             return(int(new_x), int(new_y))  
                 
         else:
+            
+            print(f"Current Window: (Width {curr_window_info["width"]}) (Height {curr_window_info["height"]})")
+            print(f"Current Monitor: (Width {self.current_monitor_width}) (Height {self.current_monitor_height})")
+            print(f"Previous Window: (Width {prev_window_info["width"]}) (Height {prev_window_info['height']})")
+            print(f"Previous Monitor: (Width {self.prev_monitor_width}) (Height {self.prev_monitor_height})")
+            
             return None
     
