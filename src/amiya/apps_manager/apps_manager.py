@@ -399,6 +399,7 @@ class AppsManager:
         for i in progressbar(range(len(apps)), f"Syncing: ", 40):
             app: App = apps[i]
             success = sync_controller.sync(app)
+            self.apps[app.id] = app
             
         self.print_apps()
         
