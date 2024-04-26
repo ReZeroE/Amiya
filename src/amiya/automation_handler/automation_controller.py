@@ -9,23 +9,28 @@ from amiya.exceptions.exceptions import *
 from amiya.utils.helper import *
 from amiya.apps_manager.safety_monitor import SafetyMonitor
 
+APP_AUTOMATION_SEQUENCE_DIRNAME = "sequence"
+APP_AUTOMATION_PLATE_DIRNAME    = "plate"
+
 class AutomationController:
-    def __init__(self, auto_sequence_config_dir: str, auto_plate_config_dir: str):
-        
-        self.auto_sequence_config_dir = auto_sequence_config_dir
-        self.auto_plate_config_dir    = auto_plate_config_dir
+    def __init__(self, automation_dir):
+        self.automation_dir     = automation_dir
+        self.sequence_dirpath   = os.path.join(automation_dir, APP_AUTOMATION_SEQUENCE_DIRNAME)
+        self.plate_dirpath      = os.path.join(automation_dir, APP_AUTOMATION_PLATE_DIRNAME)
         
         self.__create_automation_dir_structure()
         
-        self.__sequence_list: list[AutomationSequence] = self.__load_all_sequences(auto_sequence_config_dir)
+        self.__sequence_list: list[AutomationSequence] = self.__load_all_sequences()
         self.__plate_list: list[AutomationPlate] = None
     
     
     def __create_automation_dir_structure(self):
-        if not os.path.exists(self.auto_sequence_config_dir):       # Create the app automation sequence directory (amiya/apps/<app_name>/automation/sequence)
-            os.mkdir(self.auto_sequence_config_dir)
-        if not os.path.exists(self.auto_plate_config_dir):          # Create the app automation plate directory (amiya/apps/<app_name>/automation/plate)
-            os.mkdir(self.auto_plate_config_dir)
+        if not os.path.exists(self.automation_dir):         # Create the app automation top directory (amiya/apps/<app_name>/automation)
+            os.mkdir(self.automation_dir)
+        if not os.path.exists(self.sequence_dirpath):       # Create the app automation sequence directory (amiya/apps/<app_name>/automation/sequence)
+            os.mkdir(self.sequence_dirpath)
+        if not os.path.exists(self.plate_dirpath):          # Create the app automation plate directory (amiya/apps/<app_name>/automation/plate)
+            os.mkdir(self.plate_dirpath)
     
     # ========================================================
     # ===========| AUTOMATION SEQUENCE FUNCTIONS | ===========
@@ -64,12 +69,12 @@ class AutomationController:
         self.__sequence_list.append(sequence)
         self.__sequence_list.sort(key=lambda seq: seq.date_created)
         
-    def __load_all_sequences(self, automation_directory) -> list[AutomationSequence]:
+    def __load_all_sequences(self) -> list[AutomationSequence]:
         sequence_list: list[AutomationSequence] = []
-        sequence_name_list = os.listdir(automation_directory)        # List all file/dir names in the automation folder
+        sequence_name_list = os.listdir(self.automation_dir)        # List all file/dir names in the automation folder
         
         for seq_filename in sequence_name_list:
-            AUTOMATION_FILE = os.path.join(automation_directory, seq_filename)
+            AUTOMATION_FILE = os.path.join(self.automation_dir, seq_filename)
             config_handler = SequenceConfigHandler(AUTOMATION_FILE)
             if config_handler.config_exists():
             

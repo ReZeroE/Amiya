@@ -11,8 +11,7 @@ from amiya.automation_handler.automation_controller import AutomationController
 from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
 
 APP_AUTOMATION_DIRNAME          = "automation"
-APP_AUTOMATION_SEQUENCE_DIRNAME = "sequence"
-APP_AUTOMATION_PLATE_DIRNAME    = "plate"
+
 APP_CONFIG_FILENAME             = "app-config.json"
 
 class App:
@@ -43,18 +42,12 @@ class App:
     
         self.app_config_dirpath     = os.path.join(APPS_DIRECTORY, self.get_reformatted_app_name())
         self.app_config_filepath    = os.path.join(self.app_config_dirpath, APP_CONFIG_FILENAME)
-        
-        # Automation directories
-        self.sequence_dirpath = os.path.join(self.app_config_dirpath, APP_AUTOMATION_DIRNAME, APP_AUTOMATION_SEQUENCE_DIRNAME)
-        self.plate_dirpath = os.path.join(self.app_config_dirpath, APP_AUTOMATION_DIRNAME, APP_AUTOMATION_PLATE_DIRNAME)
+        self.app_automation_dirpath = os.path.join(self.app_config_dirpath, APP_AUTOMATION_DIRNAME)
         
         self.new = new
         self.automation_controller = None
         if not new:
-            self.automation_controller = AutomationController(
-                self.sequence_dirpath,
-                self.plate_dirpath
-            )
+            self.automation_controller = AutomationController(self.app_automation_dirpath)
 
 
 
