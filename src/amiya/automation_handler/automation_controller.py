@@ -71,10 +71,10 @@ class AutomationController:
         
     def __load_all_sequences(self) -> list[AutomationSequence]:
         sequence_list: list[AutomationSequence] = []
-        sequence_name_list = os.listdir(self.automation_dir)        # List all file/dir names in the automation folder
+        sequence_name_list = os.listdir(self.sequence_dirpath)        # List all file/dir names in the automation folder
         
         for seq_filename in sequence_name_list:
-            AUTOMATION_FILE = os.path.join(self.automation_dir, seq_filename)
+            AUTOMATION_FILE = os.path.join(self.sequence_dirpath, seq_filename)
             config_handler = SequenceConfigHandler(AUTOMATION_FILE)
             if config_handler.config_exists():
             

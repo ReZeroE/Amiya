@@ -11,7 +11,6 @@ from amiya.automation_handler.automation_controller import AutomationController
 from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
 
 APP_AUTOMATION_DIRNAME          = "automation"
-
 APP_CONFIG_FILENAME             = "app-config.json"
 
 class App:

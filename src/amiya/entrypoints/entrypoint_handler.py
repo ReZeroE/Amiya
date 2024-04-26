@@ -12,7 +12,7 @@ class AmiyaEntrypointHandler:
         self.apps_manager = AppsManager()
         self.search_controller = SearchController()
         self.power_utils = PowerUtils()
-        self.scheduler = AmiyaScheduler()
+        # self.scheduler = AmiyaScheduler()
 
     
     # =================================================
@@ -107,8 +107,8 @@ class AmiyaEntrypointHandler:
     # ================| SCHEDULER | ===================
     # =================================================
 
-    def run_scheduler(self, args):
-        self.scheduler.run_scheduler()
+    # def run_scheduler(self, args):
+    #     self.scheduler.run_scheduler()
 
     # =================================================
     # ===============| OTHER HELPER | =================

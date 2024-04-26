@@ -117,8 +117,8 @@ def start_amiya():
     # ================| SCHEDULER | ===================
     # =================================================
     
-    start_parser = subparsers.add_parser('run-scheduler', help='Start and run the scheduler')
-    start_parser.set_defaults(func=entrypoint_handler.run_scheduler)
+    # start_parser = subparsers.add_parser('run-scheduler', help='Start and run the scheduler')
+    # start_parser.set_defaults(func=entrypoint_handler.run_scheduler)
     
     
     
