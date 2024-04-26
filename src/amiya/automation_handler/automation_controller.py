@@ -128,7 +128,7 @@ class AutomationController:
         return sequence_name.strip().replace(" ", "-").lower()
     
     def __get_sequence_filepath(self, sequence_name: str):
-        return os.path.join(self.auto_sequence_config_dir, f"{self.__reformat_sequence_name(sequence_name)}.json")
+        return os.path.join(self.sequence_dirpath, f"{self.__reformat_sequence_name(sequence_name)}.json")
     
     
     
