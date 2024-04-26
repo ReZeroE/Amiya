@@ -180,7 +180,7 @@ class App:
     
     def set_new_path(self, new_path):
         # Used for syncing apps across different machines only
-        self.exe_path = new_path
+        self.exe_path = Path(new_path)
         self.verified = self.__verify_app_path()
     
     def set_new_uuid(self):
