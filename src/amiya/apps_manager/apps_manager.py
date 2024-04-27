@@ -3,6 +3,7 @@ import sys
 import json
 import shutil
 import time
+import signal
 from termcolor import colored
 from amiya.apps_manager.app import App, APP_CONFIG_FILENAME
 from amiya.apps_manager.apps_viewer import AppsViewer
@@ -160,6 +161,19 @@ class AppsManager:
             
             
     # ======================================
+    # ==========| TERMINATE APP | ==========
+    # ======================================
+         
+    def __safe_terminate_current_app(self):
+        pid = SafetyMonitor.get_focused_pid()
+        try:
+            os.kill(pid, signal.SIGTERM)  # Send the SIGTERM signal to gracefully terminate the process
+            aprint(f"Current application (PID {pid}) has been closed.")
+        except OSError as e:
+            aprint(f"Failed to terminate process with PID {pid}: {e}", log_type=LogType.ERROR)
+
+
+    # ======================================
     # ============| VIEW APPS | ============
     # ======================================
     def print_app(self, app: App, format="fancy_grid"):
@@ -287,7 +301,7 @@ class AppsManager:
     
     def __start_app_and_record(self, app: App, new_sequence_name: str):
         self.__safe_start_app(app)
-        safety_monitor = SafetyMonitor(app.process.pid)
+        safety_monitor = SafetyMonitor(app.process)
         
         new_sequence_recorded = app.automation_controller.record_sequence(
             new_sequence_name, 
@@ -299,7 +313,7 @@ class AppsManager:
     # =================================================
     # ================| RUN SEQUENCES | ===============
     # =================================================
-    def run_sequence(self, tag: str = None, seq_name: str = None, add_global_delay: bool = False):
+    def run_sequence(self, tag: str = None, seq_name: str = None, add_global_delay: bool = False, terminate_on_finish: bool = False):
         if tag != None:
             tag = self.__parse_tag(tag)
             app = self.get_app_by_tag(tag)
@@ -326,17 +340,22 @@ class AppsManager:
         sequence.set_global_delay(global_delay)
         
         # ============== RUN CONFIRMATION ==============
-        aprint(f"The sequence '{sequence.sequence_name}' will run for {sequence.get_runtime()} seconds. Continue? [y/n] ", log_type=LogType.WARNING, end="")
+        terminate_text = " Terminate on finish." if terminate_on_finish else ""
+        aprint(f"The sequence '{sequence.sequence_name}' will run for {sequence.get_runtime()} seconds.{terminate_text} Continue? [y/n] ", log_type=LogType.WARNING, end="")
         if input().lower() != "y": return                                       # Verbose runtime and wait for user confirmation to run
         
         # =============== START RUNNING ===============
         aprint(f"[Automation {sequence.sequence_name}] Running...")
         self.__safe_start_app(app); time.sleep(5)                               # Starts the application for the sequence
-        safety_monitor = SafetyMonitor(app.process.pid)                           # Creates a safety monitor object for sequence execution safety (must be created after the app is started)
+        safety_monitor = SafetyMonitor(app.process)                             # Creates a safety monitor object for sequence execution safety (must be created after the app is started)
         self.__safe_execute_sequence(sequence, safety_monitor)                   # Runs the sequence (with the safety monitor)
 
         print("")
         aprint(f"[Automation {sequence.sequence_name}] Run Completed!", log_type=LogType.SUCCESS)
+        
+        if terminate_on_finish:
+            self.__safe_terminate_current_app()
+        
         
     def __safe_execute_sequence(self, sequence: AutomationSequence, safety_monitor: SafetyMonitor):
         try:

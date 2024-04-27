@@ -1,6 +1,6 @@
 #include <windows.h>
-// #include <ShellScalingAPI.h>
 #include <stdio.h>
+
 
 // C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\ShellScalingApi.h
 
@@ -44,8 +44,8 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam) {
     return TRUE; // Continue enumerating
 }
 
+
 int main(int argc, char *argv[]) {
-    // SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
 
     if (argc != 2) {
         fprintf(stderr, "Usage: %s <PID>\n", argv[0]);

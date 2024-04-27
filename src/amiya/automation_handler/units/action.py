@@ -19,6 +19,10 @@ ActionRecorder: Class for recording action sequences.
 
 class Action(ABC):
     @abstractclassmethod
+    def __init__(self, *args):
+        self.delay = ...
+    
+    @abstractclassmethod
     def __repr__(self):
         pass
     
@@ -47,7 +51,6 @@ class MouseAction(Action):
         The delay represent the time lag between the current click and the previous click,
         therefore time.sleep() is executed at the start of a new action.
         '''
-        time.sleep(self.delay) 
         
         x = self.coordinate[0]
         y = self.coordinate[1]
@@ -86,7 +89,6 @@ class KeyboardAction(Action):
         therefore time.sleep() is executed at the start of a new action.
         '''
         
-        time.sleep(self.delay)
         self.press_key(self.key, keyboard)
     
     def to_json(self):
@@ -128,3 +130,4 @@ class KeyboardAction(Action):
                 key = key.replace(suffix, "")
 
         return key
+    

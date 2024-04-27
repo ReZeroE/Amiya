@@ -7,9 +7,9 @@ from amiya.utils.constants import GET_FOCUSED_PID_EXE
 from amiya.exceptions.exceptions import AmiyaBaseException, Amiya_AppNotFocusedException
 
 class SafetyMonitor:
-    def __init__(self, app_pid: int):
-        self.app_pid = app_pid
-        self.cached_pids: set[int] = set()      # Cached PID includes all the processes' PID that is created after the SafetyMonitor
+    def __init__(self, app_process: psutil.Process):
+        self.app_process = app_process
+        self.cached_pids: set[int] = set()
         self.monitor_create_time = time.time()  # Time when the SafetyMonitor is created
     
     def app_is_focused(self) -> bool:
@@ -20,40 +20,33 @@ class SafetyMonitor:
         focused_pid = SafetyMonitor.get_focused_pid()
         
         # If PID == original APP's PID, return True
-        if focused_pid == self.app_pid:
+        if focused_pid == self.app_process.pid:
             return True
-        
-        # Else:
-        #   Check if the PID is one of the processes that got created after this SafetyMonitor is created. If so, ignore and return True.
-        #
-        #   The only reason why this exist if because if the original application is a game launcher, then the launched game's PID will
-        #   be untracked and this is the only way to improve safety.
-        if len(self.cached_pids) == 0:
-            time.sleep(10)
-            self.cached_pids = self.get_possible_pids()
-            focused_pid = SafetyMonitor.get_focused_pid()
-            
-        
-        # TODO: If the application is already running when a sequence is executed, another app process will be started and that PID will be used as the app_pid. However,
-        #   that process continue to exist since the app is already running, albeit a different process. In this case, we need to check to see if the app is already 
-        #   running first. If so, grab the running app's process' PID. If not, then start the process and use that pid. 
-        # return True # Force return true since this error exist
-        
-        
-        # TODO: Another problem:
-        #   Generally, the cached PIDs are only used to identify applications subprocesses that start after the original app has started (thus the safety monitor is created after the application is started).
-        #   The safety monitor CANNOT detect any application that gets started immediately after the original applciation starts (in the case of Persona 5 X where the executable immediately starts another executable, the actual game)
-        #   This limitation needs to be resolved as some application executable isn't the sole executable that gets started on callback.   
-        
+
+
         # print(f"Focused {focused_pid}")
-        # print(f"App: {self.app_pid}")
+        # print(f"App: {self.app_process.pid}")
         # print(f"Cached: {self.cached_pids}")
         
+
+        if focused_pid not in self.cached_pids:
+            self.__update_cached_pids()  # Update the cache if PID not found initially
+            
+            if focused_pid not in self.cached_pids:
+                aprint(f"Focused PID: [{focused_pid}], Original App PID: [{self.app_process.pid}], Cached PID: {self.cached_pids}", log_type=LogType.ERROR, new_line_no_prefix=False)
+                raise Amiya_AppNotFocusedException()
+            else:
+                return True
+        else:
+            return True
         
-        if focused_pid not in self.cached_pids:      # Return True if currently focused PID is cached (started after the SafetyMonitor is created)
-            print("")
-            aprint(f"Focused PID: [{focused_pid}], Original App PID: [{self.app_pid}], Cached PID: {self.cached_pids}", log_type=LogType.ERROR)
-            raise Amiya_AppNotFocusedException()
+
+    
+    def __update_cached_pids(self):
+        children_pids = set(proc.pid for proc in self.app_process.children(recursive=True))                  # Get children PIDs
+        parents_pids = set(proc.pid for proc in self.app_process.parents() if proc.pid != os.getpid())       # Get parent PIDs
+        self.cached_pids = children_pids.union(parents_pids)
+    
     
     @staticmethod
     def get_focused_pid() -> int|None:

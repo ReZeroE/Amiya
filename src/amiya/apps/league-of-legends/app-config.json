@@ -1,0 +1,11 @@
+{
+    "id": 8,
+    "name": "League of Legends",
+    "exe_path": "E:\\Riot Games\\Riot Client\\RiotClientServices.exe",
+    "tags": [
+        "league-of-legends",
+        "league"
+    ],
+    "verified": true,
+    "sys_uuid": "ECB1B2E8-FB5D-C8CB-75DC-C87F545BE519"
+}

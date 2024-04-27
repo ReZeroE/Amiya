@@ -22,12 +22,13 @@ class PixelCalculator:
             new_y = self.current_monitor_height / self.prev_monitor_height * prev_y  
             
             return(int(new_x), int(new_y))  
-                
+            
         else:
             print(f"\nCurrent Window: (Width {curr_window_info["width"]}) (Height {curr_window_info["height"]})")
             print(f"Current Monitor: (Width {self.current_monitor_width}) (Height {self.current_monitor_height})")
             print(f"Previous Window: (Width {prev_window_info["width"]}) (Height {prev_window_info['height']})")
             print(f"Previous Monitor: (Width {self.prev_monitor_width}) (Height {self.prev_monitor_height})")
             
+            aprint("[Pixel-Calc] Window size does not match monitor size, pixel calculator returning previous coordinate.", log_type=LogType.WARNING)
             return None
     

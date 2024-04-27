@@ -79,6 +79,8 @@ def start_amiya():
     start_parser = subparsers.add_parser('run-auto', help='[Admin Permission Req.] Record an automation sequences of the application')
     start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application')
     start_parser.add_argument('seq_name', nargs='?', default=None, help='Name of the sequence to run')
+    start_parser.add_argument('--add-global-delay', '-g', default=False, action='store_true', help='Add a global delay to the sequence during execution')
+    start_parser.add_argument('--terminate', '-t', default=False, action='store_true', help='Terminate the application on automation completion')
     start_parser.set_defaults(func=entrypoint_handler.run_automations_sequences)
     
     

@@ -10,6 +10,9 @@ CONFIG_NAME     = "Amiya Config"
 TIME_FORMAT     = "%H:%M:%S"
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
+# DO NOT REMOVE/MODIFY THESE VALUES (critical to the program's execution)
+FORCE_ACTIONS_DELAY = 0.5
+
 # ==================================
 # ============| PATHS | ============
 # ==================================

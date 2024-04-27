@@ -5,7 +5,7 @@ from pynput import keyboard
 from amiya.automation_handler.automation_config_handler import SequenceConfigHandler
 from amiya.automation_handler.units.action import Action, MouseAction, KeyboardAction
 from amiya.exceptions.exceptions import AmiyaBaseException, Amiya_AppNotFocusedException
-from amiya.utils.constants import DATETIME_FORMAT
+from amiya.utils.constants import FORCE_ACTIONS_DELAY
 from amiya.utils.helper import *
 from amiya.apps_manager.safety_monitor import SafetyMonitor
 from amiya.pixel_calculator.resolution_detector import ResolutionDetector
@@ -25,25 +25,48 @@ class AutomationSequence:
         self.global_delay                   = 0
     
     def execute(self, safety_monitor: SafetyMonitor):
+        
+        def verbose_action(idx: int, action: Action):
+            buffer_space = " "*5                                # Verbose current action
+            aprint(f"(CMD {idx+1}/{len(self.actions)}) Executing: {action.__repr__()}{buffer_space}", end="\r")
+        
         pixel_calculator = PixelCalculator(self.primary_monitor_info)
         pynput_keyboard = keyboard.Controller()
         
         for idx, action in enumerate(self.actions):
-            safety_monitor.app_is_focused()                      # If the application is no longer focused, stop the automation
             
-            buffer_space = " "*5                                # Verbose current action
-            aprint(f"(CMD {idx+1}/{len(self.actions)}) Executing: {action.__repr__()}{buffer_space}", end="\r")
+            # I don't ever know where to start explaining this.
+            # But some applications may have extra processes that popup (where the pop-up process has a different PID)
+            # When the new pop-up process get's clicked on, the pixel calculator will try to fetch the size of this process.
+            # However, if the previous action closed this pop-up process, the active/focused process takes a split second
+            # to switch back to the original process, and therefore the pixel calculator will try to fetch the already closed
+            # pop-up process' PID, causing an error.
+            time.sleep(FORCE_ACTIONS_DELAY)     
+            verbose_action(idx, action)
             
+            time.sleep(action.delay)                            # Execute current action after standard action delay
             time.sleep(self.global_delay)                       # Execute current action after global delay
+            
+            safety_monitor.app_is_focused()                     # If the application is no longer focused, stop the automation
+            
+            # ====================================
+            # ===========| KEYBOARD | ============
+            # ====================================
             if isinstance(action, KeyboardAction):
                 action.execute(pynput_keyboard)
+                
+
+            # ==================================
+            # ============| MOUSE | ============
+            # ==================================
             elif isinstance(action, MouseAction):
-                new_coord = pixel_calculator.calculate_new_coordinate(action.coordinate, action.window_info)
-                if new_coord == None:
-                    aprint("[Pixel-Calc] Window size does not match monitor size, pixel calculator returning previous coordinate.", log_type=LogType.WARNING)
-                else:
-                    action.coordinate = new_coord
+                # new_coord = pixel_calculator.calculate_new_coordinate(action.coordinate, action.window_info)
+                # if new_coord != None:
+                #     action.coordinate = new_coord
+                
                 action.execute()
+            
+
             
     def add(self, action: Action):
         assert(isinstance(action, Action))

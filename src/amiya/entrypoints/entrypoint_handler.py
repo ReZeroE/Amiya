@@ -59,7 +59,12 @@ class AmiyaEntrypointHandler:
         self.apps_manager.record_sequence(args.tag)
 
     def run_automations_sequences(self, args):
-        self.apps_manager.run_sequence(args.tag, args.seq_name)
+        self.apps_manager.run_sequence(
+            tag=args.tag, 
+            seq_name=args.seq_name,
+            add_global_delay=args.add_global_delay,
+            terminate_on_finish=args.terminate
+        )
 
 
     # =================================================
