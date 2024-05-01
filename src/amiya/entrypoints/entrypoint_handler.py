@@ -161,7 +161,7 @@ r"""
         cls_cmd = Printer.to_purple("clear")
         help_cmd = Printer.to_purple("help")
         
-        welcome_str = f"Welcome to the Amiya CLI Environment (BETA)."
+        welcome_str = f"Welcome to the Amiya CLI Environment (BETA {VERSION})"
         exit_str = f"Type '{quit_cmd}' to quit amiya CLI"
         cls_str = f"Type '{cls_cmd}' to clear terminal"
         help_str = f"Type '{help_cmd}' to display commands list"

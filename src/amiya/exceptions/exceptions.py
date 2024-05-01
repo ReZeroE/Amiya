@@ -72,3 +72,8 @@ class AmiyaOSNotSupported(Exception):
     __module__ = 'builtins'
     def __init__(self):
         super().__init__(f"\n\n\tAs of version {VERSION} (BETA), the {BASENAME} package is only supported on the Windows OS.")
+
+class AmiyaExit(Exception):
+    __module__ = 'builtins'
+    def __init__(self, message="Module internal exit callback executed."):
+        super().__init__(message)
