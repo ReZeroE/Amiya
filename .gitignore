@@ -2,12 +2,12 @@
 # src/amiya/apps/*
 src/amiya/apps_backup
 
+*.bk
+**/*.bk
+
 # Ignore test files and temp driver files
-test/
-**/test.py
-**/test*.py
+**/test[0-9]*.py
 **/tmp.*
-**/amiya.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

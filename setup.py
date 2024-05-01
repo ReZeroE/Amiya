@@ -22,11 +22,10 @@
 
 import os
 from setuptools import setup, find_packages
-from src.amiya.utils.constants import BASENAME, VERSION
 
 setup(
-    name=BASENAME,
-    version=VERSION,
+    name='amiya',
+    version='0.0.1',
     author='Kevin L.',
     author_email='kevinliu@vt.edu',
     description='A lightweight cross-platform automation tool for games and daily tasks!',
@@ -46,7 +45,7 @@ setup(
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
-        'Development Status :: 1 - Planning'
+        'Development Status :: 3 - Alpha'
     ],  
     include_package_data=True,
 )
