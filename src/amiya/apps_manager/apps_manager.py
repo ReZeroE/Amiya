@@ -60,8 +60,8 @@ class AppsManager:
         app.create_app()                                # Create the app and save to config
         self.apps[app.id] = app                         # Add to apps dict (key: app_id, value: app_obj)
         
-        text = colored(f"amiya start {app.get_reformatted_app_name()}", "light_cyan")
-        aprint(f"Application '{name}' has been successfully created and configured!\n\nTo start the app, run `{text}`")
+        cmd = color_cmd(f"amiya start {app.get_reformatted_app_name()}")
+        aprint(f"Application '{name}' has been successfully created and configured!\n\nTo start the app, run `{cmd}`")
         print("")
     
     def create_app_automated(self):
@@ -72,13 +72,13 @@ class AppsManager:
 
     def __verify_app_existance(self, app: App):
         if os.path.isfile(app.app_config_filepath):
-            aprint(f"An app with name '{app.name}' already exist. Exiting.", log_type=LogType.ERROR); exit()
+            aprint(f"An app with name '{app.name}' already exist. Exiting.", log_type=LogType.ERROR); raise AmiyaExit()
     
     def __verify_path_validity(self, app: App):
         if app.verified == False:
             aprint(f"The application's path failed to be verified (invalid path to .exe). Would you like to add this app anyways? [y/n] ", log_type=LogType.WARNING, end="")
             if input("").lower()!= "y": 
-                exit()
+                raise AmiyaExit()
     
     
     # ======================================
@@ -86,6 +86,8 @@ class AppsManager:
     # ======================================
     
     def delete_app(self, tag: str = None):
+        self.__verify_non_empty_apps_dir()
+        
         app = None
         
         if tag == None:                             # If no application tag is inputted by user
@@ -140,6 +142,8 @@ class AppsManager:
     # =============| RUN APP | =============
     # ======================================
     def run_app(self, tag: str = None):
+        self.__verify_non_empty_apps_dir()      # Verify that the apps dir is not empty
+        
         app = None
         
         if tag == None:                         # If user did not provide a tag
@@ -157,7 +161,7 @@ class AppsManager:
         if ret == True:
             aprint(f"[PID {app.process.pid}] Application '{app.name}' started successfully!")
         else:
-            aprint(f"Application '{app.name}' failed to start.", log_type=LogType.ERROR); exit()
+            aprint(f"Application '{app.name}' failed to start.", log_type=LogType.ERROR); raise AmiyaExit()
             
             
     # ======================================
@@ -171,6 +175,15 @@ class AppsManager:
             aprint(f"Current application (PID {pid}) has been closed.")
         except OSError as e:
             aprint(f"Failed to terminate process with PID {pid}: {e}", log_type=LogType.ERROR)
+
+
+    # ======================================
+    # ============| SHOW APPS | ============
+    # ======================================
+
+    def show_apps(self):
+        self.__verify_non_empty_apps_dir()
+        self.print_apps()
 
 
     # ======================================
@@ -197,6 +210,7 @@ class AppsManager:
     # ============| ADD/REOVE TAGS TO/FROM APP | ============
     # =======================================================
     def add_tag(self):
+        self.__verify_non_empty_apps_dir()
         
         def tag_exists(tag):
             try:
@@ -221,6 +235,8 @@ class AppsManager:
         app.save_app_config()
     
     def remove_tag(self):
+        self.__verify_non_empty_apps_dir()
+        
         self.print_apps()
         user_input = input(atext(f"Which app would you like to REMOVE a tag from? (0-{len(self.apps)-1}) "))
         app = self.apps[int(user_input)]
@@ -250,9 +266,9 @@ class AppsManager:
         try:
             app = self.apps[int(user_input_id)]
         except KeyError:
-            aprint(f"Your input (ID {user_input_id}) does not correspond to any apps.", log_type=LogType.ERROR); exit()
+            aprint(f"Your input (ID {user_input_id}) does not correspond to any apps.", log_type=LogType.ERROR); raise AmiyaExit()
         except ValueError:
-            aprint(f"Expected an ID (such as 0 or 1) but got '{user_input_id}'.", log_type=LogType.ERROR); exit()
+            aprint(f"Expected an ID (such as 0 or 1) but got '{user_input_id}'.", log_type=LogType.ERROR); raise AmiyaExit()
         return app
     
     def get_app_by_tag(self, tag) -> App | None:
@@ -261,8 +277,11 @@ class AppsManager:
                 return app
         raise Amiya_NoSuchTagException(tag)
             
-    
-    
+    def __verify_non_empty_apps_dir(self):
+        if len(self.apps) == 0:
+            cmd = color_cmd("amiya add-app")
+            aprint(f"No application is configured. To add/configure an application, run `{cmd}`")
+            raise AmiyaExit()
     
       
     # =====================================================================================================================================
@@ -272,6 +291,8 @@ class AppsManager:
     # ===============| LIST SEQUENCES | ===============
     # =================================================
     def list_sequences(self, tag: str = None):
+        self.__verify_non_empty_apps_dir()
+        
         if tag != None:
             tag = self.__parse_tag(tag)
             app = self.get_app_by_tag(tag)
@@ -288,6 +309,8 @@ class AppsManager:
     # ==============| RECORD SEQUENCES | ==============
     # =================================================
     def record_sequence(self, tag: str = None):
+        self.__verify_non_empty_apps_dir()
+        
         if tag != None:
             tag = self.__parse_tag(tag)
             app = self.get_app_by_tag(tag)
@@ -314,6 +337,8 @@ class AppsManager:
     # ================| RUN SEQUENCES | ===============
     # =================================================
     def run_sequence(self, tag: str = None, seq_name: str = None, add_global_delay: bool = False, terminate_on_finish: bool = False):
+        self.__verify_non_empty_apps_dir()
+        
         if tag != None:
             tag = self.__parse_tag(tag)
             app = self.get_app_by_tag(tag)
@@ -367,7 +392,7 @@ class AppsManager:
     def __safe_get_sequence(self, app: App, sequence_name: str) -> AutomationSequence:
         sequence = app.automation_controller.get_sequence(sequence_name)
         if sequence == None:
-            aprint(f"No sequence with name '{sequence_name}' exists. Exiting.", log_type=LogType.ERROR); exit()
+            aprint(f"No sequence with name '{sequence_name}' exists. Exiting.", log_type=LogType.ERROR); raise AmiyaExit()
         return sequence
 
     def __parse_int(self, delay) -> int:
@@ -378,7 +403,7 @@ class AppsManager:
             try:
                 return int(delay.strip())
             except ValueError:
-                aprint("Please input an integer as the delay."); exit()
+                aprint("Please input an integer as the delay."); raise AmiyaExit()
         
         raise AmiyaBaseException(f"Type {type(delay)} ({delay}) delay not supported.")
     
@@ -408,6 +433,8 @@ class AppsManager:
     # =================================================
     
     def sync_apps(self, verbose=True):
+        self.__verify_non_empty_apps_dir()
+        
         if verbose:
             aprint(f"Sync all {len(self.apps)} applications on this machine? (This may take a while) [y/n] ", log_type=LogType.WARNING, end="")
             if input().strip().lower() != "y": return
@@ -423,8 +450,8 @@ class AppsManager:
         self.print_apps()
         
         found = len([app for app in apps if app.verified == True])
-        text = colored("amiya cleanup", "light_cyan")
-        aprint(f"Sync Complete - successfully synced {found}/{len(apps)} applications.\n\nTo cleanup unverified applications (unavailable on this machine), run '{text}'")
+        cmd = color_cmd("amiya cleanup")
+        aprint(f"Sync Complete - successfully synced {found}/{len(apps)} applications.\n\nTo cleanup unverified applications (unavailable on this machine), run '{cmd}'")
         print("")
         
     def verify_apps_synced(self) -> bool: 

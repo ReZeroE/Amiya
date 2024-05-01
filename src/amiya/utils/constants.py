@@ -11,7 +11,7 @@ TIME_FORMAT     = "%H:%M:%S"
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 # DO NOT REMOVE/MODIFY THESE VALUES (critical to the program's execution)
-FORCE_ACTIONS_DELAY = 0.5
+FORCE_ACTIONS_DELAY = 0.0
 
 # ==================================
 # ============| PATHS | ============
@@ -26,3 +26,11 @@ BIN_DIRECTORY       = os.path.join(__AMIYA_DIRECTORY, "bin")
 FOCUS_PID_EXE           = os.path.join(BIN_DIRECTORY, "focus_pid.exe")
 GET_FOCUSED_PID_EXE     = os.path.join(BIN_DIRECTORY, "get_active_pid.exe")
 GET_WINDOW_SIZE_EXE     = os.path.join(BIN_DIRECTORY, "get_window_size.exe")
+
+# ==================================
+# ============| GLOBAL | ===========
+# ==================================
+
+# Global variable to identify whether the program is in CLI mode
+# MUST BE USED AS constants.CLI_MODE (only this accesses the re-bind value)
+CLI_MODE = False

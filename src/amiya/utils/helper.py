@@ -5,6 +5,7 @@ import shutil
 from enum import Enum
 from datetime import datetime
 from termcolor import colored
+from amiya.utils import constants
 from amiya.utils.constants import BASENAME, DATETIME_FORMAT, TIME_FORMAT # "Amiya"
 
 def verify_platform() -> bool:
@@ -42,6 +43,16 @@ def aprint(text: str, log_type: LogType = LogType.NORMAL, end="\n", new_line_no_
     print(rtext, end=end, file=sys.stdout)
     sys.stdout.flush()
 
+def color_cmd(text: str):
+    text = text.lower()
+    
+    if constants.CLI_MODE == True:
+        text = text.replace("amiya ", "")
+    else:
+        if not text.startswith("amiya"):
+            text = f"amiya {text}"
+    
+    return colored(text, "light_cyan")
 
 # =================================================
 # ============| CENTER TEXT HELPER | ==============

@@ -73,7 +73,9 @@ class AmiyaOSNotSupported(Exception):
     def __init__(self):
         super().__init__(f"\n\n\tAs of version {VERSION} (BETA), the {BASENAME} package is only supported on the Windows OS.")
 
+# This is a special exception that is used in place of exit() to avoid IO read error in the CLI environment (to avoid closing STDOUT).
+# This error is caught and replaced with 'continue' in the CLI env and 'exit()' in the normal mode. 
 class AmiyaExit(Exception):
     __module__ = 'builtins'
-    def __init__(self, message="Module internal exit callback executed."):
+    def __init__(self, message="Module internal exit requested (should be caught accordingly)."):
         super().__init__(message)

@@ -1,4 +1,9 @@
+# Ignore application config files
+# src/amiya/apps/*
+src/amiya/apps_backup
+
 # Ignore test files and temp driver files
+test/
 **/test.py
 **/test*.py
 **/tmp.*

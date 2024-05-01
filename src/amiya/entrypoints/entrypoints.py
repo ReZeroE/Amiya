@@ -5,7 +5,7 @@ import argparse
 from termcolor import colored
 from amiya.entrypoints.entrypoint_handler import AmiyaEntrypointHandler
 from amiya.utils.helper import aprint, verify_platform, is_admin, Printer
-from amiya.exceptions.exceptions import AmiyaOSNotSupported
+from amiya.exceptions.exceptions import AmiyaOSNotSupported, AmiyaExit
 
 
 class AmiyaArgParser(argparse.ArgumentParser):
@@ -174,5 +174,7 @@ def start_amiya():
                 args.func(args)
             except KeyboardInterrupt:
                 print("\nKeyboard Interrupt! Amiya Exiting.")
+            except AmiyaExit:
+                exit()
         else:
             parser.print_help()

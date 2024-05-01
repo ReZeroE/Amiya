@@ -7,8 +7,11 @@ from amiya.module_utilities.search_controller import SearchController
 from amiya.module_utilities.power_controller import PowerUtils
 from amiya.scheduler.scheduler import AmiyaScheduler
 from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
+from amiya.utils import constants
 from amiya.utils.constants import VERSION
 from amiya.module_utilities.volume_controller import AmiyaVolumeControllerUI, start_volume_control_ui, start_volume_control_ui_detached
+
+
 
 class AmiyaEntrypointHandler:
     def __init__(self):
@@ -29,7 +32,7 @@ class AmiyaEntrypointHandler:
         self.apps_manager.delete_app(args.tag)
     
     def show_apps(self, args):
-        self.apps_manager.print_apps()
+        self.apps_manager.show_apps()
     
     
     # =================================================
@@ -191,6 +194,9 @@ r"""
     import argparse
     def start_cli(self, parser: argparse.ArgumentParser):
         
+        # =============| SET CLI MODE |==============
+        constants.CLI_MODE = True
+        
         # ==============| PRINT TITLE |==============
         clear_screen()
         self.print_title()
@@ -213,7 +219,10 @@ r"""
         # =============| PARSE ARGUMENT |=============    
                 args = parser.parse_args(user_input.split())
                 if hasattr(args, 'func'):
-                    args.func(args)
+                    try:
+                        args.func(args)
+                    except AmiyaExit:
+                        continue
                 else:
                     parser.print_help()
             

@@ -19,7 +19,7 @@ class SearchController:
         success = webbrowser.open_new_tab(url)
         
         if not success:
-            aprint("Search failed due to web browser availablility or invalid request.", log_type=LogType.ERROR); exit()
+            aprint("Search failed due to web browser availablility or invalid request.", log_type=LogType.ERROR); raise AmiyaExit()
 
     def search_automated(self):
         search_content = input(atext("What would you like to search? ")).strip()

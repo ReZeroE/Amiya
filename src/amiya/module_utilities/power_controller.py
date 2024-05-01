@@ -65,7 +65,7 @@ class PowerUtils:
             try:
                 return int(delay.strip())
             except ValueError:
-                aprint("Please input an integer as the delay."); exit()
+                aprint("Please input an integer as the delay."); raise AmiyaExit()
         
         raise AmiyaBaseException(f"Type {type(delay)} ({delay}) delay not supported.")
              
