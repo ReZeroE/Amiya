@@ -12,6 +12,8 @@ Action: A single mouse of keyboard action.
 
 Sequence: A list/sequence of Action objects.
 
+Plate: A list of sequences in the order of execution.
+
 ActionRecorder: Class for recording action sequences.
 
 '''

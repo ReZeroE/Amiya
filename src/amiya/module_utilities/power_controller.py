@@ -32,7 +32,6 @@ class PowerUtils:
     def run_confirmation(self, delay: int, type: PowerType):
         aprint(f"This machine will {type.name.lower()} after {delay} seconds. Proceed? [y/n] ", end="")
         if input().lower().strip() == "y":
-            print("")
             return True
         return False
         

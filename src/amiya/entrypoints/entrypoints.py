@@ -115,6 +115,10 @@ def start_amiya():
     start_parser = subparsers.add_parser('uuid', help='Display system UUID')
     start_parser.set_defaults(func=entrypoint_handler.display_system_uuid)
     
+    
+    start_parser = subparsers.add_parser('volume', help='Open simple application volume control UI')
+    start_parser.set_defaults(func=entrypoint_handler.open_volume_control_ui)
+    
     # =================================================
     # ================| SCHEDULER | ===================
     # =================================================

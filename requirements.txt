@@ -8,3 +8,5 @@ elevate
 termcolor
 schedule
 screeninfo
+customtkinter
+pycaw

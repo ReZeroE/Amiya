@@ -9,6 +9,7 @@ from amiya.exceptions.exceptions import *
 from amiya.utils.helper import *
 from amiya.apps_manager.safety_monitor import SafetyMonitor
 
+
 APP_AUTOMATION_SEQUENCE_DIRNAME = "sequence"
 APP_AUTOMATION_PLATE_DIRNAME    = "plate"
 
@@ -49,7 +50,7 @@ class AutomationController:
             if sequence.sequence_name == target_sequence_name:
                 return sequence
         return None
-    
+     
     def sequence_exists(self, sequence_name):
         return self.get_sequence(sequence_name) != None
         

@@ -1,3 +1,5 @@
+import multiprocessing
+
 from amiya.apps_manager.apps_manager import AppsManager 
 from amiya.exceptions.exceptions import *
 from amiya.utils.helper import *
@@ -6,6 +8,7 @@ from amiya.module_utilities.power_controller import PowerUtils
 from amiya.scheduler.scheduler import AmiyaScheduler
 from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
 from amiya.utils.constants import VERSION
+from amiya.module_utilities.volume_controller import AmiyaVolumeControllerUI, start_volume_control_ui, start_volume_control_ui_detached
 
 class AmiyaEntrypointHandler:
     def __init__(self):
@@ -107,6 +110,15 @@ class AmiyaEntrypointHandler:
 
     def display_system_uuid(self, args):
        SysUUIDController.print_uuid()
+
+
+    def open_volume_control_ui(self, args):
+        # A new process is used because on closing the UI, a whole bunch of nonsense if printed 
+        # in stdout (only happens when using this as an module entrypoint apparantly)
+        gui_process = multiprocessing.Process(target=start_volume_control_ui)
+        gui_process.start()
+        gui_process.join()
+    
 
     # =================================================
     # ================| SCHEDULER | ===================
