@@ -23,11 +23,9 @@ class SafetyMonitor:
         if focused_pid == self.app_process.pid:
             return True
 
-
         # print(f"Focused {focused_pid}")
         # print(f"App: {self.app_process.pid}")
         # print(f"Cached: {self.cached_pids}")
-        
 
         if focused_pid not in self.cached_pids:
             self.__update_cached_pids()  # Update the cache if PID not found initially

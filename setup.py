@@ -25,7 +25,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='amiya',
-    version='0.0.1',
+    version='0.0.2',
     author='Kevin L.',
     author_email='kevinliu@vt.edu',
     description='A lightweight cross-platform automation tool for games and daily tasks!',
@@ -45,7 +45,7 @@ setup(
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
-        'Development Status :: 3 - Alpha'
+        'Development Status :: 4 - Beta'
     ],  
     include_package_data=True,
 )

@@ -8,8 +8,8 @@ from amiya.module_utilities.power_controller import PowerUtils
 from amiya.scheduler.scheduler import AmiyaScheduler
 from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
 from amiya.utils import constants
-from amiya.utils.constants import VERSION
-from amiya.module_utilities.volume_controller import AmiyaVolumeControllerUI, start_volume_control_ui, start_volume_control_ui_detached
+from amiya.utils.constants import VERSION, VERSION_DESC, AUTHOR, AUTHOR_DETAIL, REPOSITORY
+from amiya.module_utilities.volume_controller import AmiyaVolumeControllerUI, start_volume_control_ui
 
 
 
@@ -20,6 +20,19 @@ class AmiyaEntrypointHandler:
         self.power_utils = PowerUtils()
         # self.scheduler = AmiyaScheduler()
 
+    
+    # =================================================
+    # ====================| ABOUT | ===================
+    # =================================================
+    
+    def version(self, args):
+        aprint(f"Amiya {VERSION_DESC}-{VERSION}")
+    
+    def author(self, args):
+        aprint(AUTHOR_DETAIL)
+    
+    def repo(self, args):
+        aprint(REPOSITORY)
     
     # =================================================
     # ============| ADD/REMOVE/SHOW APPS | ============
@@ -34,6 +47,8 @@ class AmiyaEntrypointHandler:
     def show_apps(self, args):
         self.apps_manager.show_apps()
     
+    def show_app_config_dir(self, args):
+        self.apps_manager.verbose_app_config(args.tag)
     
     # =================================================
     # =================| START APPS | =================
@@ -110,10 +125,8 @@ class AmiyaEntrypointHandler:
         else:
             parser.print_help()
 
-
     def display_system_uuid(self, args):
        SysUUIDController.print_uuid()
-
 
     def open_volume_control_ui(self, args):
         # A new process is used because on closing the UI, a whole bunch of nonsense if printed 
@@ -133,6 +146,7 @@ class AmiyaEntrypointHandler:
     # =================================================
     # ===============| OTHER HELPER | =================
     # =================================================
+    
     def print_title(self):
         
         # columns, _ = shutil.get_terminal_size(fallback=(80, 20))
@@ -150,8 +164,8 @@ r"""
 """)
         
         desc = Printer.to_purple("""A lightweight cross-platform automation tool for games and daily tasks!""")
-        postfix = Printer.to_lightgrey("https://github.com/ReZeroE/Amiya")
-        author = Printer.to_lightgrey("By Kevin L.")
+        postfix = Printer.to_lightgrey(REPOSITORY)
+        author = Printer.to_lightgrey(f"By {AUTHOR}")
         
         print(center_text(title))
         print_centered(f"{desc}\n{postfix}\n{author}\n")
@@ -164,7 +178,7 @@ r"""
         cls_cmd = Printer.to_purple("clear")
         help_cmd = Printer.to_purple("help")
         
-        welcome_str = f"Welcome to the Amiya CLI Environment (BETA {VERSION})"
+        welcome_str = f"Welcome to the Amiya CLI Environment ({VERSION_DESC}-{VERSION})"
         exit_str = f"Type '{quit_cmd}' to quit amiya CLI"
         cls_str = f"Type '{cls_cmd}' to clear terminal"
         help_str = f"Type '{help_cmd}' to display commands list"
@@ -172,6 +186,9 @@ r"""
         print(f"{welcome_str}\n  {help_str}\n  {exit_str}\n  {cls_str}\n")
     
         
+    # =================================================
+    # ===============| CLI DRIVERS | ==================
+    # =================================================
     
     def check_custom_commands(self, user_input: str):
         # Return 0 to continue loop, 1 to short-circit loop and 'continue' loop, 2 to exit loop
@@ -234,6 +251,3 @@ r"""
                 continue
             except SystemExit:
                 continue
-            # except Exception as ex:
-            #     print(ex)
-            #     continue

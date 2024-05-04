@@ -1,5 +1,6 @@
-# Amiya (in development)
-Amiya - a lightweight cross-platform automation tool that allows scheduled start and automation of any application from the CLI. 
+# Amiya
+Amiya - a lightweight cross-platform automation tool that allows scheduled start and automation of any application from the CLI.
+
 
 <div align="center">
     <p style="padding-bottom: 0">
@@ -10,8 +11,9 @@ Amiya - a lightweight cross-platform automation tool that allows scheduled start
 
 
 ## Overview
-Amiya is a easy-to-use and versatile cross-platform application and game automation tool designed for efficiency and ease of use directly from the CLI. This package offers automation capabilities for any applications (including games), enabling users to start and control any application with simple CLI commands.
+_This project is currently in development (`Development Status :: 4 - Beta`)._
 
+Amiya is a easy-to-use and versatile cross-platform application and game automation tool designed for efficiency and ease of use directly from the CLI. This package offers automation capabilities for any applications (including games), enabling users to start and control any application with simple CLI commands.
 
 
 The primary features supported by the `amiya` package are:

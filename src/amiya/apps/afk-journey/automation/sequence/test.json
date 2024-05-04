@@ -1,7 +1,7 @@
 {
     "metadata": {
         "sequence_name": "test",
-        "date_created": "2024-05-03 16:59:09",
+        "date_created": "2024-05-03 22:17:30",
         "monitor_info": {
             "width": 3840,
             "height": 2160
@@ -11,40 +11,25 @@
     "actions_sequence": [
         {
             "coordinate": {
-                "x": 2651,
-                "y": 1484
+                "x": 2574,
+                "y": 1488
             },
-            "delay": 15,
+            "delay": 16.641955614089966,
             "click": true,
             "window_info": {
-                "left": 863,
-                "top": 377,
-                "width": 2115,
-                "height": 1335,
+                "left": 915,
+                "top": 480,
+                "width": 2010,
+                "height": 1128,
                 "is_fullscreen": false
             }
         },
         {
             "coordinate": {
-                "x": 2812,
-                "y": 687
+                "x": 1929,
+                "y": 1824
             },
-            "delay": 60,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3843,
-                "height": 2160,
-                "is_fullscreen": false
-            }
-        },
-        {
-            "coordinate": {
-                "x": 1944,
-                "y": 1562
-            },
-            "delay": 8,
+            "delay": 36.31861901283264,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -56,57 +41,10 @@
         },
         {
             "coordinate": {
-                "x": 1978,
-                "y": 1551
+                "x": 1958,
+                "y": 1833
             },
-            "delay": 3.4887948036193848,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "key": "Key.esc",
-            "delay": 15.542707204818726
-        },
-        {
-            "key": "Key.esc",
-            "delay": 0.7619655132293701
-        },
-        {
-            "key": "Key.esc",
-            "delay": 0.42328667640686035
-        },
-        {
-            "key": "Key.esc",
-            "delay": 0.4010045528411865
-        },
-        {
-            "key": "Key.esc",
-            "delay": 0.33297133445739746
-        },
-        {
-            "key": "Key.esc",
-            "delay": 1.689762830734253
-        },
-        {
-            "key": "Key.esc",
-            "delay": 0.31203651428222656
-        },
-        {
-            "key": "Key.esc",
-            "delay": 0.25124239921569824
-        },
-        {
-            "coordinate": {
-                "x": 2751,
-                "y": 1871
-            },
-            "delay": 5.453726053237915,
+            "delay": 2.3419809341430664,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -118,10 +56,10 @@
         },
         {
             "coordinate": {
-                "x": 2439,
-                "y": 1689
+                "x": 1928,
+                "y": 1874
             },
-            "delay": 1.8505406379699707,
+            "delay": 3.840620994567871,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -133,10 +71,10 @@
         },
         {
             "coordinate": {
-                "x": 1058,
-                "y": 1893
+                "x": 1926,
+                "y": 1882
             },
-            "delay": 1.6378066539764404,
+            "delay": 0.5933804512023926,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -148,10 +86,10 @@
         },
         {
             "coordinate": {
-                "x": 1873,
-                "y": 1940
+                "x": 1926,
+                "y": 1882
             },
-            "delay": 2.4010980129241943,
+            "delay": 0.3916616439819336,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -163,10 +101,10 @@
         },
         {
             "coordinate": {
-                "x": 1873,
-                "y": 1940
+                "x": 1926,
+                "y": 1882
             },
-            "delay": 0.909980297088623,
+            "delay": 0.461256742477417,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -178,10 +116,10 @@
         },
         {
             "coordinate": {
-                "x": 1873,
-                "y": 1940
+                "x": 1926,
+                "y": 1882
             },
-            "delay": 0.8312029838562012,
+            "delay": 0.19807982444763184,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -193,10 +131,10 @@
         },
         {
             "coordinate": {
-                "x": 1873,
-                "y": 1940
+                "x": 1926,
+                "y": 1882
             },
-            "delay": 0.6929197311401367,
+            "delay": 0.2050151824951172,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -208,85 +146,10 @@
         },
         {
             "coordinate": {
-                "x": 1873,
-                "y": 1940
+                "x": 1926,
+                "y": 1882
             },
-            "delay": 0.698859691619873,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 1873,
-                "y": 1940
-            },
-            "delay": 0.7319028377532959,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 1873,
-                "y": 1940
-            },
-            "delay": 0.823312520980835,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 1873,
-                "y": 1940
-            },
-            "delay": 0.8198275566101074,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 1873,
-                "y": 1940
-            },
-            "delay": 0.788114070892334,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 1873,
-                "y": 1940
-            },
-            "delay": 0.7616362571716309,
+            "delay": 0.3377401828765869,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -298,960 +161,42 @@
         },
         {
             "key": "Key.esc",
-            "delay": 1.3289263248443604
+            "delay": 1.6466195583343506
         },
         {
             "key": "Key.esc",
-            "delay": 1.6527700424194336
+            "delay": 0.4170253276824951
         },
         {
             "key": "Key.esc",
-            "delay": 1.2668933868408203
+            "delay": 0.468900203704834
         },
         {
             "key": "Key.esc",
-            "delay": 1.158761739730835
+            "delay": 0.9785375595092773
         },
         {
             "key": "Key.esc",
-            "delay": 0.879155158996582
+            "delay": 1.061506748199463
         },
         {
-            "coordinate": {
-                "x": 3559,
-                "y": 1838
-            },
-            "delay": 4.166687488555908,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 1083,
-                "y": 865
-            },
-            "delay": 3.727630138397217,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 987,
-                "y": 1171
-            },
-            "delay": 3.0266835689544678,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 739,
-                "y": 1904
-            },
-            "delay": 2.3852133750915527,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 762,
-                "y": 1772
-            },
-            "delay": 0.8845438957214355,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 779,
-                "y": 1651
-            },
-            "delay": 0.889451265335083,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 800,
-                "y": 1569
-            },
-            "delay": 0.7183578014373779,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 815,
-                "y": 1489
-            },
-            "delay": 0.7287881374359131,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 842,
-                "y": 1400
-            },
-            "delay": 0.7627975940704346,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 860,
-                "y": 1321
-            },
-            "delay": 0.6633760929107666,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 884,
-                "y": 1237
-            },
-            "delay": 0.7089290618896484,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 912,
-                "y": 1138
-            },
-            "delay": 0.7417793273925781,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 927,
-                "y": 1064
-            },
-            "delay": 0.7478277683258057,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3370,
-                "y": 1910
-            },
-            "delay": 2.9933621883392334,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3333,
-                "y": 1945
-            },
-            "delay": 2.555105209350586,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3321,
-                "y": 1945
-            },
-            "delay": 1.233851671218872,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3329,
-                "y": 1940
-            },
-            "delay": 0.8464508056640625,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3372,
-                "y": 1902
-            },
-            "delay": 122.73804712295532,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2031,
-                "y": 1964
-            },
-            "delay": 12.626181840896606,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2082,
-                "y": 1912
-            },
-            "delay": 0.4746582508087158,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2052,
-                "y": 1989
-            },
-            "delay": 0.484112024307251,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 1987,
-                "y": 1973
-            },
-            "delay": 0.5462255477905273,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2093,
-                "y": 1948
-            },
-            "delay": 0.5388708114624023,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2808,
-                "y": 1930
-            },
-            "delay": 3.206716537475586,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 183,
-                "y": 137
-            },
-            "delay": 5.426974296569824,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 1627,
-                "y": 1149
-            },
-            "delay": 3.5323662757873535,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 645,
-                "y": 1887
-            },
-            "delay": 1.9679195880889893,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 693,
-                "y": 1810
-            },
-            "delay": 0.6019527912139893,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 712,
-                "y": 1716
-            },
-            "delay": 0.6790835857391357,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 729,
-                "y": 1615
-            },
-            "delay": 0.5819301605224609,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 758,
-                "y": 1516
-            },
-            "delay": 0.6218230724334717,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 784,
-                "y": 1430
-            },
-            "delay": 0.6243388652801514,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 813,
-                "y": 1330
-            },
-            "delay": 0.5698463916778564,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 861,
-                "y": 1201
-            },
-            "delay": 0.547762393951416,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 872,
-                "y": 1132
-            },
-            "delay": 0.506173849105835,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 904,
-                "y": 1053
-            },
-            "delay": 0.638697624206543,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3369,
-                "y": 1908
-            },
-            "delay": 2.16129469871521,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3363,
-                "y": 1941
-            },
-            "delay": 2.1189656257629395,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3310,
-                "y": 1944
-            },
-            "delay": 0.6507453918457031,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3303,
-                "y": 1936
-            },
-            "delay": 0.7400827407836914,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3303,
-                "y": 1936
-            },
-            "delay": 0.1781444549560547,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3368,
-                "y": 1908
-            },
-            "delay": 113.24791812896729,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 1970,
-                "y": 1915
-            },
-            "delay": 14.139781951904297,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 1884,
-                "y": 1978
-            },
-            "delay": 0.5520694255828857,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 1955,
-                "y": 1895
-            },
-            "delay": 0.5150690078735352,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 1943,
-                "y": 1957
-            },
-            "delay": 0.5479860305786133,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 1937,
-                "y": 1948
-            },
-            "delay": 1.2659504413604736,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2795,
-                "y": 1928
-            },
-            "delay": 1.408200740814209,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 184,
-                "y": 138
-            },
-            "delay": 5.008895397186279,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2252,
-                "y": 1149
-            },
-            "delay": 4.258821725845337,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 632,
-                "y": 1901
-            },
-            "delay": 1.962383508682251,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 683,
-                "y": 1813
-            },
-            "delay": 0.5526211261749268,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 714,
-                "y": 1761
-            },
-            "delay": 0.43567705154418945,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 749,
-                "y": 1660
-            },
-            "delay": 0.42913246154785156,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 785,
-                "y": 1603
-            },
-            "delay": 0.4537332057952881,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 821,
-                "y": 1505
-            },
-            "delay": 0.4341771602630615,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 849,
-                "y": 1423
-            },
-            "delay": 0.3892946243286133,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 895,
-                "y": 1342
-            },
-            "delay": 0.43784308433532715,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 913,
-                "y": 1241
-            },
-            "delay": 0.4407782554626465,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 922,
-                "y": 1185
-            },
-            "delay": 0.4233119487762451,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 0.8549787998199463
         },
         {
-            "coordinate": {
-                "x": 991,
-                "y": 1104
-            },
-            "delay": 0.4909555912017822,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 0.8388981819152832
         },
         {
-            "coordinate": {
-                "x": 3335,
-                "y": 1902
-            },
-            "delay": 2.180088996887207,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 0.7940711975097656
         },
         {
             "coordinate": {
-                "x": 3335,
-                "y": 1902
+                "x": 2027,
+                "y": 1427
             },
-            "delay": 1.6276137828826904,
+            "delay": 1.429450273513794,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1263,10 +208,10 @@
         },
         {
             "coordinate": {
-                "x": 3344,
-                "y": 1935
+                "x": 90,
+                "y": 2081
             },
-            "delay": 1.261418342590332,
+            "delay": 1.7417640686035156,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1278,10 +223,10 @@
         },
         {
             "coordinate": {
-                "x": 3276,
-                "y": 1911
+                "x": 1916,
+                "y": 1207
             },
-            "delay": 0.44182348251342773,
+            "delay": 2.7771568298339844,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1293,10 +238,10 @@
         },
         {
             "coordinate": {
-                "x": 3386,
-                "y": 1883
+                "x": 2859,
+                "y": 1604
             },
-            "delay": 108.46999502182007,
+            "delay": 3.508808135986328,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1308,10 +253,10 @@
         },
         {
             "coordinate": {
-                "x": 2008,
-                "y": 1994
+                "x": 2273,
+                "y": 1452
             },
-            "delay": 12.304520606994629,
+            "delay": 2.4070146083831787,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1322,26 +267,15 @@
             }
         },
         {
-            "coordinate": {
-                "x": 2005,
-                "y": 1990
-            },
-            "delay": 1.127352237701416,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 2.0417206287384033
         },
         {
             "coordinate": {
-                "x": 2012,
-                "y": 2003
+                "x": 2301,
+                "y": 2071
             },
-            "delay": 0.4349377155303955,
+            "delay": 3.022170066833496,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1353,10 +287,10 @@
         },
         {
             "coordinate": {
-                "x": 2099,
-                "y": 1973
+                "x": 2301,
+                "y": 2071
             },
-            "delay": 1.19203519821167,
+            "delay": 0.5741245746612549,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1368,10 +302,10 @@
         },
         {
             "coordinate": {
-                "x": 2012,
-                "y": 1994
+                "x": 2301,
+                "y": 2071
             },
-            "delay": 0.5050280094146729,
+            "delay": 0.44919872283935547,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1383,10 +317,10 @@
         },
         {
             "coordinate": {
-                "x": 2793,
-                "y": 1927
+                "x": 2857,
+                "y": 1600
             },
-            "delay": 2.015141725540161,
+            "delay": 0.9646744728088379,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1398,10 +332,10 @@
         },
         {
             "coordinate": {
-                "x": 239,
-                "y": 111
+                "x": 2295,
+                "y": 1471
             },
-            "delay": 5.030395746231079,
+            "delay": 0.9441649913787842,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1412,26 +346,15 @@
             }
         },
         {
-            "coordinate": {
-                "x": 2845,
-                "y": 1227
-            },
-            "delay": 6.008919715881348,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 2.494598865509033
         },
         {
             "coordinate": {
-                "x": 619,
-                "y": 1895
+                "x": 2320,
+                "y": 2072
             },
-            "delay": 1.8481481075286865,
+            "delay": 1.0456910133361816,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1443,10 +366,10 @@
         },
         {
             "coordinate": {
-                "x": 643,
-                "y": 1789
+                "x": 2320,
+                "y": 2072
             },
-            "delay": 0.5372560024261475,
+            "delay": 0.6266515254974365,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1458,10 +381,10 @@
         },
         {
             "coordinate": {
-                "x": 647,
-                "y": 1711
+                "x": 2320,
+                "y": 2072
             },
-            "delay": 0.5067522525787354,
+            "delay": 0.5680892467498779,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1473,10 +396,10 @@
         },
         {
             "coordinate": {
-                "x": 660,
-                "y": 1654
+                "x": 2852,
+                "y": 1595
             },
-            "delay": 0.5309467315673828,
+            "delay": 1.027665615081787,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1488,10 +411,10 @@
         },
         {
             "coordinate": {
-                "x": 682,
-                "y": 1585
+                "x": 2312,
+                "y": 1462
             },
-            "delay": 0.5500285625457764,
+            "delay": 1.1293368339538574,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1502,26 +425,15 @@
             }
         },
         {
-            "coordinate": {
-                "x": 714,
-                "y": 1503
-            },
-            "delay": 0.5017228126525879,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 1.5379769802093506
         },
         {
             "coordinate": {
-                "x": 749,
-                "y": 1407
+                "x": 2333,
+                "y": 2061
             },
-            "delay": 0.4923710823059082,
+            "delay": 0.8129985332489014,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1533,10 +445,10 @@
         },
         {
             "coordinate": {
-                "x": 773,
-                "y": 1325
+                "x": 2333,
+                "y": 2061
             },
-            "delay": 0.44554996490478516,
+            "delay": 0.6120238304138184,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1548,10 +460,10 @@
         },
         {
             "coordinate": {
-                "x": 812,
-                "y": 1235
+                "x": 2333,
+                "y": 2061
             },
-            "delay": 0.4508044719696045,
+            "delay": 0.5866632461547852,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1563,10 +475,10 @@
         },
         {
             "coordinate": {
-                "x": 840,
-                "y": 1152
+                "x": 2859,
+                "y": 1596
             },
-            "delay": 0.46770668029785156,
+            "delay": 0.9783439636230469,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1578,10 +490,10 @@
         },
         {
             "coordinate": {
-                "x": 890,
-                "y": 1076
+                "x": 2284,
+                "y": 1445
             },
-            "delay": 0.47968125343322754,
+            "delay": 1.157066822052002,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1592,26 +504,15 @@
             }
         },
         {
-            "coordinate": {
-                "x": 892,
-                "y": 1038
-            },
-            "delay": 0.5170712471008301,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 1.6913959980010986
         },
         {
             "coordinate": {
-                "x": 3357,
-                "y": 1892
+                "x": 2284,
+                "y": 2050
             },
-            "delay": 1.8339688777923584,
+            "delay": 1.0844621658325195,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1623,10 +524,10 @@
         },
         {
             "coordinate": {
-                "x": 3305,
-                "y": 1924
+                "x": 2295,
+                "y": 2042
             },
-            "delay": 2.1340508460998535,
+            "delay": 0.5780608654022217,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1638,10 +539,10 @@
         },
         {
             "coordinate": {
-                "x": 3302,
-                "y": 1946
+                "x": 2295,
+                "y": 2042
             },
-            "delay": 1.1914527416229248,
+            "delay": 0.6256663799285889,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1653,10 +554,10 @@
         },
         {
             "coordinate": {
-                "x": 3330,
-                "y": 1925
+                "x": 2866,
+                "y": 1597
             },
-            "delay": 0.667741060256958,
+            "delay": 0.8069446086883545,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1668,10 +569,10 @@
         },
         {
             "coordinate": {
-                "x": 3307,
-                "y": 1994
+                "x": 2276,
+                "y": 1466
             },
-            "delay": 0.46174025535583496,
+            "delay": 1.611264705657959,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1682,26 +583,15 @@
             }
         },
         {
-            "coordinate": {
-                "x": 3357,
-                "y": 1963
-            },
-            "delay": 122.60384774208069,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 1.7595746517181396
         },
         {
             "coordinate": {
-                "x": 3305,
-                "y": 1888
+                "x": 2349,
+                "y": 2049
             },
-            "delay": 0.7334506511688232,
+            "delay": 1.2810068130493164,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1713,10 +603,10 @@
         },
         {
             "coordinate": {
-                "x": 2018,
-                "y": 1889
+                "x": 2349,
+                "y": 2049
             },
-            "delay": 11.225083351135254,
+            "delay": 0.6211464405059814,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1728,10 +618,10 @@
         },
         {
             "coordinate": {
-                "x": 2048,
-                "y": 1980
+                "x": 2349,
+                "y": 2049
             },
-            "delay": 0.8511366844177246,
+            "delay": 0.6312346458435059,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1742,146 +632,47 @@
             }
         },
         {
-            "coordinate": {
-                "x": 1927,
-                "y": 1960
-            },
-            "delay": 1.0671517848968506,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 4.995506525039673
         },
         {
-            "coordinate": {
-                "x": 1991,
-                "y": 1891
-            },
-            "delay": 1.4170095920562744,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 1.132028341293335
         },
         {
-            "coordinate": {
-                "x": 1935,
-                "y": 1931
-            },
-            "delay": 1.0472402572631836,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 1.0357224941253662
         },
         {
-            "coordinate": {
-                "x": 2815,
-                "y": 1924
-            },
-            "delay": 2.0106136798858643,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 1.1013684272766113
         },
         {
-            "coordinate": {
-                "x": 2475,
-                "y": 1899
-            },
-            "delay": 0.8103079795837402,
-            "click": false,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 0.9488787651062012
         },
         {
-            "coordinate": {
-                "x": 202,
-                "y": 111
-            },
-            "delay": 8.241751432418823,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 1.0678958892822266
         },
         {
-            "coordinate": {
-                "x": 3488,
-                "y": 1171
-            },
-            "delay": 7.576127052307129,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 0.9182097911834717
         },
         {
-            "coordinate": {
-                "x": 576,
-                "y": 1906
-            },
-            "delay": 1.814978837966919,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 0.9036509990692139
         },
         {
-            "coordinate": {
-                "x": 618,
-                "y": 1774
-            },
-            "delay": 0.46274423599243164,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 0.7723104953765869
         },
         {
             "coordinate": {
-                "x": 662,
-                "y": 1680
+                "x": 2028,
+                "y": 1437
             },
-            "delay": 0.39718103408813477,
+            "delay": 0.7833466529846191,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1893,10 +684,10 @@
         },
         {
             "coordinate": {
-                "x": 694,
-                "y": 1592
+                "x": 2574,
+                "y": 1855
             },
-            "delay": 0.43898558616638184,
+            "delay": 2.048020362854004,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1908,10 +699,10 @@
         },
         {
             "coordinate": {
-                "x": 730,
-                "y": 1514
+                "x": 2574,
+                "y": 1855
             },
-            "delay": 0.42600250244140625,
+            "delay": 0.5109639167785645,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1923,10 +714,10 @@
         },
         {
             "coordinate": {
-                "x": 740,
-                "y": 1439
+                "x": 2574,
+                "y": 1855
             },
-            "delay": 0.3830747604370117,
+            "delay": 0.4719889163970947,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1938,10 +729,10 @@
         },
         {
             "coordinate": {
-                "x": 761,
-                "y": 1362
+                "x": 1832,
+                "y": 2053
             },
-            "delay": 0.43476009368896484,
+            "delay": 0.9536213874816895,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1953,10 +744,10 @@
         },
         {
             "coordinate": {
-                "x": 795,
-                "y": 1322
+                "x": 1556,
+                "y": 896
             },
-            "delay": 0.4659864902496338,
+            "delay": 1.858386516571045,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1968,10 +759,10 @@
         },
         {
             "coordinate": {
-                "x": 816,
-                "y": 1163
+                "x": 2929,
+                "y": 310
             },
-            "delay": 0.6840488910675049,
+            "delay": 2.5739922523498535,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -1982,26 +773,15 @@
             }
         },
         {
-            "coordinate": {
-                "x": 838,
-                "y": 1110
-            },
-            "delay": 0.5171084403991699,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 2.8522026538848877
         },
         {
             "coordinate": {
-                "x": 876,
-                "y": 1047
+                "x": 954,
+                "y": 2040
             },
-            "delay": 0.43070030212402344,
+            "delay": 2.3934342861175537,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2012,116 +792,39 @@
             }
         },
         {
-            "coordinate": {
-                "x": 3265,
-                "y": 1919
-            },
-            "delay": 3.389280080795288,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 3.5586812496185303
         },
         {
-            "coordinate": {
-                "x": 3265,
-                "y": 1919
-            },
-            "delay": 1.9331247806549072,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 1.8309831619262695
         },
         {
-            "coordinate": {
-                "x": 3291,
-                "y": 1956
-            },
-            "delay": 0.7576453685760498,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 1.330843210220337
         },
         {
-            "coordinate": {
-                "x": 3291,
-                "y": 1956
-            },
-            "delay": 0.17615389823913574,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 1.2181639671325684
         },
         {
-            "coordinate": {
-                "x": 3352,
-                "y": 1944
-            },
-            "delay": 0.29175448417663574,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 1.0119130611419678
         },
         {
-            "coordinate": {
-                "x": 3351,
-                "y": 1891
-            },
-            "delay": 123.7810275554657,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 1.207899570465088
         },
         {
-            "coordinate": {
-                "x": 2025,
-                "y": 1963
-            },
-            "delay": 12.541914224624634,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
+            "key": "Key.esc",
+            "delay": 0.8914036750793457
         },
         {
             "coordinate": {
-                "x": 2053,
-                "y": 1902
+                "x": 2023,
+                "y": 1428
             },
-            "delay": 0.5548787117004395,
+            "delay": 1.2231535911560059,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2133,10 +836,10 @@
         },
         {
             "coordinate": {
-                "x": 2032,
-                "y": 1969
+                "x": 1849,
+                "y": 2057
             },
-            "delay": 0.3830113410949707,
+            "delay": 1.4717485904693604,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2148,10 +851,10 @@
         },
         {
             "coordinate": {
-                "x": 1997,
-                "y": 1973
+                "x": 1538,
+                "y": 927
             },
-            "delay": 0.645766019821167,
+            "delay": 1.5772802829742432,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2164,9 +867,64 @@
         {
             "coordinate": {
                 "x": 2016,
-                "y": 1927
+                "y": 2013
             },
-            "delay": 0.681361198425293,
+            "delay": 2.736971855163574,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "key": "f",
+            "delay": 6.179897308349609
+        },
+        {
+            "key": "Key.esc",
+            "delay": 96.71268033981323
+        },
+        {
+            "key": "Key.esc",
+            "delay": 2.2139334678649902
+        },
+        {
+            "key": "Key.esc",
+            "delay": 1.5390400886535645
+        },
+        {
+            "key": "Key.esc",
+            "delay": 1.1980023384094238
+        },
+        {
+            "key": "Key.esc",
+            "delay": 1.0959117412567139
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.7951159477233887
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.8210713863372803
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.6207208633422852
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.772045373916626
+        },
+        {
+            "coordinate": {
+                "x": 2610,
+                "y": 1843
+            },
+            "delay": 0.4405214786529541,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2178,10 +936,10 @@
         },
         {
             "coordinate": {
-                "x": 2825,
-                "y": 1913
+                "x": 2610,
+                "y": 1843
             },
-            "delay": 0.9136426448822021,
+            "delay": 0.19176054000854492,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2193,10 +951,10 @@
         },
         {
             "coordinate": {
-                "x": 207,
-                "y": 125
+                "x": 2610,
+                "y": 1843
             },
-            "delay": 4.196147441864014,
+            "delay": 0.1973435878753662,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2208,10 +966,10 @@
         },
         {
             "coordinate": {
-                "x": 3751,
-                "y": 1147
+                "x": 2610,
+                "y": 1843
             },
-            "delay": 3.330153703689575,
+            "delay": 0.17487883567810059,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2223,10 +981,29 @@
         },
         {
             "coordinate": {
-                "x": 3505,
-                "y": 1134
+                "x": 2610,
+                "y": 1843
             },
-            "delay": 2.914379596710205,
+            "delay": 0.19002819061279297,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.6536602973937988
+        },
+        {
+            "coordinate": {
+                "x": 2023,
+                "y": 1424
+            },
+            "delay": 3.2941067218780518,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2238,10 +1015,10 @@
         },
         {
             "coordinate": {
-                "x": 678,
-                "y": 1891
+                "x": 2652,
+                "y": 1820
             },
-            "delay": 1.8603098392486572,
+            "delay": 1.139150857925415,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2253,10 +1030,10 @@
         },
         {
             "coordinate": {
-                "x": 712,
-                "y": 1772
+                "x": 2652,
+                "y": 1820
             },
-            "delay": 0.6881375312805176,
+            "delay": 0.22674012184143066,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2268,10 +1045,10 @@
         },
         {
             "coordinate": {
-                "x": 747,
-                "y": 1680
+                "x": 2652,
+                "y": 1820
             },
-            "delay": 0.4229457378387451,
+            "delay": 0.2150275707244873,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2283,10 +1060,10 @@
         },
         {
             "coordinate": {
-                "x": 772,
-                "y": 1608
+                "x": 1830,
+                "y": 2058
             },
-            "delay": 0.47293806076049805,
+            "delay": 0.7720754146575928,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2298,10 +1075,10 @@
         },
         {
             "coordinate": {
-                "x": 784,
-                "y": 1527
+                "x": 1566,
+                "y": 916
             },
-            "delay": 0.41763997077941895,
+            "delay": 1.294135332107544,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2313,10 +1090,72 @@
         },
         {
             "coordinate": {
-                "x": 809,
-                "y": 1471
+                "x": 2029,
+                "y": 2020
             },
-            "delay": 0.3745901584625244,
+            "delay": 1.6250135898590088,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "key": "f",
+            "delay": 3.5072379112243652
+        },
+        {
+            "coordinate": {
+                "x": 1960,
+                "y": 2055
+            },
+            "delay": 93.62781238555908,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "key": "Key.esc",
+            "delay": 3.428325653076172
+        },
+        {
+            "key": "Key.esc",
+            "delay": 1.0709471702575684
+        },
+        {
+            "key": "Key.esc",
+            "delay": 1.084697961807251
+        },
+        {
+            "key": "Key.esc",
+            "delay": 1.135728359222412
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.8399314880371094
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.8743910789489746
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.76523756980896
+        },
+        {
+            "coordinate": {
+                "x": 2032,
+                "y": 1443
+            },
+            "delay": 0.6273684501647949,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2328,10 +1167,10 @@
         },
         {
             "coordinate": {
-                "x": 833,
-                "y": 1393
+                "x": 2615,
+                "y": 1800
             },
-            "delay": 0.4436964988708496,
+            "delay": 1.0566082000732422,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2343,10 +1182,10 @@
         },
         {
             "coordinate": {
-                "x": 858,
-                "y": 1312
+                "x": 2615,
+                "y": 1800
             },
-            "delay": 0.42320704460144043,
+            "delay": 0.3107898235321045,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2358,10 +1197,10 @@
         },
         {
             "coordinate": {
-                "x": 890,
-                "y": 1224
+                "x": 2615,
+                "y": 1800
             },
-            "delay": 0.4460146427154541,
+            "delay": 0.2036299705505371,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2373,10 +1212,10 @@
         },
         {
             "coordinate": {
-                "x": 916,
-                "y": 1158
+                "x": 2615,
+                "y": 1800
             },
-            "delay": 0.42292118072509766,
+            "delay": 0.20539641380310059,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2388,10 +1227,53 @@
         },
         {
             "coordinate": {
-                "x": 939,
-                "y": 1104
+                "x": 2615,
+                "y": 1800
             },
-            "delay": 0.4458434581756592,
+            "delay": 0.6548409461975098,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.6995995044708252
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.9957313537597656
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.8721358776092529
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.7384011745452881
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.7164905071258545
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.735135555267334
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.6098229885101318
+        },
+        {
+            "coordinate": {
+                "x": 2032,
+                "y": 1426
+            },
+            "delay": 0.9718146324157715,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2403,10 +1285,10 @@
         },
         {
             "coordinate": {
-                "x": 3340,
-                "y": 1933
+                "x": 3725,
+                "y": 2063
             },
-            "delay": 1.1162350177764893,
+            "delay": 3.1555087566375732,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2418,10 +1300,10 @@
         },
         {
             "coordinate": {
-                "x": 3292,
-                "y": 1943
+                "x": 1684,
+                "y": 1518
             },
-            "delay": 2.218907594680786,
+            "delay": 4.884226560592651,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2433,10 +1315,49 @@
         },
         {
             "coordinate": {
-                "x": 3305,
-                "y": 1926
+                "x": 2092,
+                "y": 2009
             },
-            "delay": 0.427884578704834,
+            "delay": 1.5618703365325928,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "key": "Key.esc",
+            "delay": 1.6408281326293945
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.7437665462493896
+        },
+        {
+            "key": "Key.esc",
+            "delay": 1.0430634021759033
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.8639285564422607
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.8660497665405273
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.7000782489776611
+        },
+        {
+            "coordinate": {
+                "x": 2622,
+                "y": 1797
+            },
+            "delay": 1.0013635158538818,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2448,10 +1369,10 @@
         },
         {
             "coordinate": {
-                "x": 3306,
-                "y": 1959
+                "x": 2622,
+                "y": 1797
             },
-            "delay": 0.4640662670135498,
+            "delay": 0.1839148998260498,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2463,10 +1384,45 @@
         },
         {
             "coordinate": {
-                "x": 3355,
-                "y": 1932
+                "x": 2622,
+                "y": 1797
             },
-            "delay": 0.3791782855987549,
+            "delay": 0.2380831241607666,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.4867076873779297
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.801814079284668
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.6797776222229004
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.5806708335876465
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.5593171119689941
+        },
+        {
+            "coordinate": {
+                "x": 2041,
+                "y": 1438
+            },
+            "delay": 1.1596007347106934,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2478,10 +1434,10 @@
         },
         {
             "coordinate": {
-                "x": 3344,
-                "y": 1899
+                "x": 3735,
+                "y": 2074
             },
-            "delay": 131.6685085296631,
+            "delay": 1.076500415802002,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2493,10 +1449,10 @@
         },
         {
             "coordinate": {
-                "x": 2033,
-                "y": 1841
+                "x": 1462,
+                "y": 1762
             },
-            "delay": 11.76796293258667,
+            "delay": 1.4696106910705566,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2509,9 +1465,1008 @@
         {
             "coordinate": {
                 "x": 2082,
-                "y": 1891
+                "y": 2019
             },
-            "delay": 0.42571401596069336,
+            "delay": 0.973961591720581,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2732,
+                "y": 266
+            },
+            "delay": 1.9440081119537354,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 3223,
+                "y": 1657
+            },
+            "delay": 4.010847568511963,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 3223,
+                "y": 1657
+            },
+            "delay": 0.8757584095001221,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.8354384899139404
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.8463077545166016
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.6989870071411133
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.6220152378082275
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.4368326663970947
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.5203890800476074
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.6388318538665771
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.7118277549743652
+        },
+        {
+            "coordinate": {
+                "x": 2022,
+                "y": 1425
+            },
+            "delay": 1.469461441040039,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 3744,
+                "y": 2064
+            },
+            "delay": 1.4821274280548096,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2320,
+                "y": 1259
+            },
+            "delay": 3.105051279067993,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1657,
+                "y": 2063
+            },
+            "delay": 1.9618737697601318,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1651,
+                "y": 2066
+            },
+            "delay": 2.7355830669403076,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1651,
+                "y": 2066
+            },
+            "delay": 0.16301512718200684,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2756,
+                "y": 1849
+            },
+            "delay": 1.0691678524017334,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2802,
+                "y": 235
+            },
+            "delay": 2.41086483001709,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2348,
+                "y": 222
+            },
+            "delay": 1.8177120685577393,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1983,
+                "y": 202
+            },
+            "delay": 1.623560905456543,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1629,
+                "y": 200
+            },
+            "delay": 1.0339224338531494,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1310,
+                "y": 200
+            },
+            "delay": 0.9320485591888428,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 3375,
+                "y": 1208
+            },
+            "delay": 1.7695977687835693,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "key": "Key.esc",
+            "delay": 2.093954563140869
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.6669318675994873
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.5759797096252441
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.6119449138641357
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.4560549259185791
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.44696569442749023
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.514847993850708
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.5112667083740234
+        },
+        {
+            "coordinate": {
+                "x": 2012,
+                "y": 1425
+            },
+            "delay": 0.9675815105438232,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 3740,
+                "y": 2064
+            },
+            "delay": 2.468679189682007,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2293,
+                "y": 1227
+            },
+            "delay": 1.948004961013794,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1885,
+                "y": 2061
+            },
+            "delay": 1.9870851039886475,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1885,
+                "y": 2061
+            },
+            "delay": 0.1529538631439209,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1885,
+                "y": 2061
+            },
+            "delay": 0.17609453201293945,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2754,
+                "y": 640
+            },
+            "delay": 1.0258653163909912,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2754,
+                "y": 640
+            },
+            "delay": 1.0641319751739502,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2754,
+                "y": 640
+            },
+            "delay": 1.3569025993347168,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2754,
+                "y": 640
+            },
+            "delay": 1.0728085041046143,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2754,
+                "y": 640
+            },
+            "delay": 0.9470946788787842,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2754,
+                "y": 640
+            },
+            "delay": 0.8708977699279785,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "key": "Key.esc",
+            "delay": 1.6677958965301514
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.7288932800292969
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.6799163818359375
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.73085618019104
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.6954736709594727
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.652855634689331
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.6267168521881104
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.5600144863128662
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.6202290058135986
+        },
+        {
+            "coordinate": {
+                "x": 3741,
+                "y": 2060
+            },
+            "delay": 1.068293809890747,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2277,
+                "y": 1222
+            },
+            "delay": 1.6917593479156494,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1893,
+                "y": 2056
+            },
+            "delay": 1.5962257385253906,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1893,
+                "y": 2056
+            },
+            "delay": 0.19786930084228516,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1893,
+                "y": 2056
+            },
+            "delay": 0.19825077056884766,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1893,
+                "y": 2056
+            },
+            "delay": 0.1978907585144043,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1893,
+                "y": 2056
+            },
+            "delay": 0.20166945457458496,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1893,
+                "y": 2056
+            },
+            "delay": 0.19641566276550293,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1893,
+                "y": 2056
+            },
+            "delay": 0.2223515510559082,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1893,
+                "y": 2056
+            },
+            "delay": 0.37328553199768066,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2746,
+                "y": 633
+            },
+            "delay": 3.1064114570617676,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2746,
+                "y": 633
+            },
+            "delay": 1.6168007850646973,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2746,
+                "y": 633
+            },
+            "delay": 0.5227346420288086,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2746,
+                "y": 633
+            },
+            "delay": 0.5444347858428955,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2746,
+                "y": 633
+            },
+            "delay": 0.2695178985595703,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2746,
+                "y": 633
+            },
+            "delay": 0.5579774379730225,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2746,
+                "y": 633
+            },
+            "delay": 0.20608782768249512,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "key": "Key.esc",
+            "delay": 1.3866662979125977
+        },
+        {
+            "coordinate": {
+                "x": 2117,
+                "y": 2072
+            },
+            "delay": 1.549037218093872,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2383,
+                "y": 2072
+            },
+            "delay": 1.2242205142974854,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.7767848968505859
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.8200604915618896
+        },
+        {
+            "key": "Key.esc",
+            "delay": 4.827404975891113
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.5036969184875488
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.6030027866363525
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.40957093238830566
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.4700937271118164
+        },
+        {
+            "coordinate": {
+                "x": 2706,
+                "y": 1790
+            },
+            "delay": 0.5081508159637451,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2706,
+                "y": 1790
+            },
+            "delay": 0.3494448661804199,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2706,
+                "y": 1790
+            },
+            "delay": 0.22075939178466797,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2706,
+                "y": 1790
+            },
+            "delay": 0.26189184188842773,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.42505955696105957
+        },
+        {
+            "key": "Key.esc",
+            "delay": 1.5626373291015625
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.7099840641021729
+        },
+        {
+            "coordinate": {
+                "x": 2028,
+                "y": 1422
+            },
+            "delay": 0.7383322715759277,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2005,
+                "y": 2058
+            },
+            "delay": 1.4703788757324219,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2242,
+                "y": 1888
+            },
+            "delay": 2.6398403644561768,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1651,
+                "y": 723
+            },
+            "delay": 1.1669459342956543,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1972,
+                "y": 1836
+            },
+            "delay": 0.9458119869232178,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1675,
+                "y": 2072
+            },
+            "delay": 1.4662604331970215,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2524,9 +2479,9 @@
         {
             "coordinate": {
                 "x": 1970,
-                "y": 1929
+                "y": 1851
             },
-            "delay": 0.8432469367980957,
+            "delay": 0.8989734649658203,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2538,10 +2493,10 @@
         },
         {
             "coordinate": {
-                "x": 2162,
-                "y": 1910
+                "x": 1948,
+                "y": 2089
             },
-            "delay": 0.7761549949645996,
+            "delay": 1.3031506538391113,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2553,10 +2508,10 @@
         },
         {
             "coordinate": {
-                "x": 2109,
-                "y": 1928
+                "x": 2004,
+                "y": 1845
             },
-            "delay": 0.8705651760101318,
+            "delay": 1.1768159866333008,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2568,10 +2523,10 @@
         },
         {
             "coordinate": {
-                "x": 2805,
-                "y": 1906
+                "x": 2235,
+                "y": 2078
             },
-            "delay": 1.1733334064483643,
+            "delay": 1.2929348945617676,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2583,10 +2538,10 @@
         },
         {
             "coordinate": {
-                "x": 225,
-                "y": 131
+                "x": 2014,
+                "y": 1845
             },
-            "delay": 4.4249420166015625,
+            "delay": 1.1660609245300293,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2598,10 +2553,10 @@
         },
         {
             "coordinate": {
-                "x": 3780,
-                "y": 1141
+                "x": 2501,
+                "y": 2082
             },
-            "delay": 2.5037500858306885,
+            "delay": 1.2558259963989258,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2613,10 +2568,10 @@
         },
         {
             "coordinate": {
-                "x": 3780,
-                "y": 1141
+                "x": 1958,
+                "y": 1844
             },
-            "delay": 0.4841604232788086,
+            "delay": 1.0735719203948975,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2628,10 +2583,10 @@
         },
         {
             "coordinate": {
-                "x": 3536,
-                "y": 1201
+                "x": 2776,
+                "y": 2078
             },
-            "delay": 2.162801742553711,
+            "delay": 1.030271291732788,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -2643,895 +2598,10 @@
         },
         {
             "coordinate": {
-                "x": 698,
-                "y": 1909
+                "x": 1959,
+                "y": 1833
             },
-            "delay": 1.5078685283660889,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 687,
-                "y": 1795
-            },
-            "delay": 0.5059852600097656,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 721,
-                "y": 1749
-            },
-            "delay": 0.46243715286254883,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 729,
-                "y": 1660
-            },
-            "delay": 0.3129119873046875,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 738,
-                "y": 1612
-            },
-            "delay": 0.42424464225769043,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 776,
-                "y": 1555
-            },
-            "delay": 0.3637733459472656,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 801,
-                "y": 1491
-            },
-            "delay": 0.34593915939331055,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 822,
-                "y": 1407
-            },
-            "delay": 0.36689186096191406,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 831,
-                "y": 1341
-            },
-            "delay": 0.40909910202026367,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 825,
-                "y": 1304
-            },
-            "delay": 0.36976170539855957,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 860,
-                "y": 1233
-            },
-            "delay": 0.33595728874206543,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 880,
-                "y": 1186
-            },
-            "delay": 0.3883686065673828,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 901,
-                "y": 1143
-            },
-            "delay": 0.3619678020477295,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 917,
-                "y": 1096
-            },
-            "delay": 0.38793206214904785,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3381,
-                "y": 1907
-            },
-            "delay": 3.213813304901123,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3359,
-                "y": 1937
-            },
-            "delay": 1.51228666305542,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3319,
-                "y": 1905
-            },
-            "delay": 137.13201332092285,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2083,
-                "y": 1871
-            },
-            "delay": 11.962458372116089,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2162,
-                "y": 1902
-            },
-            "delay": 0.4439125061035156,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2124,
-                "y": 1837
-            },
-            "delay": 0.5490691661834717,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2144,
-                "y": 1926
-            },
-            "delay": 0.611581563949585,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2160,
-                "y": 1837
-            },
-            "delay": 0.323331356048584,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2156,
-                "y": 1890
-            },
-            "delay": 1.5316636562347412,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2824,
-                "y": 1924
-            },
-            "delay": 2.4102725982666016,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 211,
-                "y": 136
-            },
-            "delay": 4.442982196807861,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3778,
-                "y": 1144
-            },
-            "delay": 2.614492654800415,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3778,
-                "y": 1144
-            },
-            "delay": 0.974456787109375,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3778,
-                "y": 1144
-            },
-            "delay": 0.8110802173614502,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 255,
-                "y": 1542
-            },
-            "delay": 3.350602388381958,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 330,
-                "y": 1899
-            },
-            "delay": 1.385171890258789,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2819,
-                "y": 1094
-            },
-            "delay": 1.9840381145477295,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 710,
-                "y": 1820
-            },
-            "delay": 2.3690178394317627,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 779,
-                "y": 1528
-            },
-            "delay": 0.871701717376709,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 805,
-                "y": 1530
-            },
-            "delay": 0.6038610935211182,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 875,
-                "y": 1271
-            },
-            "delay": 0.7155859470367432,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 875,
-                "y": 1271
-            },
-            "delay": 0.15686273574829102,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 753,
-                "y": 1832
-            },
-            "delay": 1.446608304977417,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 837,
-                "y": 1526
-            },
-            "delay": 0.3331472873687744,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 876,
-                "y": 1291
-            },
-            "delay": 0.3297572135925293,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 875,
-                "y": 1236
-            },
-            "delay": 0.8024649620056152,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 947,
-                "y": 992
-            },
-            "delay": 0.5677897930145264,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 947,
-                "y": 992
-            },
-            "delay": 0.1408689022064209,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 1034,
-                "y": 721
-            },
-            "delay": 0.8339018821716309,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 1034,
-                "y": 721
-            },
-            "delay": 0.1623396873474121,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3297,
-                "y": 1880
-            },
-            "delay": 1.0659716129302979,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3363,
-                "y": 1919
-            },
-            "delay": 1.9187710285186768,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3363,
-                "y": 1919
-            },
-            "delay": 0.2161259651184082,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3363,
-                "y": 1919
-            },
-            "delay": 0.2271711826324463,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3327,
-                "y": 1907
-            },
-            "delay": 341.3618347644806,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2216,
-                "y": 1998
-            },
-            "delay": 14.714144945144653,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2056,
-                "y": 1940
-            },
-            "delay": 0.46124744415283203,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2141,
-                "y": 1957
-            },
-            "delay": 0.3092632293701172,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2101,
-                "y": 1890
-            },
-            "delay": 0.35297322273254395,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2081,
-                "y": 1986
-            },
-            "delay": 0.2220299243927002,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2201,
-                "y": 1908
-            },
-            "delay": 0.6376304626464844,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 2828,
-                "y": 1915
-            },
-            "delay": 0.9713878631591797,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 606,
-                "y": 120
-            },
-            "delay": 4.068667650222778,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 590,
-                "y": 126
-            },
-            "delay": 3.3901829719543457,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 1063,
-                "y": 141
-            },
-            "delay": 4.384702205657959,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "coordinate": {
-                "x": 3410,
-                "y": 1957
-            },
-            "delay": 1.8762340545654297,
+            "delay": 1.1707475185394287,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -3543,18 +2613,46 @@
         },
         {
             "key": "Key.esc",
-            "delay": 3.2110228538513184
+            "delay": 0.9101848602294922
         },
         {
             "key": "Key.esc",
-            "delay": 2.1435000896453857
+            "delay": 0.7820355892181396
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.8020050525665283
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.805842399597168
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.9350893497467041
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.7429990768432617
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.6246042251586914
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.5864574909210205
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.5327465534210205
         },
         {
             "coordinate": {
-                "x": 2069,
-                "y": 2053
+                "x": 2024,
+                "y": 1425
             },
-            "delay": 1.340418815612793,
+            "delay": 1.6352920532226562,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -3566,10 +2664,10 @@
         },
         {
             "coordinate": {
-                "x": 2069,
-                "y": 2053
+                "x": 2010,
+                "y": 2060
             },
-            "delay": 2.3989248275756836,
+            "delay": 2.302464008331299,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -3581,37 +2679,10 @@
         },
         {
             "coordinate": {
-                "x": 2069,
-                "y": 2053
+                "x": 2374,
+                "y": 993
             },
-            "delay": 1.0141282081604004,
-            "click": true,
-            "window_info": {
-                "left": 0,
-                "top": 0,
-                "width": 3840,
-                "height": 2160,
-                "is_fullscreen": true
-            }
-        },
-        {
-            "key": "Key.esc",
-            "delay": 1.1584088802337646
-        },
-        {
-            "key": "Key.esc",
-            "delay": 1.3532624244689941
-        },
-        {
-            "key": "Key.esc",
-            "delay": 0.47280406951904297
-        },
-        {
-            "coordinate": {
-                "x": 2069,
-                "y": 2053
-            },
-            "delay": 0.3154165744781494,
+            "delay": 2.995710611343384,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -3623,10 +2694,250 @@
         },
         {
             "coordinate": {
-                "x": 2069,
-                "y": 2053
+                "x": 2424,
+                "y": 2024
             },
-            "delay": 0.4389381408691406,
+            "delay": 1.5119352340698242,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2424,
+                "y": 2024
+            },
+            "delay": 0.8088634014129639,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2424,
+                "y": 2024
+            },
+            "delay": 1.2518632411956787,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2424,
+                "y": 2024
+            },
+            "delay": 1.0252151489257812,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2424,
+                "y": 2024
+            },
+            "delay": 0.9861159324645996,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2424,
+                "y": 2024
+            },
+            "delay": 0.8753993511199951,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2424,
+                "y": 2024
+            },
+            "delay": 0.8764069080352783,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2424,
+                "y": 2024
+            },
+            "delay": 0.8450777530670166,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2424,
+                "y": 2024
+            },
+            "delay": 0.9060311317443848,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2424,
+                "y": 2024
+            },
+            "delay": 0.782975435256958,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2424,
+                "y": 2024
+            },
+            "delay": 0.8844499588012695,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2424,
+                "y": 2024
+            },
+            "delay": 0.8875143527984619,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2424,
+                "y": 2024
+            },
+            "delay": 0.8710153102874756,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2424,
+                "y": 2024
+            },
+            "delay": 0.8838729858398438,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2424,
+                "y": 2024
+            },
+            "delay": 0.8998589515686035,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2424,
+                "y": 2024
+            },
+            "delay": 0.8862125873565674,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2424,
+                "y": 2024
+            },
+            "delay": 0.8238039016723633,
             "click": true,
             "window_info": {
                 "left": 0,
@@ -3638,11 +2949,80 @@
         },
         {
             "key": "Key.esc",
-            "delay": 0.2825191020965576
+            "delay": 0.5536961555480957
         },
         {
             "key": "Key.esc",
-            "delay": 0.3049302101135254
+            "delay": 0.889000654220581
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.9750876426696777
+        },
+        {
+            "coordinate": {
+                "x": 937,
+                "y": 2019
+            },
+            "delay": 1.305999517440796,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "coordinate": {
+                "x": 944,
+                "y": 2068
+            },
+            "delay": 1.9141614437103271,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
+        },
+        {
+            "key": "Key.esc",
+            "delay": 2.150688886642456
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.8511936664581299
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.7157249450683594
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.7558507919311523
+        },
+        {
+            "key": "Key.esc",
+            "delay": 0.7621824741363525
+        },
+        {
+            "coordinate": {
+                "x": 2019,
+                "y": 1438
+            },
+            "delay": 2.67159104347229,
+            "click": true,
+            "window_info": {
+                "left": 0,
+                "top": 0,
+                "width": 3840,
+                "height": 2160,
+                "is_fullscreen": true
+            }
         }
     ]
 }

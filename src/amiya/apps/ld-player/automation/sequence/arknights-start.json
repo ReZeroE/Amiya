@@ -1,0 +1,118 @@
+{
+    "metadata": {
+        "sequence_name": "arknights-start",
+        "date_created": "2024-05-03 22:28:25",
+        "monitor_info": {
+            "width": 3840,
+            "height": 2160
+        },
+        "other_data": null
+    },
+    "actions_sequence": [
+        {
+            "coordinate": {
+                "x": 2711,
+                "y": 1208
+            },
+            "delay": 120,
+            "click": true,
+            "window_info": {
+                "left": 959,
+                "top": 478,
+                "width": 1982,
+                "height": 1132,
+                "is_fullscreen": false
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2711,
+                "y": 1208
+            },
+            "delay": 0.20314550399780273,
+            "click": true,
+            "window_info": {
+                "left": 959,
+                "top": 478,
+                "width": 1982,
+                "height": 1132,
+                "is_fullscreen": false
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2716,
+                "y": 1209
+            },
+            "delay": 1.6832802295684814,
+            "click": true,
+            "window_info": {
+                "left": 959,
+                "top": 478,
+                "width": 1982,
+                "height": 1132,
+                "is_fullscreen": false
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2716,
+                "y": 1209
+            },
+            "delay": 1.058828353881836,
+            "click": true,
+            "window_info": {
+                "left": 959,
+                "top": 478,
+                "width": 1982,
+                "height": 1132,
+                "is_fullscreen": false
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2716,
+                "y": 1209
+            },
+            "delay": 0.9547274112701416,
+            "click": true,
+            "window_info": {
+                "left": 959,
+                "top": 478,
+                "width": 1982,
+                "height": 1132,
+                "is_fullscreen": false
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1925,
+                "y": 1545
+            },
+            "delay": 120,
+            "click": true,
+            "window_info": {
+                "left": 959,
+                "top": 478,
+                "width": 1982,
+                "height": 1132,
+                "is_fullscreen": false
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1928,
+                "y": 1302
+            },
+            "delay": 15,
+            "click": true,
+            "window_info": {
+                "left": 959,
+                "top": 478,
+                "width": 1982,
+                "height": 1132,
+                "is_fullscreen": false
+            }
+        }
+    ]
+}

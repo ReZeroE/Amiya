@@ -42,11 +42,9 @@ class MouseAction(Action):
         self.coordinate     = coor
         self.delay          = delay
         self.click          = click
-        
         self.window_info    = window_info
-        assert("width" in self.window_info)
-        assert("height" in self.window_info)
-        assert("is_fullscreen" in self.window_info)
+        
+        self.is_valid_for_pixel_calc = self.__is_valid_for_pixel_calc()
  
     def execute(self):
         '''
@@ -79,6 +77,16 @@ class MouseAction(Action):
     def __repr__(self):
         return f"MouseAction(coor={self.coordinate}, delay={round(self.delay, 2)}, click={self.click})"
 
+    def __is_valid_for_pixel_calc(self):
+        try:
+            assert("width" in self.window_info)
+            assert("height" in self.window_info)
+            assert("top" in self.window_info)
+            assert("left" in self.window_info)
+            assert("is_fullscreen" in self.window_info)
+            return True
+        except AssertionError:
+            return False
 
 class KeyboardAction(Action):
     def __init__(self, key: str, delay: float):

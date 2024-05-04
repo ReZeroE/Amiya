@@ -25,6 +25,18 @@ def start_amiya():
     help_parser = subparsers.add_parser('help', help='Show this help message and exit')
     help_parser.set_defaults(func=lambda args: entrypoint_handler.print_help(parser))
 
+    # =================================================
+    # ====================| ABOUT | ===================
+    # =================================================
+
+    start_parser = subparsers.add_parser('version', help='Verbose module version')
+    start_parser.set_defaults(func=entrypoint_handler.version)
+                              
+    start_parser = subparsers.add_parser('author', help='Verbose module author')
+    start_parser.set_defaults(func=entrypoint_handler.author)
+    
+    start_parser = subparsers.add_parser('repo', help='Verbose module repository link')
+    start_parser.set_defaults(func=entrypoint_handler.repo)
 
     # =================================================
     # ============| ADD/REMOVE/SHOW APPS | ============
@@ -42,6 +54,11 @@ def start_amiya():
     show_apps_parser.add_argument('--full-path', '-f', action='store_true', help='Show the full path of the applications')
     show_apps_parser.set_defaults(func=entrypoint_handler.show_apps)
 
+
+    start_parser = subparsers.add_parser('show-config', help='Show application configuration directory')
+    start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application to show the configuration directory of')
+    start_parser.add_argument('--all', '-a', action='store_true', help='Show all configuration directory paths (including automation)')
+    start_parser.set_defaults(func=entrypoint_handler.show_app_config_dir)
 
     # =================================================
     # =================| START APPS | =================
