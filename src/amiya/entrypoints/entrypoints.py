@@ -158,10 +158,10 @@ def start_amiya():
         def blocked_func(args):
             text = colored('amiya sync', 'light_cyan')
             aprint(f"Applications under Amiya's apps manager are not fully configured to run on this machine.\n\nTo sync the apps to this machine, run `{text}`")
-            exit()
+            raise AmiyaExit()
 
         for name, subparser in subparsers.choices.items():
-            if name not in ["sync", "search", "sleep", "shutdown", "uuid"]:
+            if name not in ["sync", "search", "sleep", "shutdown", "uuid", "show-config", "version", "author", "repo"]:
                 subparser.set_defaults(func=blocked_func)
     
     
@@ -170,7 +170,7 @@ def start_amiya():
         # Certain commands require admin permissions to execute
         def blocked_func(args):
             aprint("Insufficient permission. Please restart the terminal as an administrator.")
-            exit()
+            raise AmiyaExit()
 
         for name, subparser in subparsers.choices.items():
             if name in ["record-auto", "run-auto"]:

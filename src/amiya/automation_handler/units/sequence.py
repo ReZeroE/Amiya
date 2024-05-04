@@ -1,5 +1,6 @@
 import os
 import time
+import copy
 from datetime import datetime
 from pynput import keyboard
 from amiya.automation_handler.automation_config_handler import SequenceConfigHandler
@@ -37,9 +38,15 @@ class AutomationSequence:
                     aprint(f"This automation sequence is not available for pixel calculator in version {VERSION}.")
                     return
         
-        verbose_warning()
+
+        # Becuase the pixel calculator will directory modify the MouseAction's coordinates, we need a way to reset the 
+        # sequence's coordinates after the sequence finishes running. Therefore, we first make a copy of the sequence
+        # before it is modified by the pixel calculator and then replace the modified sequence at the end.
+        actions_copy = copy.deepcopy(self.actions)
         
+        verbose_warning()
         pynput_keyboard = keyboard.Controller()
+        
         for idx, action in enumerate(self.actions):
             verbose_action(idx, action)
             
@@ -67,6 +74,8 @@ class AutomationSequence:
                 
                 action.execute()
             
+        # Reset the modified version of the sequence (modified by the pixel calculator)
+        self.actions = actions_copy
 
             
     def add(self, action: Action):
