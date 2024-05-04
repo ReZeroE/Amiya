@@ -255,6 +255,25 @@ class AppsManager:
     
         
     # HELPER FUNCTIONS ======================
+    def verbose_app_config(self, tag: str = None, show_all: bool = False):
+        app = None
+        if tag == None:                             # If no application tag is inputted by user
+            self.print_apps()
+            user_input = input(atext(f"Which app would you like to DELETE? (0-{len(self.apps)-1}) "))
+            app = self.apps[int(user_input)]
+        else:                                       # If user inputted an application tag tag
+            tag = self.__parse_tag(tag)
+            app = self.get_app_by_tag(tag)
+            
+        text = f"Application Configuration:"
+        text += f"\nApp Name: {app.name}"
+        text += f"\nApp ID: {app.id}"  
+        text += f"\nApp Tags: {app.tags}"
+        text += f"\nApp Config Directory: {app.app_config_dirpath}" 
+        text += f"\nApp Configuration System UUID: {app.sys_uuid}"  
+        aprint(text)
+        
+    
     def __initial_setup(self):
         if not os.path.isdir(APPS_DIRECTORY):
             os.mkdir(APPS_DIRECTORY)
@@ -387,7 +406,7 @@ class AppsManager:
             sequence.execute(safety_monitor)
         except Amiya_AppNotFocusedException:
             aprint("[Amiya Safety-Monitor] The application is unfocused during an automation sequence. Automation stopped.", log_type=LogType.ERROR)
-            exit(1)
+            raise AmiyaExit()
      
     def __safe_get_sequence(self, app: App, sequence_name: str) -> AutomationSequence:
         sequence = app.automation_controller.get_sequence(sequence_name)

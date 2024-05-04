@@ -10,25 +10,33 @@ class PixelCalculator:
         self.current_monitor_width = current_monitor_info["width"]
         self.current_monitor_height = current_monitor_info["height"]
     
-    def calculate_new_coordinate(self, prev_coor: tuple, prev_window_info: dict):
-        curr_window_info = ResolutionDetector.get_window_size()
-        
-        if curr_window_info["is_fullscreen"] == True and prev_window_info["is_fullscreen"] == True:
-            
-            prev_x = prev_coor[0]
-            prev_y = prev_coor[1]
-
-            new_x = self.current_monitor_width / self.prev_monitor_width * prev_x
-            new_y = self.current_monitor_height / self.prev_monitor_height * prev_y  
-            
-            return(int(new_x), int(new_y))  
-            
-        else:
-            print(f"\nCurrent Window: (Width {curr_window_info["width"]}) (Height {curr_window_info["height"]})")
-            print(f"Current Monitor: (Width {self.current_monitor_width}) (Height {self.current_monitor_height})")
-            print(f"Previous Window: (Width {prev_window_info["width"]}) (Height {prev_window_info['height']})")
-            print(f"Previous Monitor: (Width {self.prev_monitor_width}) (Height {self.prev_monitor_height})")
-            
-            aprint("[Pixel-Calc] Window size does not match monitor size, pixel calculator returning previous coordinate.", log_type=LogType.WARNING)
-            return None
     
+    @staticmethod
+    def transform_coordinate(prev_coor: tuple, prev_window_info: dict):
+        
+        try:
+            x, y = prev_coor
+            
+            curr_window_info = ResolutionDetector.get_window_size()
+            curr_x = curr_window_info["left"]
+            curr_y = curr_window_info["top"]
+            curr_w = curr_window_info["width"]
+            curr_h = curr_window_info["height"]
+            
+            prev_x = prev_window_info["left"]
+            prev_y = prev_window_info["top"]
+            prev_w = prev_window_info["width"]
+            prev_h = prev_window_info["height"]
+            
+            # Normalize the coordinate relative to the original window
+            normalized_x = (x - prev_x) / prev_w
+            normalized_y = (y - prev_y) / prev_h
+
+            new_x = curr_x + normalized_x * curr_w
+            new_y = curr_y + normalized_y * curr_h
+
+            return (int(new_x), int(new_y))
+    
+        except KeyError:
+            # Unavailable for pixel calculator (ver 0.0.2)
+            return prev_coor

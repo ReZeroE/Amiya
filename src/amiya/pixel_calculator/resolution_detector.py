@@ -31,7 +31,7 @@ class ResolutionDetector:
     @staticmethod
     def get_window_size():
         pid = SafetyMonitor.get_focused_pid()
-        print(f"Currently focused PID: {pid}")
+        # print(f"Currently focused PID: {pid}")
         if pid == None: return None
         
         win_info: dict = ResolutionDetector.get_window_info(pid)
