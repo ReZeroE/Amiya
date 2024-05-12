@@ -1,31 +1,37 @@
 import sys, threading, time
 from pynput import mouse
 import pyautogui
-from amiya.utils.helper import aprint
+from amiya.utils.helper import aprint, LogType
 from amiya.exceptions.exceptions import AmiyaExit
 import pyscreeze
 from screeninfo import get_monitors
 
 class CursorController:
-    def __init__(self):
-        pass
+    def __init__(self, verbose_hex: bool = False):
+        if verbose_hex == True and len(get_monitors()) > 1:
+            aprint("Note: pixel tracking is only supported on the primary monitor.", log_type=LogType.WARNING)
+            # aprint("Pixel tracking with color is only supported on set up with one monitor.")
+            # raise AmiyaExit()
+        
+        self.verbose_with_color_hex = verbose_hex
+          
     
     def track_cursor(self):
-        stop_event = threading.Event()
-        thread = threading.Thread(target=self.__verbose_cursor_info, args=(stop_event,))
-        thread.start()
-        
         listener = mouse.Listener(on_click=self.__on_click)
+        
+        # thread.start()
         listener.start()
         
         aprint("Cursor listener started. Click to verbose position on new line. Press Ctrl+C to stop.")
         try:
-            while listener.running:
-                pass
+            while True:
+                self.__verbose_cursor_info()
+                
         except KeyboardInterrupt:
+            time.sleep(0.1)
+            print("")
+            
             listener.stop()
-            stop_event.set()
-            thread.join()
             raise AmiyaExit()
 
 
@@ -55,18 +61,30 @@ class CursorController:
         return (x, y)
 
 
+    def __verbose_cursor_info(self):
+        x, y = pyautogui.position()
+        buffer = " " * 4
+        aprint(f"Pixel position: ({x}, {y}){buffer}", end="\r")
+        time.sleep(0.01)
+        
+        
 
-    def __verbose_cursor_info(self, stop_event: threading.Event):
-        while not stop_event.is_set():
-            x, y = pyautogui.position()
-            buffer = " " * 4
-            aprint(f"Pixel position: ({x}, {y}){buffer}", end="\r")
-            time.sleep(0.01)
+    def __on_click(self, x, y, button, pressed):
+        
+        hex_text = ""
+        if self.verbose_with_color_hex == True:
+            try:
+                screenshot = pyautogui.screenshot(allScreens=True)
+                hex_color = self.__get_pixel_color(screenshot)
+                hex_text = f" => Hex color: {hex_color}"
+            except:
+                hex_text = f" => Hex color: Failed to fetch."
+        
+        if pressed:
+            buffer = " " * 10
+            aprint(f'Pixel clicked: ({x}, {y}){hex_text}{buffer}')
             
-        time.sleep(0.1)
-        print("")
-
-
+    
     def __get_pixel_color(self, screenshot):
         x, y = self.get_adjusted_cursor_pos()
         
@@ -76,15 +94,3 @@ class CursorController:
         pixel_color = screenshot.getpixel((x, y))  
         hex_color = rgb_to_hex(pixel_color)
         return hex_color
-
-
-    def __on_click(self, x, y, button, pressed):
-        screenshot = pyautogui.screenshot()
-        hex_color = self.__get_pixel_color(screenshot)
-        
-        if pressed:
-            buffer = " " * 10
-            aprint(f'Pixel clicked: ({x}, {y}) => Hex color: {hex_color}{buffer}')
-            
-    
-    

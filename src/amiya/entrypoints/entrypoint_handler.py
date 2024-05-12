@@ -4,6 +4,7 @@ from amiya.apps_manager.apps_manager import AppsManager
 from amiya.module_utilities.search_controller import SearchController
 from amiya.module_utilities.power_controller import PowerUtils
 from amiya.module_utilities.cursor_controller import CursorController
+from amiya.module_utilities.continuous_click_controller import ContinuousClickController
 from amiya.module_utilities.dev_features import DevController
 
 from amiya.exceptions.exceptions import *
@@ -22,7 +23,7 @@ class AmiyaEntrypointHandler:
         self.apps_manager = AppsManager()
         self.search_controller = SearchController()
         self.power_utils = PowerUtils()
-        self.cursor_controller = CursorController()
+       
         # self.scheduler = AmiyaScheduler()
 
 
@@ -38,8 +39,7 @@ class AmiyaEntrypointHandler:
             self.dev_controller.verbose_objects(
                 self.apps_manager,
                 self.search_controller,
-                self.power_utils,
-                self.cursor_controller
+                self.power_utils
             )
         if args.refresh:
             self.dev_controller.refresh_objects()
@@ -163,7 +163,17 @@ class AmiyaEntrypointHandler:
     
 
     def track_cursor(self, args):
+        if args.color:
+            self.cursor_controller = CursorController(verbose_hex=True)
+        else:
+            self.cursor_controller = CursorController(verbose_hex=False)
+        
         self.cursor_controller.track_cursor()
+
+
+    def click_continuously(self, args):
+        cc_controller = ContinuousClickController()
+        cc_controller.click_continuously(args.count, args.delay, args.hold_time, args.start_after, args.quite)
 
     # =================================================
     # ================| SCHEDULER | ===================
@@ -229,7 +239,9 @@ r"""
         if user_input.lower() in ['clear', "cls", "reset"]:
             clear_screen()
             self.print_title()
-            print("Terminal cleared. Type 'exit' to quit.")
+            
+            exit_cmd = color_cmd("exit", with_quotes=True)
+            print(f"Terminal cleared. Type {exit_cmd} to quit.")
             return 1
         
         if user_input.strip() == '':

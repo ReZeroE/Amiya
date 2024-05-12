@@ -145,12 +145,21 @@ def start_amiya():
     start_parser.set_defaults(func=entrypoint_handler.display_system_uuid)
     
     
-    start_parser = subparsers.add_parser('cursor', help='Track cursor position and color')
+    start_parser = subparsers.add_parser('pixel', help='Track cursor position and color')
+    start_parser.add_argument('--color', '-c', action='store_true', help='Show pixel coordinate as well as the pixel\'s color hex value.')
     start_parser.set_defaults(func=entrypoint_handler.track_cursor)
     
     
     start_parser = subparsers.add_parser('volume', help='Open simple application volume control UI')
     start_parser.set_defaults(func=entrypoint_handler.open_volume_control_ui)
+    
+    start_parser = subparsers.add_parser('click', help='Continuously click mouse.')
+    start_parser.add_argument('--count', '-c', type=int, default=-1, help='Number of clicks. Leave empty (default) to run forever')
+    start_parser.add_argument('--delay', '-d', type=int, default=1, help=' Delay (second) between clicks')
+    start_parser.add_argument('--hold-time', '-ht', type=int, default=0.1, help='Delay (second) between click press and release')
+    start_parser.add_argument('--start-after', '-sa', type=int, default=3, help='Delay (second) before the clicks start')
+    start_parser.add_argument('--quite', '-q', action="store_true", default=False, help='Run without verbosing progress')
+    start_parser.set_defaults(func=entrypoint_handler.click_continuously)
     
     # =================================================
     # ================| SCHEDULER | ===================
