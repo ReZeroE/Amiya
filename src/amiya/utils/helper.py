@@ -2,7 +2,10 @@ import os
 import re
 import sys
 import shutil
+import threading
+import pyautogui
 from enum import Enum
+from screeninfo import get_monitors
 from datetime import datetime
 from termcolor import colored
 from amiya.utils import constants
@@ -43,7 +46,7 @@ def aprint(text: str, log_type: LogType = LogType.NORMAL, end="\n", new_line_no_
     print(rtext, end=end, file=sys.stdout)
     sys.stdout.flush()
 
-def color_cmd(text: str):
+def color_cmd(text: str, with_quotes: bool = False):
     text = text.lower()
     
     if constants.CLI_MODE == True:
@@ -51,8 +54,12 @@ def color_cmd(text: str):
     else:
         if not text.startswith("amiya"):
             text = f"amiya {text}"
+            
+    colored_cmd = colored(text, "light_cyan")
     
-    return colored(text, "light_cyan")
+    if with_quotes:
+        return f"'{colored_cmd}'"
+    return colored_cmd
 
 # =================================================
 # ============| CENTER TEXT HELPER | ==============
@@ -130,13 +137,12 @@ class Printer:
 
     
 
-def bool_to_str(boolean: bool):
-    
+def bool_to_str(boolean: bool, true_text="Valid", false_text="Invalid"):
     CHECKMARK = "\u2713"
     CROSSMARK = "\u2717"
     if boolean:
-        return Printer.to_lightgreen(f"{CHECKMARK} Valid")
-    return Printer.to_lightred(f"{CROSSMARK} Invalid")
+        return Printer.to_lightgreen(f"{CHECKMARK} {true_text}")
+    return Printer.to_lightred(f"{CROSSMARK} {false_text}")
 
 # ========================================================
 # =============| PERMISSION VERIFICATION | ===============
@@ -182,6 +188,7 @@ def progressbar(it, prefix="", size=60, out=sys.stdout):
         show(i+1)
     print("", flush=True, file=out)
     
+
 
 # ===================================================
 # ===============| SCREEN HELPER | ==================
@@ -235,3 +242,63 @@ class DatetimeHandler:
         return datetime.strptime(datetime_str, DATETIME_FORMAT)
     
     
+    
+# ===================================================
+# ===========| MESSAGE WITH SPINNER | ===============
+# ===================================================
+
+class SpinnerMessage(threading.Thread):
+    def __init__(self, start_message, end_message, spin_delay):
+        super().__init__()
+        self.running = False
+        self.start_message = start_message
+        self.end_message = end_message
+        self.spin_delay = spin_delay
+
+    def verbose_start(self):
+        self.running = True
+        self.start()
+
+    def verbose_end(self):
+        self.running = False
+        self.join()
+        time.sleep(0.1)
+        aprint(f"\n{self.end_message}")
+
+    def run(self):
+        try:
+            while self.running:
+                for char in '|/-\\':
+                    aprint(self.start_message + " " + char, end="\r", file=sys.stdout)
+                    sys.stdout.flush()
+                    time.sleep(self.spin_delay)
+        except KeyboardInterrupt:
+            pass
+        
+# ===================================================
+# ==============| TERMINAL RESIZE | =================
+# ===================================================
+        
+import shutil
+
+def get_terminal_size():
+    cols, rows = shutil.get_terminal_size()
+    return cols, rows
+
+
+def resize_terminal(min_cols, min_rows):
+    # Get the current size
+    current_cols, current_rows = shutil.get_terminal_size()
+
+    if current_cols < min_cols:
+        # Set the desired size
+        os.system(f'mode con: cols={min_cols+5} lines={current_rows}')
+        
+    if current_rows < min_rows:
+        # Set the desired size
+        os.system(f'mode con: cols={current_cols} lines={min_rows+5}')
+
+# ===================================================
+# ==============| TERMINAL RESIZE | =================
+# ===================================================
+

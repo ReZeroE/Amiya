@@ -3,7 +3,7 @@ from termcolor import colored
 from tabulate import tabulate
 from amiya.apps_manager.app import App
 from amiya.utils.constants import APPS_DIRECTORY
-from amiya.utils.helper import bool_to_str, Printer, shorten_display_path
+from amiya.utils.helper import bool_to_str, Printer, shorten_display_path, resize_terminal
 
 
 class AppsViewer:
@@ -16,6 +16,10 @@ class AppsViewer:
         headers = [Printer.to_blue(title) for title in headers]
         tabulated_table =  tabulate(table, headers, tablefmt=tablefmt)
         # tabulated_table = '\n'.join('  ' + line for line in tabulated_table.split('\n'))
+        
+        table_len = len(tabulated_table.split('\n')[0])
+        resize_terminal(table_len, 5)
+        
         return tabulated_table
     
     @staticmethod

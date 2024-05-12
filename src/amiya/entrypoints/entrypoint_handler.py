@@ -1,10 +1,14 @@
 import multiprocessing
 
-from amiya.apps_manager.apps_manager import AppsManager 
-from amiya.exceptions.exceptions import *
-from amiya.utils.helper import *
+from amiya.apps_manager.apps_manager import AppsManager
 from amiya.module_utilities.search_controller import SearchController
 from amiya.module_utilities.power_controller import PowerUtils
+from amiya.module_utilities.cursor_controller import CursorController
+from amiya.module_utilities.dev_features import DevController
+
+from amiya.exceptions.exceptions import *
+from amiya.utils.helper import *
+
 from amiya.scheduler.scheduler import AmiyaScheduler
 from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
 from amiya.utils import constants
@@ -18,8 +22,30 @@ class AmiyaEntrypointHandler:
         self.apps_manager = AppsManager()
         self.search_controller = SearchController()
         self.power_utils = PowerUtils()
+        self.cursor_controller = CursorController()
         # self.scheduler = AmiyaScheduler()
 
+
+    # =================================================
+    # =================| DEVELOPMENT | ================
+    # =================================================
+
+    def DEV(self, args):
+        # If "DEVELOPMENT" variable in constants is False, the dev controller cannot be created.
+        self.dev_controller = DevController()
+        
+        if args.objects:
+            self.dev_controller.verbose_objects(
+                self.apps_manager,
+                self.search_controller,
+                self.power_utils,
+                self.cursor_controller
+            )
+        if args.refresh:
+            self.dev_controller.refresh_objects()
+        if args.code:
+            self.dev_controller.open_dev_env()
+    
     
     # =================================================
     # ====================| ABOUT | ===================
@@ -33,6 +59,10 @@ class AmiyaEntrypointHandler:
     
     def repo(self, args):
         aprint(REPOSITORY)
+    
+    def print_help(self, args, parser):
+        help_cmd = color_cmd("help", with_quotes=True)
+        aprint(f"Command {help_cmd} is not implemented.")
     
     # =================================================
     # ============| ADD/REMOVE/SHOW APPS | ============
@@ -83,8 +113,9 @@ class AmiyaEntrypointHandler:
         self.apps_manager.run_sequence(
             tag=args.tag, 
             seq_name=args.seq_name,
-            add_global_delay=args.add_global_delay,
-            terminate_on_finish=args.terminate
+            global_delay=args.global_delay,
+            terminate_on_finish=args.terminate,
+            no_confirmation=args.no_confirmation
         )
 
 
@@ -114,16 +145,11 @@ class AmiyaEntrypointHandler:
             self.search_controller.search_automated()
 
     def sleep(self, args, parser):
-        if args.delay:
-            self.power_utils.sleep_pc(args.delay)
-        else:
-            parser.print_help()
+        self.power_utils.sleep_pc(args.delay)
     
     def shutdown(self, args, parser):
-        if args.delay:
-            self.power_utils.shutdown_pc(args.delay)
-        else:
-            parser.print_help()
+        self.power_utils.shutdown_pc(args.delay)
+
 
     def display_system_uuid(self, args):
        SysUUIDController.print_uuid()
@@ -135,6 +161,9 @@ class AmiyaEntrypointHandler:
         gui_process.start()
         gui_process.join()
     
+
+    def track_cursor(self, args):
+        self.cursor_controller.track_cursor()
 
     # =================================================
     # ================| SCHEDULER | ===================

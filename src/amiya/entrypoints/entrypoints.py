@@ -23,7 +23,18 @@ def start_amiya():
     subparsers = parser.add_subparsers(dest='command', help='commands')
 
     help_parser = subparsers.add_parser('help', help='Show this help message and exit')
-    help_parser.set_defaults(func=lambda args: entrypoint_handler.print_help(parser))
+    help_parser.set_defaults(func=lambda args: entrypoint_handler.print_help(args, parser))
+
+    # =================================================
+    # =================| DEVELOPMENT | ================
+    # =================================================
+
+    start_parser = subparsers.add_parser('dev', help='[DEV] Developer\'s commands.')
+    start_parser.add_argument('--objects', '-obj', action='store_true', help='Show all controller objects and their addresses.')
+    start_parser.add_argument('--refresh', '-ref', action='store_true', help='Refresh all controller objects.')
+    start_parser.add_argument('--code', '-c', action='store_true', help='Open development environment with VSCode.')
+    start_parser.set_defaults(func=entrypoint_handler.DEV)
+
 
     # =================================================
     # ====================| ABOUT | ===================
@@ -96,8 +107,9 @@ def start_amiya():
     start_parser = subparsers.add_parser('run-auto', help='[Admin Permission Req.] Record an automation sequences of the application')
     start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application')
     start_parser.add_argument('seq_name', nargs='?', default=None, help='Name of the sequence to run')
-    start_parser.add_argument('--add-global-delay', '-g', default=False, action='store_true', help='Add a global delay to the sequence during execution')
+    start_parser.add_argument('--global-delay', '-g', type=int, default=-1, help='Add a global delay to the sequence during execution')
     start_parser.add_argument('--terminate', '-t', default=False, action='store_true', help='Terminate the application on automation completion')
+    start_parser.add_argument('--no-confirmation', '-nc', default=False, action='store_true', help='Run the automation without confirmation')
     start_parser.set_defaults(func=entrypoint_handler.run_automations_sequences)
     
     
@@ -105,7 +117,7 @@ def start_amiya():
     # ==========| APP UTILITY FEATURES | ==============
     # =================================================
     
-    start_parser = subparsers.add_parser('sync', help='Sync configured applications on new machine')
+    start_parser = subparsers.add_parser('sync', help='Sync configured applications on new machine OR auto configure application executable paths')
     start_parser.set_defaults(func=entrypoint_handler.sync)
     
     start_parser = subparsers.add_parser('cleanup', help='Remove all unverified applications')
@@ -115,22 +127,26 @@ def start_amiya():
     # =================================================
     # =============| UTILITY FEATURES | ===============
     # =================================================
-        
+    
     start_parser = subparsers.add_parser('search', help='Initiate a search on the default browser')
     start_parser.add_argument('search_content', nargs='*', default=None, help='Content of the search')
     start_parser.set_defaults(func=entrypoint_handler.search)
     
     sleep_parser = subparsers.add_parser('sleep', help='Put the PC to sleep after X seconds')
-    sleep_parser.add_argument('delay', nargs='?', default=None, help='Delay in seconds before sleep')
+    sleep_parser.add_argument('delay', nargs='?', type=int, default=0, help='Delay in seconds before sleep')
     sleep_parser.set_defaults(func=lambda args: entrypoint_handler.sleep(args, sleep_parser))
     
     shutdown_parser = subparsers.add_parser('shutdown', help='Shutdown PC after X seconds')
-    shutdown_parser.add_argument('delay', nargs='?', default=None, help='Delay in seconds before shutdown')
+    shutdown_parser.add_argument('delay', nargs='?', type=int, default=0, help='Delay in seconds before shutdown')
     shutdown_parser.set_defaults(func=lambda args: entrypoint_handler.shutdown(args, shutdown_parser))
     
     
     start_parser = subparsers.add_parser('uuid', help='Display system UUID')
     start_parser.set_defaults(func=entrypoint_handler.display_system_uuid)
+    
+    
+    start_parser = subparsers.add_parser('cursor', help='Track cursor position and color')
+    start_parser.set_defaults(func=entrypoint_handler.track_cursor)
     
     
     start_parser = subparsers.add_parser('volume', help='Open simple application volume control UI')

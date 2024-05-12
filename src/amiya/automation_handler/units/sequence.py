@@ -25,6 +25,32 @@ class AutomationSequence:
         
         self.global_delay                   = 0
     
+    
+    def __progress_bar(self, actions: list[Action], prefix="", size=40, out=sys.stdout):
+        count = len(actions)
+        start = time.time() # time estimate start
+        total_time = self.get_runtime()
+        
+        
+        def show(j, delay, remaining_time_str):
+            x = int(size*j/count)   
+            aprint(f"{prefix}|{u'█'*x}{(' '*(size-x))}| {int(j)}/{count}  -  Remaining: {remaining_time_str}", end='\r', file=out, flush=True) 
+        
+        def secs_to_str(secs):
+            mins, sec = divmod(secs, 60)
+            time_str = f"{int(mins)} mins {round(sec, 2)} secs"
+            return time_str
+        
+        show(0.1, delay=actions[0].delay, remaining_time_str=secs_to_str(total_time)) # avoid div/0 
+        for i, action in enumerate(actions):
+            yield action
+            
+            total_time -= action.delay
+            show(i+1, action.delay, secs_to_str(total_time))
+            
+        print("", flush=True, file=out)
+    
+    
     def execute(self, safety_monitor: SafetyMonitor):
         
         def verbose_action(idx: int, action: Action):
@@ -47,6 +73,8 @@ class AutomationSequence:
         verbose_warning()
         pynput_keyboard = keyboard.Controller()
         
+        # for idx, action in enumerate(self.__progress_bar(self.actions, f"Running: ", 40)):
+            
         for idx, action in enumerate(self.actions):
             verbose_action(idx, action)
             

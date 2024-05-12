@@ -10,3 +10,4 @@ schedule
 screeninfo
 customtkinter
 pycaw
+Pillow

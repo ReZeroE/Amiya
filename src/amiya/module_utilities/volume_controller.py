@@ -4,7 +4,8 @@ from pycaw.pycaw import AudioUtilities
 import multiprocessing
 import subprocess
 
-from amiya.utils.helper import aprint
+from amiya.exceptions.exceptions import AmiyaExit
+from amiya.utils.helper import aprint, SpinnerMessage
 
 class ConfirmDialog(ctk.CTkToplevel):
     def __init__(self, parent, title, message, callback):
@@ -59,8 +60,9 @@ class ConfirmDialog(ctk.CTkToplevel):
         self.after(100, self.destroy)  # Delay destruction
 
 class AmiyaVolumeControllerUI(ctk.CTk):
-    def __init__(self):
+    def __init__(self, spin_msg: SpinnerMessage):
         self.volumes = dict()
+        self.spin_msg = spin_msg
         
         super().__init__()
         self.title('Application Volume Control')
@@ -76,13 +78,14 @@ class AmiyaVolumeControllerUI(ctk.CTk):
         self.after_id = self.after(1000, self.scheduled_update)  # Schedule an update every 1000ms
 
         # Dynamically set the window size based on the number of applications
-        window_height = min(600, max(200, 80 * len(self.apps)))
+        window_height = min(600, max(200, 90 * len(self.apps)))
         self.geometry(f'400x{window_height}')
 
         # Bind the close event to a custom handler
         self.protocol("WM_DELETE_WINDOW", self.on_close)
         self.attributes('-topmost', True)
         
+        self.spin_msg.verbose_start()
         
 
     def init_volume_controls(self):
@@ -108,7 +111,7 @@ class AmiyaVolumeControllerUI(ctk.CTk):
         volume.SetMasterVolume(float(value) / 100, None)
 
     def on_close(self):
-        aprint("Closing application volume control GUI...")
+        self.spin_msg.verbose_end()
         
         if self.winfo_exists():
             reset_needed = any(vol.GetMasterVolume() < 1.0 for _, (slider, vol) in self.volumes.items())
@@ -131,20 +134,73 @@ class AmiyaVolumeControllerUI(ctk.CTk):
                     self.after_cancel(self.after_id)
                 self.destroy()
 
+
     def scheduled_update(self):
         try:
             if self.winfo_exists():
-                pass
-            else:
-                self.after_cancel(self.after_id)
+                self.update_apps()  # Update the list of apps
+                self.after_id = self.after(1000, self.scheduled_update)  # Schedule the next update
         except Exception as e:
             print(f"Error during scheduled update: {e}")
             self.after_cancel(self.after_id)
+            
+
+    def update_apps(self):
+        current_apps = set(self.apps)
+        new_apps = set()
+        sessions = AudioUtilities.GetAllSessions()
+        for session in sessions:
+            if session.Process:
+                if session.Process.name() not in current_apps:
+                    new_apps.add(session.Process.name())
+                    volume = session.SimpleAudioVolume
+                    label = ctk.CTkLabel(self.frame, text=session.Process.name())
+                    label.pack(pady=(10, 0))  # Provide some padding above the label
+                    
+                    volume_control = ctk.CTkSlider(self.frame, from_=0, to=100,
+                                               command=lambda value, vol=volume: self.set_volume(value, vol))
+                    volume_control.set(volume.GetMasterVolume() * 100)
+                    volume_control.pack(pady=5)
+                    self.volumes[session.Process.name()] = (volume_control, volume)
+
+        
+
+        stopped_apps = set()
+        for app_name in current_apps:
+            if app_name not in [session.Process.name() for session in sessions if session.Process]:
+                stopped_apps.add(app_name)
+                # Find and remove the label and slider for the inactive app
+                for widget in self.frame.winfo_children():
+                    if isinstance(widget, ctk.CTkLabel) and widget.cget("text") == app_name:
+                        widget.pack_forget()  # Remove label
+                    elif isinstance(widget, ctk.CTkSlider) and widget in self.volumes[app_name]:
+                        widget.pack_forget()  # Remove slider
+
+        if new_apps or stopped_apps:
+            # Update self.apps with new apps and adjust window size if needed
+            self.apps.extend(new_apps)
+            for app_name in stopped_apps:
+                self.apps.remove(app_name)
+            
+            window_height = min(600, max(200, 90 * len(self.apps)))
+            self.geometry(f'400x{window_height}')
+
+            # Refresh the UI
+            self.update_idletasks()
 
 def start_volume_control_ui():
-    aprint("Starting application volume control GUI...")
-    app_ui = AmiyaVolumeControllerUI()
-    app_ui.mainloop()
+    spin_msg = SpinnerMessage(
+        start_message  = "Application volume control (AVC) GUI running...", 
+        end_message    = "AVC GUI terminated successfully.",
+        spin_delay     = 0.1
+    )
+    
+    app_ui = AmiyaVolumeControllerUI(spin_msg)
+    try:
+        app_ui.mainloop()
+    except KeyboardInterrupt:
+        spin_msg.verbose_end()
+        app_ui.destroy()
 
 
 ## DON"T USE THIS FOR NOW
