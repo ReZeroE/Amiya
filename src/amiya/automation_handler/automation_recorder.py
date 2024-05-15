@@ -19,15 +19,15 @@ class AutomationRecorder():
         self.last_click_time = None
         self.is_recording = False
         
-        self.window_event: threading.Event = None
+        self.stop_event = threading.Event()
         self.label = None
         
         
     def stop_recording(self, root: tk.Tk):
-        self.window_event.set()
+        self.stop_event.set()
         self.is_recording = False
         self.sequence.actions = self.sequence.actions[:-1]    # Remove the last key click (user clicks on the Stop Recording button)
-        root.destroy()
+        root.quit()
     
     def create_indicator_window(self):
         LENGTH = 300
@@ -90,9 +90,6 @@ class AutomationRecorder():
         
         
     def record(self, start_on_callback=False) -> AutomationSequence:
-        from elevate import elevate; elevate()
-        
-        self.window_event = threading.Event()
         threading.Thread(target=self.create_indicator_window, daemon=True).start()
         
         if start_on_callback:
@@ -115,7 +112,7 @@ class AutomationRecorder():
             keyboard_listener_thread.start()
 
             # Wait until stop recording event is triggered
-            self.window_event.wait()
+            self.stop_event.wait()
 
             # Stop listeners
             mouse_listener.stop()

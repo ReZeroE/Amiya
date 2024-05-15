@@ -1,10 +1,15 @@
+import os
 import sys
 import time
 import psutil
 import argparse
+
+import ctypes
+import subprocess
+
 from termcolor import colored
 from amiya.entrypoints.entrypoint_handler import AmiyaEntrypointHandler
-from amiya.utils.helper import aprint, verify_platform, is_admin, Printer
+from amiya.utils.helper import aprint, atext, verify_platform, is_admin, Printer
 from amiya.exceptions.exceptions import AmiyaOSNotSupported, AmiyaExit
 
 
@@ -15,6 +20,9 @@ class AmiyaArgParser(argparse.ArgumentParser):
         aprint(f"Command not recognized: {command}\nType '{helpt}' for commands list")
         self.exit(2)
         
+        
+
+
 
 def start_amiya():
     entrypoint_handler = AmiyaEntrypointHandler()
@@ -162,6 +170,11 @@ def start_amiya():
     start_parser.add_argument('--quite', '-q', action="store_true", default=False, help='Run without verbosing progress')
     start_parser.set_defaults(func=entrypoint_handler.click_continuously)
     
+    start_parser = subparsers.add_parser('elevate', help='Elevate `amiya` permissions.')
+    start_parser.add_argument('--explain', action='store_true', help='Explain why this is needed and what will happen.')
+    start_parser.set_defaults(func=entrypoint_handler.elevate)
+    
+    
     # =================================================
     # ================| SCHEDULER | ===================
     # =================================================
@@ -202,6 +215,7 @@ def start_amiya():
             if name in ["record-auto", "run-auto"]:
                 subparser.set_defaults(func=blocked_func)
     
+    
     # ===========================================================================================
     # >>> PARSER DRIVER
     # ===========================================================================================
@@ -221,3 +235,27 @@ def start_amiya():
                 exit()
         else:
             parser.print_help()
+            
+
+
+def start_amiya_cli_as_admin():
+    start_amiya()
+    
+    # # If process already have admin access
+    # if is_admin():
+    #     start_amiya()
+    #     return
+
+    # # Else, request admin permissions
+    # user_input = input(atext("Amiya is not ran as admin. Would you like to run 'amiya' as admin? [y/n] "))
+    # if user_input.lower() != "y":
+    #     start_amiya()
+    #     return
+    
+    # script = os.path.abspath(sys.argv[0])
+    # params = ' '.join([script] + sys.argv[1:])
+    # try:
+    #     subprocess.run(["powershell", "-Command", f"Start-Process -Verb runAs {params}"])
+    # except Exception as e:
+    #     aprint(f"Failed to elevate privileges: {e}")
+    # sys.exit(0)
