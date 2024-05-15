@@ -1,10 +1,17 @@
 import multiprocessing
+import getpass
+import subprocess
 
-from amiya.apps_manager.apps_manager import AppsManager 
-from amiya.exceptions.exceptions import *
-from amiya.utils.helper import *
+from amiya.apps_manager.apps_manager import AppsManager
 from amiya.module_utilities.search_controller import SearchController
 from amiya.module_utilities.power_controller import PowerUtils
+from amiya.module_utilities.cursor_controller import CursorController
+from amiya.module_utilities.continuous_click_controller import ContinuousClickController
+from amiya.module_utilities.dev_features import DevController
+
+from amiya.exceptions.exceptions import *
+from amiya.utils.helper import *
+
 from amiya.scheduler.scheduler import AmiyaScheduler
 from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
 from amiya.utils import constants
@@ -18,8 +25,31 @@ class AmiyaEntrypointHandler:
         self.apps_manager = AppsManager()
         self.search_controller = SearchController()
         self.power_utils = PowerUtils()
+       
         # self.scheduler = AmiyaScheduler()
 
+
+    # =================================================
+    # =================| DEVELOPMENT | ================
+    # =================================================
+
+    def DEV(self, args):
+        # If "DEVELOPMENT" variable in constants is False, the dev controller cannot be created.
+        self.dev_controller = DevController()
+        
+        if args.objects:
+            self.dev_controller.verbose_objects(
+                self.apps_manager,
+                self.search_controller,
+                self.power_utils
+            )
+        if args.refresh:
+            self.dev_controller.refresh_objects()
+        if args.code:
+            self.dev_controller.open_dev_env()
+        if args.isadmin:
+            self.dev_controller.is_admin()
+    
     
     # =================================================
     # ====================| ABOUT | ===================
@@ -33,6 +63,10 @@ class AmiyaEntrypointHandler:
     
     def repo(self, args):
         aprint(REPOSITORY)
+    
+    def print_help(self, args, parser):
+        help_cmd = color_cmd("help", with_quotes=True)
+        aprint(f"Command {help_cmd} is not implemented.")
     
     # =================================================
     # ============| ADD/REMOVE/SHOW APPS | ============
@@ -83,8 +117,9 @@ class AmiyaEntrypointHandler:
         self.apps_manager.run_sequence(
             tag=args.tag, 
             seq_name=args.seq_name,
-            add_global_delay=args.add_global_delay,
-            terminate_on_finish=args.terminate
+            global_delay=args.global_delay,
+            terminate_on_finish=args.terminate,
+            no_confirmation=args.no_confirmation
         )
 
 
@@ -114,16 +149,11 @@ class AmiyaEntrypointHandler:
             self.search_controller.search_automated()
 
     def sleep(self, args, parser):
-        if args.delay:
-            self.power_utils.sleep_pc(args.delay)
-        else:
-            parser.print_help()
+        self.power_utils.sleep_pc(args.delay)
     
     def shutdown(self, args, parser):
-        if args.delay:
-            self.power_utils.shutdown_pc(args.delay)
-        else:
-            parser.print_help()
+        self.power_utils.shutdown_pc(args.delay)
+
 
     def display_system_uuid(self, args):
        SysUUIDController.print_uuid()
@@ -135,6 +165,49 @@ class AmiyaEntrypointHandler:
         gui_process.start()
         gui_process.join()
     
+
+    def track_cursor(self, args):
+        if args.color:
+            self.cursor_controller = CursorController(verbose_hex=True)
+        else:
+            self.cursor_controller = CursorController(verbose_hex=False)
+        
+        self.cursor_controller.track_cursor()
+
+
+    def click_continuously(self, args):
+        cc_controller = ContinuousClickController()
+        cc_controller.click_continuously(args.count, args.delay, args.hold_time, args.start_after, args.quite)
+
+    def elevate(self, args):
+        if is_admin():
+            aprint("Already running as admin.")
+            return
+        
+        if args.explain:
+            text = """Certain applications necessitate the 'amiya' process to have administrative 
+privileges to replay or record mouse and keyboard actions. To help with this, 
+the 'elevate' command is available to elevate amiya's permissions to an 
+administrative level.
+
+As an open-source project, `amiya` does not possess a Code Signing Certificate 
+due to the associated cost. Without this certificate, Windows will flag the 
+module's publisher as unknown.
+
+By invoking the elevate command, you are granting `amiya` admin access.
+"""
+            aprint(text)
+            ui = input(atext("Proceed to elevate? [y/n] "))
+            if ui.lower() != "y":
+                return
+        
+        script = os.path.abspath(sys.argv[0])
+        params = ' '.join([script])
+        try:
+            subprocess.run(["powershell", "-Command", f"Start-Process -Verb runAs {params}"])
+        except Exception as e:
+            aprint(f"Failed to elevate privileges: {e}")
+        sys.exit(0)
 
     # =================================================
     # ================| SCHEDULER | ===================
@@ -173,6 +246,8 @@ r"""
     def print_init_help(self):
         
         access_time = colored(f"Access Time: {DatetimeHandler.get_datetime_str()}", "dark_grey")
+        username = getpass.getuser()
+        isadmin = "ADMIN" if is_admin() else "USER"
         
         quit_cmd = Printer.to_purple("exit")
         cls_cmd = Printer.to_purple("clear")
@@ -184,7 +259,6 @@ r"""
         help_str = f"Type '{help_cmd}' to display commands list"
     
         print(f"{welcome_str}\n  {help_str}\n  {exit_str}\n  {cls_str}\n")
-    
         
     # =================================================
     # ===============| CLI DRIVERS | ==================
@@ -200,7 +274,9 @@ r"""
         if user_input.lower() in ['clear', "cls", "reset"]:
             clear_screen()
             self.print_title()
-            print("Terminal cleared. Type 'exit' to quit.")
+            
+            exit_cmd = color_cmd("exit", with_quotes=True)
+            print(f"Terminal cleared. Type {exit_cmd} to quit.")
             return 1
         
         if user_input.strip() == '':
@@ -240,6 +316,9 @@ r"""
                         args.func(args)
                     except AmiyaExit:
                         continue
+                    # except AmiyaBaseException as ex:
+                    #     aprint(ex, log_type=LogType.ERROR)
+                    #     continue
                 else:
                     parser.print_help()
             

@@ -34,9 +34,7 @@
 #     $ git clone https://github.com/ReZeroE/Amiya.git
 #     $ cd Amiya/
 #     $ pip install .
-#
-#
-# RUN THIS SCRIPT TO START THE AMIYA CLI WITHOUT INSTALLATION.
+
 
 import sys
 from amiya.utils.helper import verify_platform

@@ -3,7 +3,8 @@
     "name": "Steam",
     "exe_path": "E:\\Steam\\steam.exe",
     "tags": [
-        "steam"
+        "steam",
+        "stm"
     ],
     "verified": true,
     "sys_uuid": "ECB1B2E8-FB5D-C8CB-75DC-C87F545BE519"

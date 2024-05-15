@@ -6,6 +6,7 @@ import os
 BASENAME        = "Amiya"
 VERSION         = "0.0.2"
 VERSION_DESC    = "Beta"
+DEVELOPMENT     = VERSION_DESC.lower() != "stable"
 
 CONFIG_NAME     = "Amiya Config"
 TIME_FORMAT     = "%H:%M:%S"
@@ -21,7 +22,9 @@ REPOSITORY      = "https://github.com/ReZeroE/Amiya"
 # ==================================
 # ============| PATHS | ============
 # ==================================
-__AMIYA_DIRECTORY   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+HOME_DIRECTORY      = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+
+__AMIYA_DIRECTORY   = os.path.join(HOME_DIRECTORY, "src", "amiya")
 APPS_DIRECTORY      = os.path.join(__AMIYA_DIRECTORY, "apps")
 BIN_DIRECTORY       = os.path.join(__AMIYA_DIRECTORY, "bin")
 

@@ -1,5 +1,6 @@
 import os
 import time
+import copy
 from datetime import datetime
 from pynput import keyboard
 from amiya.automation_handler.automation_config_handler import SequenceConfigHandler
@@ -24,6 +25,32 @@ class AutomationSequence:
         
         self.global_delay                   = 0
     
+    
+    def __progress_bar(self, actions: list[Action], prefix="", size=40, out=sys.stdout):
+        count = len(actions)
+        start = time.time() # time estimate start
+        total_time = self.get_runtime()
+        
+        
+        def show(j, delay, remaining_time_str):
+            x = int(size*j/count)   
+            aprint(f"{prefix}|{u'█'*x}{(' '*(size-x))}| {int(j)}/{count}  -  Remaining: {remaining_time_str}", end='\r', file=out, flush=True) 
+        
+        def secs_to_str(secs):
+            mins, sec = divmod(secs, 60)
+            time_str = f"{int(mins)} mins {round(sec, 2)} secs"
+            return time_str
+        
+        show(0.1, delay=actions[0].delay, remaining_time_str=secs_to_str(total_time)) # avoid div/0 
+        for i, action in enumerate(actions):
+            yield action
+            
+            total_time -= action.delay
+            show(i+1, action.delay, secs_to_str(total_time))
+            
+        print("", flush=True, file=out)
+    
+    
     def execute(self, safety_monitor: SafetyMonitor):
         
         def verbose_action(idx: int, action: Action):
@@ -37,9 +64,17 @@ class AutomationSequence:
                     aprint(f"This automation sequence is not available for pixel calculator in version {VERSION}.")
                     return
         
-        verbose_warning()
+
+        # Becuase the pixel calculator will directory modify the MouseAction's coordinates, we need a way to reset the 
+        # sequence's coordinates after the sequence finishes running. Therefore, we first make a copy of the sequence
+        # before it is modified by the pixel calculator and then replace the modified sequence at the end.
+        actions_copy = copy.deepcopy(self.actions)
         
+        verbose_warning()
         pynput_keyboard = keyboard.Controller()
+        
+        # for idx, action in enumerate(self.__progress_bar(self.actions, f"Running: ", 40)):
+            
         for idx, action in enumerate(self.actions):
             verbose_action(idx, action)
             
@@ -67,6 +102,8 @@ class AutomationSequence:
                 
                 action.execute()
             
+        # Reset the modified version of the sequence (modified by the pixel calculator)
+        self.actions = actions_copy
 
             
     def add(self, action: Action):

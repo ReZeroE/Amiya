@@ -355,7 +355,7 @@ class AppsManager:
     # =================================================
     # ================| RUN SEQUENCES | ===============
     # =================================================
-    def run_sequence(self, tag: str = None, seq_name: str = None, add_global_delay: bool = False, terminate_on_finish: bool = False):
+    def run_sequence(self, tag: str = None, seq_name: str = None, global_delay: int = 0, terminate_on_finish: bool = False, no_confirmation: bool = False):
         self.__verify_non_empty_apps_dir()
         
         if tag != None:
@@ -376,23 +376,25 @@ class AppsManager:
         
         # ============== GET GLOBAL DELAY ==============
         global_delay = 0
-        if add_global_delay:
+        if global_delay == -1:                                                # If global_delay == -1, then the argument -g is used but no time is specified (in entrypoints.py)
             aprint(f"Add global delay to all actions (seconds) [leave empty to default to 0]: ", end="")
             user_input = input().lower().strip()
             if user_input:
-                global_delay = self.__parse_int(user_input)                     # If user inputted global delay
+                global_delay = self.__parse_int(user_input)                   # If user inputted global delay
         sequence.set_global_delay(global_delay)
         
         # ============== RUN CONFIRMATION ==============
-        terminate_text = " Terminate on finish." if terminate_on_finish else ""
-        aprint(f"The sequence '{sequence.sequence_name}' will run for {sequence.get_runtime()} seconds.{terminate_text} Continue? [y/n] ", log_type=LogType.WARNING, end="")
-        if input().lower() != "y": return                                       # Verbose runtime and wait for user confirmation to run
+        if not no_confirmation:
+            terminate_text = " Terminate on finish." if terminate_on_finish else ""
+            aprint(f"The sequence '{sequence.sequence_name}' will run for {sequence.get_runtime()} seconds.{terminate_text} Continue? [y/n] ", log_type=LogType.WARNING, end="")
+            if input().lower() != "y": return                                  # Verbose runtime and wait for user confirmation to run
         
         # =============== START RUNNING ===============
         aprint(f"[Automation {sequence.sequence_name}] Running...")
-        self.__safe_start_app(app); time.sleep(5)                               # Starts the application for the sequence
-        safety_monitor = SafetyMonitor(app.process)                             # Creates a safety monitor object for sequence execution safety (must be created after the app is started)
-        self.__safe_execute_sequence(sequence, safety_monitor)                   # Runs the sequence (with the safety monitor)
+        self.__safe_start_app(app);                                            # Starts the application for the sequence
+        app_process = app.get_app_process()                                    # Get application's process
+        safety_monitor = SafetyMonitor(app_process)                            # Creates a safety monitor object for sequence execution safety (must be created after the app is started)
+        self.__safe_execute_sequence(sequence, safety_monitor)                 # Runs the sequence (with the safety monitor)
 
         print("")
         aprint(f"[Automation {sequence.sequence_name}] Run Completed!", log_type=LogType.SUCCESS)

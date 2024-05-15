@@ -56,10 +56,10 @@ class AutomationController:
         
     def record_sequence(self, new_sequence_name, safety_monitor: SafetyMonitor) -> AutomationSequence:
         NEW_SEQUENCE_NAME = self.__reformat_sequence_name(new_sequence_name)
-        recording_sequence = AutomationSequence(NEW_SEQUENCE_NAME)                           # Create new empty actions sequence (later populated during recording)
+        recording_sequence = AutomationSequence(NEW_SEQUENCE_NAME)                        # Create new empty actions sequence (later populated during recording)
         recording_sequence.set_date_created_to_current()                                  # Set current time to creation time
 
-        action_recorder   = AutomationRecorder(recording_sequence, safety_monitor)           # Create the AutomationRecorder object by passing it the empty sequence object to populate and a safety monitor (to fetch app window size)
+        action_recorder   = AutomationRecorder(recording_sequence, safety_monitor)        # Create the AutomationRecorder object by passing it the empty sequence object to populate and a safety monitor (to fetch app window size)
         action_recorder.record(start_on_callback=True)                                    # Record mouse actions until "end-recording" is pressed
         
         aprint("Saving to configurations...")
@@ -157,8 +157,8 @@ class AutomationController:
         config_handler.save_config(plate_json)
         
         self.__plate_list.append(plate)
+ 
     
-
     def parse_plate_config(self, raw_json):
         metadata = raw_json["metadata"]
         
@@ -181,7 +181,6 @@ class AutomationController:
         
         automation_plate.date_created = date_created
         automation_plate.other_data   = other_data
-        
         
         
     def __reformat_plate_name(self, sequence_name: str):
