@@ -45,6 +45,8 @@ class AmiyaEntrypointHandler:
             self.dev_controller.refresh_objects()
         if args.code:
             self.dev_controller.open_dev_env()
+        if args.isadmin:
+            self.dev_controller.is_admin()
     
     
     # =================================================
@@ -281,6 +283,9 @@ r"""
                         args.func(args)
                     except AmiyaExit:
                         continue
+                    # except AmiyaBaseException as ex:
+                    #     aprint(ex, log_type=LogType.ERROR)
+                    #     continue
                 else:
                     parser.print_help()
             

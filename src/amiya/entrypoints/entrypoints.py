@@ -33,6 +33,7 @@ def start_amiya():
     start_parser.add_argument('--objects', '-obj', action='store_true', help='Show all controller objects and their addresses.')
     start_parser.add_argument('--refresh', '-ref', action='store_true', help='Refresh all controller objects.')
     start_parser.add_argument('--code', '-c', action='store_true', help='Open development environment with VSCode.')
+    start_parser.add_argument('--isadmin', '-ia', action='store_true', help='Show whether the main thread has admin access.')
     start_parser.set_defaults(func=entrypoint_handler.DEV)
 
 

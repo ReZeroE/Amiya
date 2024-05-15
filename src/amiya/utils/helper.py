@@ -4,6 +4,9 @@ import sys
 import shutil
 import threading
 import pyautogui
+import psutil
+import pygetwindow as gw
+import win32gui, win32process, psutil
 from enum import Enum
 from screeninfo import get_monitors
 from datetime import datetime
@@ -302,3 +305,30 @@ def resize_terminal(min_cols, min_rows):
 # ==============| TERMINAL RESIZE | =================
 # ===================================================
 
+class WindowUtils:
+
+    @staticmethod
+    def bring_to_foreground(pid):
+        # Try to find the window associated with the PID
+        for proc in psutil.process_iter(['pid', 'name']):
+            if proc.info['pid'] == pid:
+                # Get all windows and check if any belong to the target process
+                for window in gw.getAllWindows():
+                    if window._hWnd == win32gui.FindWindow(None, window.title):
+                        _, window_pid = win32process.GetWindowThreadProcessId(window._hWnd)
+                        if window_pid == pid:
+                            if window.isMinimized:
+                                window.restore()
+                            window.activate()
+                            pyautogui.click(window.left + window.width // 2, window.top + window.height // 2)
+                            return True
+        return False
+
+    @staticmethod
+    def active_window_process_name():
+        try:
+            _, process_ids = win32process.GetWindowThreadProcessId(win32gui.GetForegroundWindow())
+            thread_id, pid = process_ids
+            return (psutil.Process(pid).name(), thread_id, pid)
+        except:
+            return None

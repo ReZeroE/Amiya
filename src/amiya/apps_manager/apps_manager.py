@@ -391,8 +391,9 @@ class AppsManager:
         
         # =============== START RUNNING ===============
         aprint(f"[Automation {sequence.sequence_name}] Running...")
-        self.__safe_start_app(app); time.sleep(5)                              # Starts the application for the sequence
-        safety_monitor = SafetyMonitor(app.process)                            # Creates a safety monitor object for sequence execution safety (must be created after the app is started)
+        self.__safe_start_app(app);                                            # Starts the application for the sequence
+        app_process = app.get_app_process()                                    # Get application's process
+        safety_monitor = SafetyMonitor(app_process)                            # Creates a safety monitor object for sequence execution safety (must be created after the app is started)
         self.__safe_execute_sequence(sequence, safety_monitor)                 # Runs the sequence (with the safety monitor)
 
         print("")

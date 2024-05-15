@@ -7,6 +7,7 @@ import subprocess
 from pathlib import Path
 from amiya.utils.constants import APPS_DIRECTORY, FOCUS_PID_EXE
 from amiya.exceptions.exceptions import *
+from amiya.utils.helper import WindowUtils, aprint
 from amiya.automation_handler.automation_controller import AutomationController
 from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
 
@@ -37,7 +38,9 @@ class App:
         # This variable should ONLY be used to identify the initial status of the application
         # as its started since any callback to is_running() (while a new instance of the application
         # is created) will overwrite the previous process.
-        self.process    = None
+        #
+        # Use get_app_process() instead.
+        self.process: psutil.Process = None
     
         self.app_config_dirpath     = os.path.join(APPS_DIRECTORY, self.get_reformatted_app_name())
         self.app_config_filepath    = os.path.join(self.app_config_dirpath, APP_CONFIG_FILENAME)
@@ -94,14 +97,14 @@ class App:
         if self.verified == True:   
             subprocess.Popen([self.exe_path], shell=True)
             
-            if self.started_successfully():
+            if self.wait_to_start():
                 self.bring_to_foreground()
                 return True
             return False
         else:
             raise Amiya_AppInvalidPathException(path=self.exe_path)
 
-    def started_successfully(self) -> bool:
+    def wait_to_start(self) -> bool:
         TIMEOUT = 30
         starting_time = time.time()
         while time.time() - starting_time < TIMEOUT:
@@ -110,25 +113,44 @@ class App:
             time.sleep(1)
         return False
 
-    def is_running(self) -> bool:
+    def is_running(self, timeout: int = 0) -> bool:
+        if timeout == 0:
+            return self.get_app_process() != None
+        
+        # Timeout will ensure the application is still running after timeout seconds.
+        if self.get_app_process() != None:
+            time.sleep(timeout)
+            return self.get_app_process() != None
+        return False
+    
+    def get_app_process(self) -> psutil.Process:
         APP_EXE_NAME = os.path.basename(self.exe_path)
         for p in psutil.process_iter():
             if APP_EXE_NAME.replace(".exe", "") in p.name():
                 try:
-                    self.process = psutil.Process(p.pid)
-                    if self.process.is_running():
-                        return True
-                    return False
+                    app_process = psutil.Process(p.pid)
+                    if app_process.is_running():
+                        self.process = app_process
+                        return app_process
+                    
                 except Exception as ex:
-                    raise AmiyaBaseException("Failed to identify the app's process due to an unknown error.")
-        return False
+                    raise AmiyaBaseException(f"Failed to identify the app's process due to an unknown error ({ex}).")
+        return None
+    
     
     def bring_to_foreground(self):
         try:
-            if self.is_running():
-                subprocess.run([FOCUS_PID_EXE, str(self.process.pid)], shell=True)
-        except:
-            raise AmiyaBaseException(f"The app '{self.name}' is currently not running, therefore can't be brought to foreground.")
+            TIMEOUT = 10
+            start_time = time.time()
+            while time.time() - start_time < TIMEOUT:
+                if self.is_running():
+                    success = WindowUtils.bring_to_foreground(self.process.pid)
+                    if success:
+                        return
+        except Exception as ex:
+            raise AmiyaBaseException(f"The app '{self.name}' is currently not running, therefore can't be brought to foreground ({ex}).")
+
+        raise AmiyaBaseException(f"The app '{self.name}' cannot be brought to foreground due to an unknown error.") 
 
     # ==========================================
     # ============| APP UTILITIES | ============

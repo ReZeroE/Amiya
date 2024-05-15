@@ -24,3 +24,7 @@ class DevController:
     def open_dev_env(self):
         aprint(f"Opening development environment ({HOME_DIRECTORY})...")
         os.system(f"code {HOME_DIRECTORY}")
+        
+    def is_admin(self):
+        isadmin = bool_to_str(is_admin(), true_text="Admin", false_text="User")
+        aprint(f"Persmissions: {isadmin}")

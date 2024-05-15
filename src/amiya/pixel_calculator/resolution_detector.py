@@ -1,3 +1,4 @@
+import time
 import win32process
 import pygetwindow
 from ctypes import windll
@@ -30,6 +31,8 @@ class ResolutionDetector:
     
     @staticmethod
     def get_window_size():
+        windll.user32.SetProcessDPIAware()
+        
         pid = SafetyMonitor.get_focused_pid()
         # print(f"Currently focused PID: {pid}")
         if pid == None: return None
@@ -51,18 +54,21 @@ class ResolutionDetector:
         return win_info
         
     @staticmethod
-    def get_window_info(pid):
-        windows = pygetwindow.getWindowsWithTitle('')  # Get all windows
-        for window in windows:
-            _, window_pid = win32process.GetWindowThreadProcessId(window._hWnd)
-            if window_pid == pid:
-                return {
-                    'left'          : window.left,
-                    'top'           : window.top,
-                    'width'         : window.width,
-                    'height'        : window.height,
-                    'is_fullscreen' : None
-                }
+    def get_window_info(pid, retry: int = 5):
+        for _ in range(retry):
+            windows = pygetwindow.getWindowsWithTitle('')  # Get all windows
+            for window in windows:
+                _, window_pid = win32process.GetWindowThreadProcessId(window._hWnd)
+                if window_pid == pid:
+                    if (window.left >= 0 and window.top >= 0) and (window.width > 0 and window.height > 0):
+                        return {
+                            'left'          : window.left,
+                            'top'           : window.top,
+                            'width'         : window.width,
+                            'height'        : window.height,
+                            'is_fullscreen' : None
+                        }
+            time.sleep(1)
         return None
         
     

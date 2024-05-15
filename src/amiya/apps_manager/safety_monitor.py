@@ -41,9 +41,17 @@ class SafetyMonitor:
 
     
     def __update_cached_pids(self):
-        children_pids = set(proc.pid for proc in self.app_process.children(recursive=True))                  # Get children PIDs
-        parents_pids = set(proc.pid for proc in self.app_process.parents() if proc.pid != os.getpid())       # Get parent PIDs
-        self.cached_pids = children_pids.union(parents_pids)
+        # If the inital process is still running
+        try:
+            children_pids = set(proc.pid for proc in self.app_process.children(recursive=True))                  # Get children PIDs
+            parents_pids = set(proc.pid for proc in self.app_process.parents() if proc.pid != os.getpid())       # Get parent PIDs
+            self.cached_pids = children_pids.union(parents_pids)
+        
+        # If the inital proecss is killed
+        except psutil.NoSuchProcess:
+            pass
+        
+        
     
     
     @staticmethod

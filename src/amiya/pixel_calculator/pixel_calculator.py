@@ -23,6 +23,8 @@ class PixelCalculator:
             curr_w = curr_window_info["width"]
             curr_h = curr_window_info["height"]
             
+            print(curr_x, curr_y, curr_w, curr_h)
+            
             prev_x = prev_window_info["left"]
             prev_y = prev_window_info["top"]
             prev_w = prev_window_info["width"]
