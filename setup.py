@@ -25,7 +25,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='amiya',
-    version='0.0.2',
+    version='0.0.3',
     author='Kevin L.',
     author_email='kevinliu@vt.edu',
     description='A lightweight cross-platform automation tool for games and daily tasks!',
