@@ -205,9 +205,10 @@ By invoking the elevate command, you are granting `amiya` admin access.
         params = ' '.join([script])
         try:
             subprocess.run(["powershell", "-Command", f"Start-Process -Verb runAs {params}"])
+            aprint("Permissions granted. Please use the new terminal with the Amiya-CLI that opened.")
         except Exception as e:
             aprint(f"Failed to elevate privileges: {e}")
-        sys.exit(0)
+        raise AmiyaExit()
 
     # =================================================
     # ================| SCHEDULER | ===================

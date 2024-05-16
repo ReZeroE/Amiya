@@ -465,8 +465,8 @@ class AppsManager:
         apps = list(self.apps.values())
         for i in progressbar(range(len(apps)), f"Syncing: ", 40):
             app: App = apps[i]
-            success = sync_controller.sync(app)
-            self.apps[app.id] = app
+            synced_app = sync_controller.sync(app)
+            self.apps[app.id] = synced_app
             
         self.print_apps()
         
@@ -480,6 +480,7 @@ class AppsManager:
         # Sync is only required when transferring the apps manager's configuration data (apps) on to a new machine.
         for app in self.apps.values():
             if SysUUIDController.system_uuid != app.sys_uuid:
+                aprint(f"App not synced: {app.name} ({app.sys_uuid})")
                 return False
         return True
         

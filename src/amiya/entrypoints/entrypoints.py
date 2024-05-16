@@ -9,7 +9,7 @@ import subprocess
 
 from termcolor import colored
 from amiya.entrypoints.entrypoint_handler import AmiyaEntrypointHandler
-from amiya.utils.helper import aprint, atext, verify_platform, is_admin, Printer
+from amiya.utils.helper import aprint, atext, verify_platform, is_admin, Printer, color_cmd
 from amiya.exceptions.exceptions import AmiyaOSNotSupported, AmiyaExit
 
 
@@ -208,7 +208,8 @@ def start_amiya():
     if not isadmin:
         # Certain commands require admin permissions to execute
         def blocked_func(args):
-            aprint("Insufficient permission. Please restart the terminal as an administrator.")
+            elevate_cmd = color_cmd("amiya elevate", with_quotes=True)
+            aprint(f"Insufficient permission. Run {elevate_cmd} to elevate permissions first.")
             raise AmiyaExit()
 
         for name, subparser in subparsers.choices.items():
