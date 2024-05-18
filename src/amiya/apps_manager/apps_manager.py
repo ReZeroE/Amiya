@@ -7,7 +7,7 @@ import signal
 from termcolor import colored
 from amiya.apps_manager.app import App, APP_CONFIG_FILENAME
 from amiya.apps_manager.apps_viewer import AppsViewer
-from amiya.utils.constants import APPS_DIRECTORY
+from amiya.utils.constants import APPS_DIRECTORY, AMIYA_PID
 from amiya.exceptions.exceptions import *
 from amiya.utils.helper import *
 from amiya.automation_handler.units.sequence import AutomationSequence
@@ -15,6 +15,7 @@ from amiya.automation_handler.automation_viewer import AutomationViewer
 from amiya.apps_manager.safety_monitor import SafetyMonitor
 from amiya.apps_manager.sync_controller.sync_controller import AppSyncController
 from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
+from amiya.module_utilities.power_controller import PowerUtils
 
 # from elevate import elevate; elevate()
 
@@ -42,7 +43,7 @@ class AppsManager:
                 
         return apps_dict
     
-    
+   
     # ======================================
     # ===========| CREATE APPS | ===========
     # ======================================
@@ -156,8 +157,15 @@ class AppsManager:
         
         self.__safe_start_app(app)
     
+    
     def __safe_start_app(self, app: App):
-        ret = app.run()
+        aprint(f"Starting application {app.name}...", end="\r")
+        
+        try:
+            ret = app.run()
+        except Amiya_AppInvalidPathException as ex:    # Application path invalid
+            aprint(ex.message, log_type=LogType.ERROR); raise AmiyaExit()
+        
         if ret == True:
             aprint(f"[PID {app.process.pid}] Application '{app.name}' started successfully!")
         else:
@@ -167,14 +175,29 @@ class AppsManager:
     # ======================================
     # ==========| TERMINATE APP | ==========
     # ======================================
-         
+    
     def __safe_terminate_current_app(self):
         pid = SafetyMonitor.get_focused_pid()
+        
         try:
-            os.kill(pid, signal.SIGTERM)  # Send the SIGTERM signal to gracefully terminate the process
-            aprint(f"Current application (PID {pid}) has been closed.")
-        except OSError as e:
-            aprint(f"Failed to terminate process with PID {pid}: {e}", log_type=LogType.ERROR)
+            app_process = psutil.Process(pid)
+            app_name = app_process.name()
+        except:
+            aprint("Unable to terminate application because it is already closed.", log_type=LogType.ERROR); raise AmiyaExit()
+        
+        try:
+            if app_process.is_running():
+                app_parent_pid = app_process.ppid()                                 # Get current focused process' parent PID
+                
+                app_process.kill()                                                  # Terminate the app process
+                aprint(f"Application `{app_name}` (PID {pid}) has been closed.")
+                
+                # if AMIYA_PID != app_parent_pid:                                     # Get PPID != module PID, kill parent PID (most likely a launcher of sort)
+                #     time.sleep(3)
+                #     success = ProcessHandler.kill_pid(app_parent_pid)
+
+        except OSError as ex:
+            aprint(f"Failed to terminate process with PID {pid}: {ex}", log_type=LogType.ERROR); raise AmiyaExit()
 
 
     # ======================================
@@ -355,7 +378,15 @@ class AppsManager:
     # =================================================
     # ================| RUN SEQUENCES | ===============
     # =================================================
-    def run_sequence(self, tag: str = None, seq_name: str = None, global_delay: int = 0, terminate_on_finish: bool = False, no_confirmation: bool = False):
+    def run_sequence(
+        self, tag: str = None, 
+        seq_name: str = None, 
+        global_delay: int = 0, 
+        terminate_on_finish: bool = False, 
+        no_confirmation: bool = False,
+        sleep_afterward: bool = False,
+        shutdown_afterward: bool = False
+    ):
         self.__verify_non_empty_apps_dir()
         
         if tag != None:
@@ -399,15 +430,23 @@ class AppsManager:
         print("")
         aprint(f"[Automation {sequence.sequence_name}] Run Completed!", log_type=LogType.SUCCESS)
         
+        # ============== AFTER FINISHING ==============
         if terminate_on_finish:
             self.__safe_terminate_current_app()
         
+        if sleep_afterward:
+            power_utils = PowerUtils()
+            power_utils.sleep_pc(delay=10)
+        elif shutdown_afterward:
+            power_utils = PowerUtils()
+            power_utils.shutdown_pc(delay=10)
+            
         
     def __safe_execute_sequence(self, sequence: AutomationSequence, safety_monitor: SafetyMonitor):
         try:
             sequence.execute(safety_monitor)
         except Amiya_AppNotFocusedException:
-            aprint("[Amiya Safety-Monitor] The application is unfocused during an automation sequence. Automation stopped.", log_type=LogType.ERROR)
+            aprint("[Safety-Monitor] The application is unfocused during an automation run. Automation terminated.", log_type=LogType.ERROR)
             raise AmiyaExit()
      
     def __safe_get_sequence(self, app: App, sequence_name: str) -> AutomationSequence:

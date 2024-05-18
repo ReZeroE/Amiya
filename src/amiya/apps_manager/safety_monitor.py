@@ -3,8 +3,8 @@ import time
 import psutil
 import subprocess
 from amiya.utils.helper import *
-from amiya.utils.constants import GET_FOCUSED_PID_EXE
-from amiya.exceptions.exceptions import AmiyaBaseException, Amiya_AppNotFocusedException
+from amiya.utils.constants import GET_FOCUSED_PID_EXE, DEVELOPMENT
+from amiya.exceptions.exceptions import AmiyaBaseException, Amiya_AppNotFocusedException, AmiyaExit
 
 class SafetyMonitor:
     def __init__(self, app_process: psutil.Process):
@@ -23,15 +23,13 @@ class SafetyMonitor:
         if focused_pid == self.app_process.pid:
             return True
 
-        # print(f"Focused {focused_pid}")
-        # print(f"App: {self.app_process.pid}")
-        # print(f"Cached: {self.cached_pids}")
-
         if focused_pid not in self.cached_pids:
             self.__update_cached_pids()  # Update the cache if PID not found initially
             
             if focused_pid not in self.cached_pids:
-                aprint(f"Focused PID: [{focused_pid}], Original App PID: [{self.app_process.pid}], Cached PID: {self.cached_pids}", log_type=LogType.ERROR, new_line_no_prefix=False)
+                if DEVELOPMENT:
+                    print("")
+                    aprint(f"Focused PID: {focused_pid}, Original App PID: {self.app_process.pid}, Cached PIDs: {self.cached_pids}", log_type=LogType.ERROR, new_line_no_prefix=False)
                 raise Amiya_AppNotFocusedException()
             else:
                 return True
@@ -55,14 +53,23 @@ class SafetyMonitor:
     
     
     @staticmethod
-    def get_focused_pid() -> int|None:
-        result = subprocess.run([GET_FOCUSED_PID_EXE], capture_output=True, text=True)
+    def get_focused_pid(tries: int = 3) -> int|None:
+        # :param tries: specifies how many times to try on failed PID fetch attempts
+        if tries <= 0:
+            aprint(f"ERROR: get_focuse_pid() cannot be called with {tries} tries.", log_type=LogType.ERROR)
+            raise AmiyaExit()
+        
     
         pid = None
-        if result.returncode == 0:
-            pid = result.stdout.strip()
-        else:
-            raise AmiyaBaseException(f"Embeded script 'GET_FOCUSED_PID' failed with return code {result.returncode}")
+        for _ in range(tries):
+            result = subprocess.run([GET_FOCUSED_PID_EXE], capture_output=True, text=True)
+            if result.returncode == 0:
+                pid = result.stdout.strip()
+                break
+            time.sleep(1)
+            
+        if pid == None:
+            raise AmiyaBaseException(f"Embeded script 'GET_FOCUSED_PID' failed after {tries} tries with return code {result.returncode}")
         
         try:
             pid = int(pid)
@@ -78,10 +85,5 @@ class SafetyMonitor:
         '''
         # for p in sorted(psutil.process_iter(), key=lambda x: x.create_time()):
         #     print(f"{p.name()}, {p.create_time()}, {p.pid}")
-        
-        
-        # print(self.monitor_create_time)
-        
-        # print("\n\n")
         
         return {p.pid for p in psutil.process_iter(['pid']) if p.create_time() > self.monitor_create_time}

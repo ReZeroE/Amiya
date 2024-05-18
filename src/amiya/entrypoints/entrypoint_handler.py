@@ -119,7 +119,9 @@ class AmiyaEntrypointHandler:
             seq_name=args.seq_name,
             global_delay=args.global_delay,
             terminate_on_finish=args.terminate,
-            no_confirmation=args.no_confirmation
+            no_confirmation=args.no_confirmation,
+            sleep_afterward=args.sleep,
+            shutdown_afterward=args.shutdown
         )
 
 

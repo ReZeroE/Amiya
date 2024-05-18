@@ -119,6 +119,8 @@ def start_amiya():
     start_parser.add_argument('--global-delay', '-g', type=int, default=-1, help='Add a global delay to the sequence during execution')
     start_parser.add_argument('--terminate', '-t', default=False, action='store_true', help='Terminate the application on automation completion')
     start_parser.add_argument('--no-confirmation', '-nc', default=False, action='store_true', help='Run the automation without confirmation')
+    start_parser.add_argument('--sleep', default=False, action='store_true', help='Put PC to sleep after automation finishes (overwrites --shutdown)')
+    start_parser.add_argument('--shutdown', default=False, action='store_true', help='Shutdown PC after automation finishes')
     start_parser.set_defaults(func=entrypoint_handler.run_automations_sequences)
     
     

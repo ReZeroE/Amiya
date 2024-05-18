@@ -39,7 +39,7 @@ class App:
         # as its started since any callback to is_running() (while a new instance of the application
         # is created) will overwrite the previous process.
         #
-        # Use get_app_process() instead.
+        # Use get_app_process() instead to get the application's current process.
         self.process: psutil.Process = None
     
         self.app_config_dirpath     = os.path.join(APPS_DIRECTORY, self.get_reformatted_app_name())
@@ -94,13 +94,15 @@ class App:
             return True
         
         # If the application is not running, then start the application
-        if self.verified == True:   
-            subprocess.Popen([self.exe_path], shell=True)
+        if self.verified:
+            process = subprocess.Popen([self.exe_path], shell=True)
             
             if self.wait_to_start():
                 self.bring_to_foreground()
                 return True
+
             return False
+        
         else:
             raise Amiya_AppInvalidPathException(path=self.exe_path)
 
@@ -117,7 +119,7 @@ class App:
         if timeout == 0:
             return self.get_app_process() != None
         
-        # Timeout will ensure the application is still running after timeout seconds.
+        # Timeout will ensure the application is still running after timeout seconds
         if self.get_app_process() != None:
             time.sleep(timeout)
             return self.get_app_process() != None
@@ -147,6 +149,8 @@ class App:
                     success = WindowUtils.bring_to_foreground(self.process.pid)
                     if success:
                         return
+                else:
+                    raise Exception()
         except Exception as ex:
             raise AmiyaBaseException(f"The app '{self.name}' is currently not running, therefore can't be brought to foreground ({ex}).")
 

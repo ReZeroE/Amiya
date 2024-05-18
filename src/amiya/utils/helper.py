@@ -12,7 +12,7 @@ from screeninfo import get_monitors
 from datetime import datetime
 from termcolor import colored
 from amiya.utils import constants
-from amiya.utils.constants import BASENAME, DATETIME_FORMAT, TIME_FORMAT # "Amiya"
+from amiya.utils.constants import BASENAME, DATETIME_FORMAT, TIME_FORMAT, DEVELOPMENT # "Amiya"
 
 def verify_platform() -> bool:
     """
@@ -251,7 +251,7 @@ class DatetimeHandler:
 # ===================================================
 
 class SpinnerMessage(threading.Thread):
-    def __init__(self, start_message, end_message, spin_delay):
+    def __init__(self, start_message, end_message="", spin_delay=0.1):
         super().__init__()
         self.running = False
         self.start_message = start_message
@@ -268,6 +268,11 @@ class SpinnerMessage(threading.Thread):
         time.sleep(0.1)
         aprint(f"\n{self.end_message}")
 
+    def end_run(self):
+        self.running = False
+        self.join()
+
+    # Thread function only. Doen't call directly!!!!!!
     def run(self):
         try:
             while self.running:
@@ -332,3 +337,46 @@ class WindowUtils:
             return (psutil.Process(pid).name(), thread_id, pid)
         except:
             return None
+
+class ProcessHandler:
+    
+
+    @staticmethod
+    def get_related_processes(process_pid: int):
+        process = psutil.Process(process_pid)
+        if not process.is_running():
+            return None, None
+        
+        parent_procs: list[psutil.Process] = []
+        children_procs: list[psutil.Process] = []
+               
+        try:
+            parent_procs = process.parents()
+            children_procs = process.children(recursive=True)
+        except:
+            pass
+
+        return parent_procs, children_procs
+    
+    @staticmethod
+    def kill_pid(pid):
+        try:
+            proc = psutil.Process(pid)
+            if proc.is_running():
+                proc.kill()
+                return True
+        
+        except psutil.NoSuchProcess:
+            if DEVELOPMENT:
+                aprint(f"[DEV] Unabled to kill proc {pid} because it's already closed.")
+        except Exception as ex:
+            if DEVELOPMENT:
+                aprint(f"[DEV] Unabled to kill proc {pid} ({ex}).")
+        return False
+
+    
+    @staticmethod
+    def kill_pids(pids: list[int], excluding_pids: list[int] = []):
+        for pid in pids:
+            if pid not in excluding_pids:
+                ProcessHandler.kill_pid(pid)

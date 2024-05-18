@@ -41,4 +41,5 @@ GET_WINDOW_SIZE_EXE     = os.path.join(BIN_DIRECTORY, "get_window_size.exe")
 
 # Global variable to identify whether the program is in CLI mode
 # MUST BE USED AS constants.CLI_MODE (only this accesses the re-bind value)
-CLI_MODE = False
+CLI_MODE    = False
+AMIYA_PID   = os.getpid()
