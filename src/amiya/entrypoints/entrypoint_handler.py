@@ -7,6 +7,7 @@ from amiya.module_utilities.search_controller import SearchController
 from amiya.module_utilities.power_controller import PowerUtils
 from amiya.module_utilities.cursor_controller import CursorController
 from amiya.module_utilities.continuous_click_controller import ContinuousClickController
+from amiya.module_utilities.url_tracker import URLTracker
 from amiya.module_utilities.dev_features import DevController
 
 from amiya.exceptions.exceptions import *
@@ -211,6 +212,12 @@ By invoking the elevate command, you are granting `amiya` admin access.
         except Exception as e:
             aprint(f"Failed to elevate privileges: {e}")
         raise AmiyaExit()
+
+
+    def track_url(self, args):
+        url_monitor = URLTracker()
+        url_monitor.safe_track_changes(args.url, args.interval)
+
 
     # =================================================
     # ================| SCHEDULER | ===================

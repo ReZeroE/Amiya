@@ -177,6 +177,11 @@ def start_amiya():
     start_parser.set_defaults(func=entrypoint_handler.elevate)
     
     
+    start_parser = subparsers.add_parser('track-url', help='Track URL to monitor anchor href changes.')
+    start_parser.add_argument('--url', type=str, default="https://mc.kurogames.com/", help='The website URL to track')
+    start_parser.add_argument('--interval', "-i", type=int, default=0, help='The interval duration between GET requests (seconds). Defaulted to 0.')
+    start_parser.set_defaults(func=entrypoint_handler.track_url)
+    
     # =================================================
     # ================| SCHEDULER | ===================
     # =================================================

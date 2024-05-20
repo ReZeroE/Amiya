@@ -39,11 +39,23 @@ def atext(text: str, log_type: LogType = LogType.NORMAL) -> str:
     rtext = colored(text, log_type.value)
     return f"[{prefix}] {rtext}"
 
-def aprint(text: str, log_type: LogType = LogType.NORMAL, end="\n", new_line_no_prefix=True, file=sys.stdout, flush=True):
+def aprint(
+    text: str, 
+    log_type: LogType   = LogType.NORMAL, 
+    end: str            = "\n", 
+    submodule_name: str = "", 
+    new_line_no_prefix  = True, 
+    file                = sys.stdout, 
+    flush               = True
+):
     # The new_line_no_prefix param coupled with \n in the text param will put the
     # text after the new line character on the next line, but without a prefix.
     if "\n" in text and new_line_no_prefix == True:
         text = text.replace("\n", f"\n        ")
+    
+    submodule_name = Printer.to_purple(submodule_name)
+    submodule_name = f"[{submodule_name}] "
+    text = submodule_name + text
     
     rtext = atext(text, log_type)
     print(rtext, end=end, file=sys.stdout)
@@ -339,7 +351,6 @@ class WindowUtils:
             return None
 
 class ProcessHandler:
-    
 
     @staticmethod
     def get_related_processes(process_pid: int):
