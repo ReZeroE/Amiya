@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+import platform
 import shutil
 import threading
 import pyautogui
@@ -12,7 +13,7 @@ from screeninfo import get_monitors
 from datetime import datetime
 from termcolor import colored
 from amiya.utils import constants
-from amiya.utils.constants import BASENAME, DATETIME_FORMAT, TIME_FORMAT, DEVELOPMENT # "Amiya"
+from amiya.utils.constants import BASENAME, COMMAND, DATETIME_FORMAT, TIME_FORMAT, DEVELOPMENT # "Amiya"
 
 def verify_platform() -> bool:
     """
@@ -39,6 +40,7 @@ def atext(text: str, log_type: LogType = LogType.NORMAL) -> str:
     rtext = colored(text, log_type.value)
     return f"[{prefix}] {rtext}"
 
+
 def aprint(
     text: str, 
     log_type: LogType   = LogType.NORMAL, 
@@ -53,28 +55,30 @@ def aprint(
     if "\n" in text and new_line_no_prefix == True:
         text = text.replace("\n", f"\n        ")
     
-    submodule_name = Printer.to_purple(submodule_name)
-    submodule_name = f"[{submodule_name}] "
-    text = submodule_name + text
+    if submodule_name:
+        submodule_name = Printer.to_purple(submodule_name)
+        submodule_name = f"[{submodule_name}] "
+        text = submodule_name + text
     
     rtext = atext(text, log_type)
-    print(rtext, end=end, file=sys.stdout)
-    sys.stdout.flush()
+    print(rtext, end=end, file=file, flush=flush)
+
 
 def color_cmd(text: str, with_quotes: bool = False):
     text = text.lower()
     
     if constants.CLI_MODE == True:
-        text = text.replace("amiya ", "")
+        text = text.replace(COMMAND, "").strip()
     else:
-        if not text.startswith("amiya"):
-            text = f"amiya {text}"
+        if not text.startswith(COMMAND):
+            text = f"{COMMAND} {text}"
             
     colored_cmd = colored(text, "light_cyan")
     
     if with_quotes:
         return f"'{colored_cmd}'"
     return colored_cmd
+
 
 # =================================================
 # ============| CENTER TEXT HELPER | ==============
@@ -151,7 +155,6 @@ class Printer:
         return Printer.hex_text(text, "#f27e82")
 
     
-
 def bool_to_str(boolean: bool, true_text="Valid", false_text="Invalid"):
     CHECKMARK = "\u2713"
     CROSSMARK = "\u2717"
@@ -162,10 +165,6 @@ def bool_to_str(boolean: bool, true_text="Valid", false_text="Invalid"):
 # ========================================================
 # =============| PERMISSION VERIFICATION | ===============
 # ========================================================
-
-import os
-import sys
-import platform
 
 def is_admin() -> bool:
     try:
@@ -233,6 +232,7 @@ def shorten_display_path(path: str):
 
     return simplified_path_str
 
+
 # ===================================================
 # =============| DATETIME HANDLER | =================
 # ===================================================
@@ -255,7 +255,6 @@ class DatetimeHandler:
     @staticmethod
     def str_to_datetime(datetime_str: str):
         return datetime.strptime(datetime_str, DATETIME_FORMAT)
-    
     
     
 # ===================================================
@@ -295,6 +294,7 @@ class SpinnerMessage(threading.Thread):
         except KeyboardInterrupt:
             pass
         
+        
 # ===================================================
 # ==============| TERMINAL RESIZE | =================
 # ===================================================
@@ -317,6 +317,7 @@ def resize_terminal(min_cols, min_rows):
     if current_rows < min_rows:
         # Set the desired size
         os.system(f'mode con: cols={current_cols} lines={min_rows+5}')
+
 
 # ===================================================
 # ==============| TERMINAL RESIZE | =================
@@ -349,6 +350,11 @@ class WindowUtils:
             return (psutil.Process(pid).name(), thread_id, pid)
         except:
             return None
+
+
+# ===================================================
+# ==============| PROCESS HANDLER | =================
+# ===================================================
 
 class ProcessHandler:
 

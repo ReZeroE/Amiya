@@ -1,6 +1,9 @@
 import multiprocessing
 import getpass
 import subprocess
+import tabulate, io
+from tabulate import tabulate
+import argparse
 
 from amiya.apps_manager.apps_manager import AppsManager
 from amiya.module_utilities.search_controller import SearchController
@@ -16,7 +19,7 @@ from amiya.utils.helper import *
 from amiya.scheduler.scheduler import AmiyaScheduler
 from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
 from amiya.utils import constants
-from amiya.utils.constants import VERSION, VERSION_DESC, AUTHOR, AUTHOR_DETAIL, REPOSITORY
+from amiya.utils.constants import COMMAND, VERSION, VERSION_DESC, AUTHOR, AUTHOR_DETAIL, REPOSITORY
 from amiya.module_utilities.volume_controller import AmiyaVolumeControllerUI, start_volume_control_ui
 
 
@@ -65,9 +68,13 @@ class AmiyaEntrypointHandler:
     def repo(self, args):
         aprint(REPOSITORY)
     
-    def print_help(self, args, parser):
-        help_cmd = color_cmd("help", with_quotes=True)
-        aprint(f"Command {help_cmd} is not implemented.")
+    # def print_help(self, args, parser):
+    #     # help_cmd = color_cmd("help", with_quotes=True)
+    #     # aprint(f"Command {help_cmd} is not implemented.")
+        
+    #     parser.print_help()
+        
+
     
     # =================================================
     # ============| ADD/REMOVE/SHOW APPS | ============
@@ -180,7 +187,7 @@ class AmiyaEntrypointHandler:
 
     def click_continuously(self, args):
         cc_controller = ContinuousClickController()
-        cc_controller.click_continuously(args.count, args.delay, args.hold_time, args.start_after, args.quite)
+        cc_controller.click_continuously(args.count, args.interval, args.hold_time, args.start_after, args.quite)
 
     def elevate(self, args):
         if is_admin():
@@ -216,7 +223,7 @@ By invoking the elevate command, you are granting `amiya` admin access.
 
     def track_url(self, args):
         url_monitor = URLTracker()
-        url_monitor.safe_track_changes(args.url, args.interval)
+        url_monitor.safe_track_changes(args.url, args.interval, args.open)
 
 
     # =================================================
@@ -305,6 +312,7 @@ r"""
         self.print_title()
         self.print_init_help()
         
+        cli_env_alert = False
         # ================| CLI LOOP |================
         while True:
             try:
@@ -318,17 +326,33 @@ r"""
                 elif continue_loop == 2:
                     break
                 
+
+                # Verify that the stdout and stderr aren't closed
+                if sys.stdout.closed or sys.stderr.closed:
+                    text = "STDOUT and STDERR" if sys.stdout.closed and sys.stderr.closed \
+                        else "STDOUT" if sys.stdout.closed \
+                        else "STDERR"
+                    aprint(f"System {text} has been closed unexpectedly. Exiting Amiya CLI environment...")
+                    sys.exit()
+
                 
-        # =============| PARSE ARGUMENT |=============    
+        # =============| PARSE ARGUMENT |=============
+                if user_input.startswith(COMMAND):
+                    user_input = user_input.lstrip(COMMAND).strip() 
+                    
+                    if not cli_env_alert:
+                        aprint(Printer.to_lightgrey(f"Currently in the Amiya CLI environment. You may call `{user_input}` directly without the `amiya` prefix."))
+                        cli_env_alert = not cli_env_alert
+                    
                 args = parser.parse_args(user_input.split())
                 if hasattr(args, 'func'):
                     try:
                         args.func(args)
                     except AmiyaExit:
                         continue
-                    # except AmiyaBaseException as ex:
-                    #     aprint(ex, log_type=LogType.ERROR)
-                    #     continue
+                    except Exception as ex:
+                        aprint(f"{type(ex)}: {ex}. Exiting...", log_type=LogType.ERROR)
+                        exit()
                 else:
                     parser.print_help()
             

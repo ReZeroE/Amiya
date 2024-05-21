@@ -12,14 +12,15 @@ class ContinuousClickController:
         self.pause = False
     
     def click_continuously(
-        self, count: int = -1, 
-        delay: float = 1.0, 
+        self, 
+        count: int = -1, 
+        interval: float = 1.0, 
         hold_time: float = 0.1, 
         start_after: float = 5.0,
         quite: bool = False
     ):
         
-        aprint(f"Uniform clicking starting in {start_after} seconds, press ESC key anytime to stop...\nClick count: {"INF" if count == -1 else count}\nDelay between clicks: {delay} seconds\nTime between press and release: {hold_time} seconds\nQuite: {quite}")
+        aprint(f"Uniform clicking starting in {start_after} seconds, press ESC key anytime to stop...\nClick count: {"INF" if count == -1 else count}\Interval between clicks: {interval} seconds\nTime between press and release: {hold_time} seconds\nQuite: {quite}")
         
         listener = keyboard.Listener(on_press=self.__on_press)
         listener.start()
@@ -45,7 +46,7 @@ class ContinuousClickController:
                     aprint(f"[{click_count+1}/{"INF" if count == -1 else count}] Clicking ({x}, {y})...{buffer}", end="\r")
                 
                 pyautogui.mouseDown()
-                self.__click(hold_time, delay)
+                self.__click(hold_time, interval)
                 click_count += 1
                 
                 
@@ -55,11 +56,11 @@ class ContinuousClickController:
             listener.stop()
             raise AmiyaExit()
     
-    def __click(self, hold_time, delay):
+    def __click(self, hold_time, interval):
         pyautogui.mouseDown()
         time.sleep(hold_time)
         pyautogui.mouseUp()
-        time.sleep(delay)
+        time.sleep(interval)
                 
     def __on_press(self, button):
         if button == keyboard.Key.esc:

@@ -4,6 +4,7 @@ import os
 # ==========| CONSTANTS | ==========
 # ==================================
 BASENAME        = "Amiya"
+COMMAND         = "amiya"
 VERSION         = "0.0.3"
 VERSION_DESC    = "Beta"
 DEVELOPMENT     = VERSION_DESC.lower() != "stable"

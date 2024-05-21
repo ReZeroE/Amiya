@@ -1,6 +1,6 @@
 from amiya.utils.helper import *
 from amiya.exceptions.exceptions import AmiyaExit
-
+import webbrowser
 
 try:
     from selenium import webdriver
@@ -10,7 +10,7 @@ try:
     from bs4 import BeautifulSoup
     import time
 except ImportError as ex:
-    aprint("The following packages/external-drivers are required to run the URLTracker:\n- selenium\n- bs4\n- requests\n- webdriver-manager\n- <chrome web-driver>", log_type=LogType.ERROR)
+    aprint("The following packages/external-drivers are required to run the URLTracker:\n- selenium\n- bs4\n- webdriver-manager", log_type=LogType.ERROR)
 
 
 class URLTracker:
@@ -29,7 +29,7 @@ class URLTracker:
         
         try:
             self.driver.get(url)
-            time.sleep(3)
+            time.sleep(5) # Wait for webpage to load
             soup = BeautifulSoup(self.driver.page_source, 'html.parser')
             anchors_data = [
                 {
@@ -39,11 +39,16 @@ class URLTracker:
                 } 
                 for anchor in soup.find_all('a', href=True)
             ]
-            self.errors_count = 0
+            
+            if self.errors_count > 0:
+                self.errors_count = 0
+                aprint("Recovered from error. Resetting error count.", submodule_name="URL-Tracker")
+            
             return anchors_data
         except Exception as e:
             if self.errors_count > ERROR_THRESHOLD:
                 aprint(f"Number of request errors has exceeded the threshold ({self.errors_count}).\nTerminating URL tracker and its associated webdriver.", log_type=LogType.ERROR)
+                self.driver.quit()
                 raise AmiyaExit()
             
             aprint(f"Error occurred while fetching for the links: {str(e)}", log_type=LogType.ERROR)
@@ -51,13 +56,13 @@ class URLTracker:
             self.errors_count += 1
             return []
 
-    def safe_track_changes(self, url: str, interval: int = 0):
+    def safe_track_changes(self, url: str, interval: int = 0, open_when_detected: bool = False):
         if url == None or len(url) == 0:
             aprint("URL must be specified with the `--url` argument.", log_type=LogType.ERROR)
         
         aprint(f"Starting tracker on URL `{url}`...", submodule_name="URL-Tracker")
         try:
-            self.__track_changes(url, interval)
+            self.__track_changes(url, interval, open_when_detected)
         except KeyboardInterrupt:
             if self.rounds > 1:
                 print("")
@@ -72,13 +77,14 @@ class URLTracker:
             aprint("Webdriver exit complete.")
             raise AmiyaExit()
 
-    def __track_changes(self, url, interval):
+    def __track_changes(self, url, interval, open_when_detected):
         original_anchors = self.get_links(url)
         original_href_list = [original_anchor["href"] for original_anchor in original_anchors]
         aprint(f"Webdriver initialized. Initial fetch returned {len(original_href_list)} HREFs from the site.", submodule_name="URL-Tracker")
         self.__print_new_anchors(original_anchors, initialization=True)
         
         while True:
+            starting_time = time.time()
             new_anchors = []
             has_diff = False
             
@@ -94,11 +100,18 @@ class URLTracker:
             if has_diff: # If there is a new anchor href, verbose and reset original anchor list
                 self.__print_new_anchors(new_anchors)
                 original_href_list = [curr_anchor["href"] for curr_anchor in current_anchors]
+                
+                if open_when_detected:
+                    aprint("Opening the new href links...")
+                    for href_url in original_href_list:
+                        webbrowser.open_new_tab(href_url)
+                
             else:
-                aprint(f"Rounds {self.rounds} check complete. No anchor href change detected.", end="\r", flush=True, submodule_name="URL-Tracker")
+                aprint(f"Rounds {self.rounds} check complete ({round(time.time() - starting_time, 2)} seconds). No anchor href change detected.    ", end="\r", flush=True, submodule_name="URL-Tracker")
 
             self.rounds += 1
             time.sleep(interval)
+            starting_time = time.time()
     
     def __print_new_anchors(self, new_anchors: list[dict], initialization: bool = False):
         # Header
@@ -121,5 +134,6 @@ class URLTracker:
         
         if self.rounds > 1:
             print("")
+        text = text.rstrip("\n")
         print(text, flush=True)
 
