@@ -47,6 +47,8 @@ class AppSyncController:
     
     
     def sync(self, app: App):
+        # :return: configured app instance
+        
         # If app's path verification failed
         if app.verified == False:
             app_basename = os.path.basename(app.exe_path)
@@ -57,13 +59,13 @@ class AppSyncController:
                 app.set_new_path(new_path)  # Set new path
                 app.set_new_uuid()          # Set new system UUID
                 app.save_app_config()       # Save new config
-                return True                 # ---> New path set successfully
+                return app                  # ---> New path set successfully
             else:
                 app.set_new_uuid()          # Set new system UUID
                 app.save_app_config()       # Save new config
-                return False                # ---> App doesn't exist on new machine
+                return None                 # ---> App doesn't exist on new machine
         else:
             app.set_new_uuid()              # Set new system UUID
             app.save_app_config()           # Save new config
-            return True                     # ---> App original path works on new machine
+            return app                      # ---> App original path works on new machine
 

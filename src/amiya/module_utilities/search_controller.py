@@ -25,4 +25,3 @@ class SearchController:
         search_content = input(atext("What would you like to search? ")).strip()
         if len(search_content) > 0:
             self.search(search_content)
-        

@@ -9,175 +9,234 @@ import subprocess
 
 from termcolor import colored
 from amiya.entrypoints.entrypoint_handler import AmiyaEntrypointHandler
-from amiya.utils.helper import aprint, atext, verify_platform, is_admin, Printer
+from amiya.entrypoints.help_format_handler import HelpFormatHandler
+from amiya.utils.helper import aprint, atext, verify_platform, is_admin, Printer, color_cmd
+from amiya.utils.constants import COMMAND
 from amiya.exceptions.exceptions import AmiyaOSNotSupported, AmiyaExit
 
 
 class AmiyaArgParser(argparse.ArgumentParser):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.groups = []
+
+    def add_group(self, title, description=None):
+        group = {'title': title, 'description': description, 'parsers': []}
+        self.groups.append(group)
+        return group
+
+    def add_parser_to_group(self, group, parser):
+        group['parsers'].append(parser)
+        
     def error(self, message):
         command = message.split("'")[1] if "invalid choice:" in message else None
         helpt = Printer.to_purple("help")
         aprint(f"Command not recognized: {command}\nType '{helpt}' for commands list")
         self.exit(2)
-        
-        
-
 
 
 def start_amiya():
     entrypoint_handler = AmiyaEntrypointHandler()
+    help_format_handler = HelpFormatHandler()
     
-    parser = AmiyaArgParser(prog='amiya', description="Amiya CLI Automation Package")
+    parser = AmiyaArgParser(prog=COMMAND, description="Amiya CLI Automation Package")
     subparsers = parser.add_subparsers(dest='command', help='commands')
 
     help_parser = subparsers.add_parser('help', help='Show this help message and exit')
-    help_parser.set_defaults(func=lambda args: entrypoint_handler.print_help(args, parser))
+    help_parser.set_defaults(func=lambda args: help_format_handler.print_help(args, parser))
 
     # =================================================
     # =================| DEVELOPMENT | ================
     # =================================================
-
-    start_parser = subparsers.add_parser('dev', help='[DEV] Developer\'s commands.')
-    start_parser.add_argument('--objects', '-obj', action='store_true', help='Show all controller objects and their addresses.')
-    start_parser.add_argument('--refresh', '-ref', action='store_true', help='Refresh all controller objects.')
-    start_parser.add_argument('--code', '-c', action='store_true', help='Open development environment with VSCode.')
-    start_parser.add_argument('--isadmin', '-ia', action='store_true', help='Show whether the main thread has admin access.')
-    start_parser.set_defaults(func=entrypoint_handler.DEV)
-
-
-    # =================================================
-    # ====================| ABOUT | ===================
-    # =================================================
-
-    start_parser = subparsers.add_parser('version', help='Verbose module version')
-    start_parser.set_defaults(func=entrypoint_handler.version)
-                              
-    start_parser = subparsers.add_parser('author', help='Verbose module author')
-    start_parser.set_defaults(func=entrypoint_handler.author)
+    dev_group = parser.add_group('Development', 'Developer\'s commands. Open available when [constants.DEVELOPMENT=True].')
     
-    start_parser = subparsers.add_parser('repo', help='Verbose module repository link')
-    start_parser.set_defaults(func=entrypoint_handler.repo)
+    dev_parser = subparsers.add_parser('dev', 
+        help='[DEV] Developer\'s commands.',
+        description='[DEV] Developer\'s commands.'
+    )
+    dev_parser.add_argument('--objects', '-obj', action='store_true', help='Show all controller objects and their addresses.')
+    dev_parser.add_argument('--refresh', '-ref', action='store_true', help='Refresh all controller objects.')
+    dev_parser.add_argument('--code', '-c', action='store_true', help='Open development environment with VSCode.')
+    dev_parser.add_argument('--isadmin', '-ia', action='store_true', help='Show whether the main thread has admin access.')
+    dev_parser.set_defaults(func=entrypoint_handler.DEV)
+    parser.add_parser_to_group(dev_group, dev_parser)
+
+    # ================================================
+    # ===================| ABOUT | ===================
+    # ================================================
+    
+    about_group = parser.add_group('About', 'Get information about the Amiya module in general.')
+    
+    version_parser = subparsers.add_parser('version', help='Verbose module version', description='Verbose module version')
+    version_parser.set_defaults(func=entrypoint_handler.version)
+    parser.add_parser_to_group(about_group, version_parser)
+                              
+    author_parser = subparsers.add_parser('author', help='Verbose module author', description='Verbose module author')
+    author_parser.set_defaults(func=entrypoint_handler.author)
+    parser.add_parser_to_group(about_group, author_parser)
+    
+    repo_parser = subparsers.add_parser('repo', help='Verbose module repository link', description='Verbose module repository link')
+    repo_parser.set_defaults(func=entrypoint_handler.repo)
+    parser.add_parser_to_group(about_group, repo_parser)
+    
 
     # =================================================
     # ============| ADD/REMOVE/SHOW APPS | ============
     # =================================================
 
-    start_parser = subparsers.add_parser('add-app', help='Add a new application')
-    start_parser.set_defaults(func=entrypoint_handler.add_app)
+    apps_group = parser.add_group('App Management', 'Add, remove, and show applications in Amiya\'s app configuration.')
     
-    start_parser = subparsers.add_parser('remove-app', help='Remove an existing application')
-    start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application to remove')
-    start_parser.set_defaults(func=entrypoint_handler.remove_app)
+    add_app_parser = subparsers.add_parser('add-app', help='Add a new application', description='Add a new application')
+    add_app_parser.set_defaults(func=entrypoint_handler.add_app)
+    parser.add_parser_to_group(apps_group, add_app_parser)
     
-    show_apps_parser = subparsers.add_parser('show-apps', help='Show applications')
+    remove_app_parser = subparsers.add_parser('remove-app', help='Remove an existing application', description='Remove an existing application')
+    remove_app_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application to remove')
+    remove_app_parser.set_defaults(func=entrypoint_handler.remove_app)
+    parser.add_parser_to_group(apps_group, remove_app_parser)
+    
+    show_apps_parser = subparsers.add_parser('show-apps', help='Show applications', description='Show applications')
     show_apps_parser.add_argument('--short', '-s', action='store_true', help='Only show the app ID, name, and verification status')
     show_apps_parser.add_argument('--full-path', '-f', action='store_true', help='Show the full path of the applications')
     show_apps_parser.set_defaults(func=entrypoint_handler.show_apps)
+    parser.add_parser_to_group(apps_group, show_apps_parser)
+    
+    show_config_parser = subparsers.add_parser('show-config', help='Show application configuration directory', description='Show application configuration directory')
+    show_config_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application to show the configuration directory of')
+    show_config_parser.add_argument('--all', '-a', action='store_true', help='Show all configuration directory paths (including automation)')
+    show_config_parser.set_defaults(func=entrypoint_handler.show_app_config_dir)
+    parser.add_parser_to_group(apps_group, show_config_parser)
 
-
-    start_parser = subparsers.add_parser('show-config', help='Show application configuration directory')
-    start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application to show the configuration directory of')
-    start_parser.add_argument('--all', '-a', action='store_true', help='Show all configuration directory paths (including automation)')
-    start_parser.set_defaults(func=entrypoint_handler.show_app_config_dir)
 
     # =================================================
     # =================| START APPS | =================
     # =================================================
     
-    start_parser = subparsers.add_parser('start', help='Start an application')
+    start_apps_group = parser.add_group('Application Launcher', 'Start or terminate applications from the CLI.')
+    
+    start_parser = subparsers.add_parser('start', help='Start an application', description='Start an application')
     start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application to start')
     start_parser.set_defaults(func=entrypoint_handler.start)
+    parser.add_parser_to_group(start_apps_group, start_parser)
     
     
     # =================================================
     # ==============| ADD/REMOVE TAGS | ===============
     # =================================================
     
-    start_parser = subparsers.add_parser('add-tag', help='Add a new tag to an application')
-    start_parser.set_defaults(func=entrypoint_handler.add_tag)
+    tags_group = parser.add_group('Tag Management', 'Add or remove tags associated with applications configured with Amiya.')
     
-    start_parser = subparsers.add_parser('remove-tag', help='Remove a tag from an application')
-    start_parser.set_defaults(func=entrypoint_handler.remove_tag)
+    add_tag_parser = subparsers.add_parser('add-tag', help='Add a new tag to an application', description='Add a new tag to an application')
+    add_tag_parser.set_defaults(func=entrypoint_handler.add_tag)
+    parser.add_parser_to_group(tags_group, add_tag_parser)
     
+    remove_tag_parser = subparsers.add_parser('remove-tag', help='Remove a tag from an application', description='Remove a tag from an application')
+    remove_tag_parser.set_defaults(func=entrypoint_handler.remove_tag)
+    parser.add_parser_to_group(tags_group, remove_tag_parser)
     
     # =================================================
     # ========| RECORD/LIST/RUN AUTOMATION |===========
     # =================================================
     
-    start_parser = subparsers.add_parser('list-auto', help='List all the automation sequences of the application')
-    start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application')
-    start_parser.set_defaults(func=entrypoint_handler.list_automation_sequences)
+    automation_group = parser.add_group('Automation', 'Record, show, and run automations in applications.')
     
-    start_parser = subparsers.add_parser('record-auto', help='[Admin Permission Req.] Record an automation sequences of the application')
-    start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application')
-    start_parser.set_defaults(func=entrypoint_handler.record_automation_sequences)
+    list_auto_parser = subparsers.add_parser('list-auto', help='List all the automation sequences of the application', description='List all the automation sequences of the application')
+    list_auto_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application')
+    list_auto_parser.set_defaults(func=entrypoint_handler.list_automation_sequences)
+    parser.add_parser_to_group(automation_group, list_auto_parser)
+    
+    record_auto_parser = subparsers.add_parser('record-auto', help='[Admin Permission Req.] Record an automation sequence of the application', description='[Admin Permission Req.] Record an automation sequence of the application')
+    record_auto_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application')
+    record_auto_parser.set_defaults(func=entrypoint_handler.record_automation_sequences)
+    parser.add_parser_to_group(automation_group, record_auto_parser)
 
-    
-    start_parser = subparsers.add_parser('run-auto', help='[Admin Permission Req.] Record an automation sequences of the application')
-    start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application')
-    start_parser.add_argument('seq_name', nargs='?', default=None, help='Name of the sequence to run')
-    start_parser.add_argument('--global-delay', '-g', type=int, default=-1, help='Add a global delay to the sequence during execution')
-    start_parser.add_argument('--terminate', '-t', default=False, action='store_true', help='Terminate the application on automation completion')
-    start_parser.add_argument('--no-confirmation', '-nc', default=False, action='store_true', help='Run the automation without confirmation')
-    start_parser.set_defaults(func=entrypoint_handler.run_automations_sequences)
+    run_auto_parser = subparsers.add_parser('run-auto', help='[Admin Permission Req.] Run an automation sequence of the application', description='[Admin Permission Req.] Run an automation sequence of the application')
+    run_auto_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application')
+    run_auto_parser.add_argument('seq_name', nargs='?', default=None, help='Name of the sequence to run')
+    run_auto_parser.add_argument('--global-delay', '-g', type=int, default=-1, help='Add a global delay to the sequence during execution')
+    run_auto_parser.add_argument('--terminate', '-t', default=False, action='store_true', help='Terminate the application on automation completion')
+    run_auto_parser.add_argument('--no-confirmation', '-nc', default=False, action='store_true', help='Run the automation without confirmation')
+    run_auto_parser.add_argument('--sleep', default=False, action='store_true', help='Put PC to sleep after automation finishes (overwrites --shutdown)')
+    run_auto_parser.add_argument('--shutdown', default=False, action='store_true', help='Shutdown PC after automation finishes')
+    run_auto_parser.set_defaults(func=entrypoint_handler.run_automations_sequences)
+    parser.add_parser_to_group(automation_group, run_auto_parser)
     
     
     # =================================================
     # ==========| APP UTILITY FEATURES | ==============
     # =================================================
     
-    start_parser = subparsers.add_parser('sync', help='Sync configured applications on new machine OR auto configure application executable paths')
-    start_parser.set_defaults(func=entrypoint_handler.sync)
+    app_utility_group = parser.add_group('Sync Commands', 'Sync (auto-locate) and cleanup applications across different local machines.')
     
-    start_parser = subparsers.add_parser('cleanup', help='Remove all unverified applications')
-    start_parser.set_defaults(func=entrypoint_handler.cleanup)
+    sync_parser = subparsers.add_parser('sync', help='Sync configured applications on new machine OR auto configure application executable paths', description='Sync configured applications on new machine OR auto configure application executable paths')
+    sync_parser.set_defaults(func=entrypoint_handler.sync)
+    parser.add_parser_to_group(app_utility_group, sync_parser)
+    
+    cleanup_parser = subparsers.add_parser('cleanup', help='Remove all unverified applications', description='Remove all unverified applications')
+    cleanup_parser.set_defaults(func=entrypoint_handler.cleanup)
+    parser.add_parser_to_group(app_utility_group, cleanup_parser)
     
     
     # =================================================
     # =============| UTILITY FEATURES | ===============
     # =================================================
     
-    start_parser = subparsers.add_parser('search', help='Initiate a search on the default browser')
-    start_parser.add_argument('search_content', nargs='*', default=None, help='Content of the search')
-    start_parser.set_defaults(func=entrypoint_handler.search)
+    utility_group = parser.add_group('Utility', 'Other useful and easy-to-use utilities provided by the Amiya module.')
     
-    sleep_parser = subparsers.add_parser('sleep', help='Put the PC to sleep after X seconds')
+    search_parser = subparsers.add_parser('search', help='Initiate a search on the default browser', description='Initiate a search on the default browser')
+    search_parser.add_argument('search_content', nargs='*', default=None, help='Content of the search')
+    search_parser.set_defaults(func=entrypoint_handler.search)
+    parser.add_parser_to_group(utility_group, search_parser)
+    
+    sleep_parser = subparsers.add_parser('sleep', help='Put the PC to sleep after X seconds', description='Put the PC to sleep after X seconds')
     sleep_parser.add_argument('delay', nargs='?', type=int, default=0, help='Delay in seconds before sleep')
     sleep_parser.set_defaults(func=lambda args: entrypoint_handler.sleep(args, sleep_parser))
+    parser.add_parser_to_group(utility_group, sleep_parser)
     
-    shutdown_parser = subparsers.add_parser('shutdown', help='Shutdown PC after X seconds')
+    shutdown_parser = subparsers.add_parser('shutdown', help='Shutdown PC after X seconds', description='Shutdown PC after X seconds')
     shutdown_parser.add_argument('delay', nargs='?', type=int, default=0, help='Delay in seconds before shutdown')
     shutdown_parser.set_defaults(func=lambda args: entrypoint_handler.shutdown(args, shutdown_parser))
+    parser.add_parser_to_group(utility_group, shutdown_parser)
+    
+    uuid_parser = subparsers.add_parser('uuid', help='Display system UUID', description='Display system UUID')
+    uuid_parser.set_defaults(func=entrypoint_handler.display_system_uuid)
+    parser.add_parser_to_group(utility_group, uuid_parser)
+    
+    pixel_parser = subparsers.add_parser('pixel', help='Track cursor position and color', description='Track cursor position and color')
+    pixel_parser.add_argument('--color', '-c', action='store_true', help='Show pixel coordinate as well as the pixel\'s color hex value.')
+    pixel_parser.set_defaults(func=entrypoint_handler.track_cursor)
+    parser.add_parser_to_group(utility_group, pixel_parser)
+    
+    volume_parser = subparsers.add_parser('volume', help='Open simple application volume control UI', description='Open simple application volume control UI')
+    volume_parser.set_defaults(func=entrypoint_handler.open_volume_control_ui)
+    parser.add_parser_to_group(utility_group, volume_parser)
+    
+    click_parser = subparsers.add_parser('click', help='Continuously click mouse.', description='Continuously click mouse.')
+    click_parser.add_argument('--count', '-c', type=int, default=-1, help='Number of clicks. Leave empty (default) to run forever')
+    click_parser.add_argument('--interval', '-d', type=int, default=1, help='Interval delay (seconds) between clicks')
+    click_parser.add_argument('--hold-time', '-ht', type=int, default=0.1, help='Delay (seconds) between click press and release')
+    click_parser.add_argument('--start-after', '-sa', type=int, default=3, help='Delay (seconds) before the clicks start')
+    click_parser.add_argument('--quiet', '-q', action='store_true', default=False, help='Run without verbosing progress')
+    click_parser.set_defaults(func=entrypoint_handler.click_continuously)
+    parser.add_parser_to_group(utility_group, click_parser)
+    
+    elevate_parser = subparsers.add_parser('elevate', help='Elevate `amiya` permissions.', description='Elevate `amiya` permissions.')
+    elevate_parser.add_argument('--explain', action='store_true', help='Explain why this is needed and what will happen.')
+    elevate_parser.set_defaults(func=entrypoint_handler.elevate)
+    parser.add_parser_to_group(utility_group, elevate_parser)
+    
+    track_url_parser = subparsers.add_parser('track-url', help='Track URL to monitor anchor href changes.', description='Track URL to monitor anchor href changes.')
+    track_url_parser.add_argument('--url', type=str, default="https://mc.kurogames.com/", help='The website URL to track')
+    track_url_parser.add_argument('--interval', "-i", type=int, default=0, help='The interval duration between GET requests (seconds). Defaulted to 0.')
+    track_url_parser.add_argument('--open', "-o", action='store_true', default=False, help='Open the URL when it is detected as new.')
+    track_url_parser.set_defaults(func=entrypoint_handler.track_url)
+    parser.add_parser_to_group(utility_group, track_url_parser)
+
     
     
-    start_parser = subparsers.add_parser('uuid', help='Display system UUID')
-    start_parser.set_defaults(func=entrypoint_handler.display_system_uuid)
-    
-    
-    start_parser = subparsers.add_parser('pixel', help='Track cursor position and color')
-    start_parser.add_argument('--color', '-c', action='store_true', help='Show pixel coordinate as well as the pixel\'s color hex value.')
-    start_parser.set_defaults(func=entrypoint_handler.track_cursor)
-    
-    
-    start_parser = subparsers.add_parser('volume', help='Open simple application volume control UI')
-    start_parser.set_defaults(func=entrypoint_handler.open_volume_control_ui)
-    
-    start_parser = subparsers.add_parser('click', help='Continuously click mouse.')
-    start_parser.add_argument('--count', '-c', type=int, default=-1, help='Number of clicks. Leave empty (default) to run forever')
-    start_parser.add_argument('--delay', '-d', type=int, default=1, help=' Delay (second) between clicks')
-    start_parser.add_argument('--hold-time', '-ht', type=int, default=0.1, help='Delay (second) between click press and release')
-    start_parser.add_argument('--start-after', '-sa', type=int, default=3, help='Delay (second) before the clicks start')
-    start_parser.add_argument('--quite', '-q', action="store_true", default=False, help='Run without verbosing progress')
-    start_parser.set_defaults(func=entrypoint_handler.click_continuously)
-    
-    start_parser = subparsers.add_parser('elevate', help='Elevate `amiya` permissions.')
-    start_parser.add_argument('--explain', action='store_true', help='Explain why this is needed and what will happen.')
-    start_parser.set_defaults(func=entrypoint_handler.elevate)
-    
-    
-    # =================================================
-    # ================| SCHEDULER | ===================
-    # =================================================
+    # # =================================================
+    # # ================| SCHEDULER | ===================
+    # # =================================================
     
     # start_parser = subparsers.add_parser('run-scheduler', help='Start and run the scheduler')
     # start_parser.set_defaults(func=entrypoint_handler.run_scheduler)
@@ -208,7 +267,8 @@ def start_amiya():
     if not isadmin:
         # Certain commands require admin permissions to execute
         def blocked_func(args):
-            aprint("Insufficient permission. Please restart the terminal as an administrator.")
+            elevate_cmd = color_cmd("amiya elevate", with_quotes=True)
+            aprint(f"Insufficient permission. Run {elevate_cmd} to elevate permissions first.")
             raise AmiyaExit()
 
         for name, subparser in subparsers.choices.items():
@@ -222,6 +282,7 @@ def start_amiya():
     
     # Check if no command line arguments are provided
     if len(sys.argv) == 1:
+        aprint("Loading Amiya CLI environment...")
         entrypoint_handler.start_cli(parser)
     else:
         # Normal command line execution

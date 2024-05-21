@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+import platform
 import shutil
 import threading
 import pyautogui
@@ -12,7 +13,7 @@ from screeninfo import get_monitors
 from datetime import datetime
 from termcolor import colored
 from amiya.utils import constants
-from amiya.utils.constants import BASENAME, DATETIME_FORMAT, TIME_FORMAT # "Amiya"
+from amiya.utils.constants import BASENAME, COMMAND, DATETIME_FORMAT, TIME_FORMAT, DEVELOPMENT # "Amiya"
 
 def verify_platform() -> bool:
     """
@@ -39,30 +40,45 @@ def atext(text: str, log_type: LogType = LogType.NORMAL) -> str:
     rtext = colored(text, log_type.value)
     return f"[{prefix}] {rtext}"
 
-def aprint(text: str, log_type: LogType = LogType.NORMAL, end="\n", new_line_no_prefix=True, file=sys.stdout, flush=True):
+
+def aprint(
+    text: str, 
+    log_type: LogType   = LogType.NORMAL, 
+    end: str            = "\n", 
+    submodule_name: str = "", 
+    new_line_no_prefix  = True, 
+    file                = sys.stdout, 
+    flush               = True
+):
     # The new_line_no_prefix param coupled with \n in the text param will put the
     # text after the new line character on the next line, but without a prefix.
     if "\n" in text and new_line_no_prefix == True:
         text = text.replace("\n", f"\n        ")
     
+    if submodule_name:
+        submodule_name = Printer.to_purple(submodule_name)
+        submodule_name = f"[{submodule_name}] "
+        text = submodule_name + text
+    
     rtext = atext(text, log_type)
-    print(rtext, end=end, file=sys.stdout)
-    sys.stdout.flush()
+    print(rtext, end=end, file=file, flush=flush)
+
 
 def color_cmd(text: str, with_quotes: bool = False):
     text = text.lower()
     
     if constants.CLI_MODE == True:
-        text = text.replace("amiya ", "")
+        text = text.replace(COMMAND, "").strip()
     else:
-        if not text.startswith("amiya"):
-            text = f"amiya {text}"
+        if not text.startswith(COMMAND):
+            text = f"{COMMAND} {text}"
             
     colored_cmd = colored(text, "light_cyan")
     
     if with_quotes:
         return f"'{colored_cmd}'"
     return colored_cmd
+
 
 # =================================================
 # ============| CENTER TEXT HELPER | ==============
@@ -139,7 +155,6 @@ class Printer:
         return Printer.hex_text(text, "#f27e82")
 
     
-
 def bool_to_str(boolean: bool, true_text="Valid", false_text="Invalid"):
     CHECKMARK = "\u2713"
     CROSSMARK = "\u2717"
@@ -150,10 +165,6 @@ def bool_to_str(boolean: bool, true_text="Valid", false_text="Invalid"):
 # ========================================================
 # =============| PERMISSION VERIFICATION | ===============
 # ========================================================
-
-import os
-import sys
-import platform
 
 def is_admin() -> bool:
     try:
@@ -221,6 +232,7 @@ def shorten_display_path(path: str):
 
     return simplified_path_str
 
+
 # ===================================================
 # =============| DATETIME HANDLER | =================
 # ===================================================
@@ -245,13 +257,12 @@ class DatetimeHandler:
         return datetime.strptime(datetime_str, DATETIME_FORMAT)
     
     
-    
 # ===================================================
 # ===========| MESSAGE WITH SPINNER | ===============
 # ===================================================
 
 class SpinnerMessage(threading.Thread):
-    def __init__(self, start_message, end_message, spin_delay):
+    def __init__(self, start_message, end_message="", spin_delay=0.1):
         super().__init__()
         self.running = False
         self.start_message = start_message
@@ -268,6 +279,11 @@ class SpinnerMessage(threading.Thread):
         time.sleep(0.1)
         aprint(f"\n{self.end_message}")
 
+    def end_run(self):
+        self.running = False
+        self.join()
+
+    # Thread function only. Doen't call directly!!!!!!
     def run(self):
         try:
             while self.running:
@@ -277,6 +293,7 @@ class SpinnerMessage(threading.Thread):
                     time.sleep(self.spin_delay)
         except KeyboardInterrupt:
             pass
+        
         
 # ===================================================
 # ==============| TERMINAL RESIZE | =================
@@ -300,6 +317,7 @@ def resize_terminal(min_cols, min_rows):
     if current_rows < min_rows:
         # Set the desired size
         os.system(f'mode con: cols={current_cols} lines={min_rows+5}')
+
 
 # ===================================================
 # ==============| TERMINAL RESIZE | =================
@@ -332,3 +350,50 @@ class WindowUtils:
             return (psutil.Process(pid).name(), thread_id, pid)
         except:
             return None
+
+
+# ===================================================
+# ==============| PROCESS HANDLER | =================
+# ===================================================
+
+class ProcessHandler:
+
+    @staticmethod
+    def get_related_processes(process_pid: int):
+        process = psutil.Process(process_pid)
+        if not process.is_running():
+            return None, None
+        
+        parent_procs: list[psutil.Process] = []
+        children_procs: list[psutil.Process] = []
+               
+        try:
+            parent_procs = process.parents()
+            children_procs = process.children(recursive=True)
+        except:
+            pass
+
+        return parent_procs, children_procs
+    
+    @staticmethod
+    def kill_pid(pid):
+        try:
+            proc = psutil.Process(pid)
+            if proc.is_running():
+                proc.kill()
+                return True
+        
+        except psutil.NoSuchProcess:
+            if DEVELOPMENT:
+                aprint(f"[DEV] Unabled to kill proc {pid} because it's already closed.")
+        except Exception as ex:
+            if DEVELOPMENT:
+                aprint(f"[DEV] Unabled to kill proc {pid} ({ex}).")
+        return False
+
+    
+    @staticmethod
+    def kill_pids(pids: list[int], excluding_pids: list[int] = []):
+        for pid in pids:
+            if pid not in excluding_pids:
+                ProcessHandler.kill_pid(pid)

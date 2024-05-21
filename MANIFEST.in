@@ -1,4 +1,8 @@
+include requirements.txt
+
 recursive-include src/amiya/bin *.c
 recursive-include src/amiya/bin *.exe
 recursive-include src/amiya/apps *.json
 recursive-include src/amiya/resources *.png
+
+exclude test/test*.py
