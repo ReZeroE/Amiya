@@ -41,18 +41,30 @@ class AppsManager:
                 app = App.read_json(app_config)
                 app = self.__update_hash(app)
                 apps_dict[app.id] = app
-                
+
         return apps_dict
     
     def __update_hash(self, app: App):
         # Updates application executable's hash value automatically every time when the apps are loaded.
+        # 
+        # Syncing logic with hash:
+        # If the hash is different, path is the same: auto update exe hash
+        # Elif hash is the same, path is different (exe_name the same): force `sync`
+        # Elif both the hash and path are different (exe_name the same): force `sync`
+        # Elif hash is null: unable to `sync`
+        
         if app.verified:
             curr_app_exe_hash = HashCalculator.calculate_file_hash(app.exe_path)
             if curr_app_exe_hash != app.exe_hash:
                 app.exe_hash = curr_app_exe_hash
                 app.save_app_config()
         else:
-            app.exe_hash = None
+            # If the application's path does not exist on the current machine, do nothing.
+            # When the apps are loaded, if a path doesn't exist, then the previous hash should
+            # presist until the path is corrected and then the hash will automatically reset.
+            # If the hash is set to None on app load, then the application won't be synced 
+            # properly the next run. 
+            pass
 
         return app
    
@@ -510,18 +522,17 @@ class AppsManager:
         self.__verify_non_empty_apps_dir()
         
         if verbose:
-            aprint(f"Sync all {len(self.apps)} applications on this machine? (This may take a while) [y/n] ", log_type=LogType.WARNING, end="")
+            aprint(f"Sync {len(self.apps)} applications on this machine? (This may take a while) [y/n] ", log_type=LogType.WARNING, end="")
             if input().strip().lower() != "y": return
         
         sync_controller = AppSyncController()
-        
+
         apps = list(self.apps.values())
         for app in apps:
-            aprint(f"Syncing application `{app.name}`... ", end="\r")
+            aprint(f"Syncing application `{app.name}`... ", end="")
             synced_app = sync_controller.sync(app)
             self.apps[app.id] = synced_app
-            aprint("Done")
-        
+            print("Done")
         self.print_apps()
         
         found = len([app for app in self.apps.values() if app.verified == True])
