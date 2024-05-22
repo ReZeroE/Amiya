@@ -8,7 +8,7 @@ class JSONConfigHandler(ABC):
         self.config_file = config_abs_path
         self.config_type = config_type
 
-    def load_config(self) -> dict|list:
+    def load_config(self):
         try:
             with open(self.config_file, "r") as rf:
                 config = json.load(rf)
