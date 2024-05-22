@@ -2,6 +2,7 @@
     "id": 3,
     "name": "Genshin Impact",
     "exe_path": "E:\\Genshin Impact\\launcher.exe",
+    "exe_hash": "fe05bc2ec35d5aa99f201e38b16dee0b11598a5943ff8aceb0ee90bc6a7e87ed",
     "tags": [
         "genshin-impact",
         "genshin",

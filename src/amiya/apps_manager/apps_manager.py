@@ -39,10 +39,20 @@ class AppsManager:
             app_config = os.path.join(APPS_DIRECTORY, app_name, APP_CONFIG_FILENAME)
             if os.path.isfile(app_config):
                 app = App.read_json(app_config)
+                app = self.__update_hash(app)
                 apps_dict[app.id] = app
                 
         return apps_dict
     
+    def __update_hash(self, app: App):
+        # Updates application executable's hash value automatically every time when the apps are loaded.
+        if app.verified:
+            curr_app_exe_hash = HashCalculator.calculate_file_hash(app.exe_path)
+            if curr_app_exe_hash != app.exe_hash:
+                app.exe_hash = curr_app_exe_hash
+                app.save_app_config()
+        return app
+   
    
     # ======================================
     # ===========| CREATE APPS | ===========
@@ -293,6 +303,7 @@ class AppsManager:
         text += f"\nApp ID: {app.id}"  
         text += f"\nApp Tags: {app.tags}"
         text += f"\nApp Config Directory: {app.app_config_dirpath}" 
+        text += f"\nApp Executable Hash: {app.exe_hash}"
         text += f"\nApp Configuration System UUID: {app.sys_uuid}"  
         aprint(text)
         
@@ -506,7 +517,7 @@ class AppsManager:
             app: App = apps[i]
             synced_app = sync_controller.sync(app)
             self.apps[app.id] = synced_app
-            
+        
         self.print_apps()
         
         found = len([app for app in apps if app.verified == True])

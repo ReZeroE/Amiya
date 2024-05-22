@@ -2,6 +2,7 @@
     "id": 1,
     "name": "AFK Journey",
     "exe_path": "E:\\AFK Journey\\AFKJourneyLauncher.exe",
+    "exe_hash": "f04675e786a4ee91467766316241af4970f56c31c7598de738c95042cf503de5",
     "tags": [
         "afk-journey",
         "afkj"
