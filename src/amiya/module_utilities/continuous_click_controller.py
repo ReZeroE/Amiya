@@ -19,8 +19,8 @@ class ContinuousClickController:
         start_after: float = 5.0,
         quite: bool = False
     ):
-        
-        aprint(f"Uniform clicking starting in {start_after} seconds, press ESC key anytime to stop...\nClick count: {"INF" if count == -1 else count}\Interval between clicks: {interval} seconds\nTime between press and release: {hold_time} seconds\nQuite: {quite}")
+        count_text = "INF" if count == -1 else count
+        aprint(f"Uniform clicking starting in {start_after} seconds, press ESC key anytime to stop...\nClick count: {count_text}\Interval between clicks: {interval} seconds\nTime between press and release: {hold_time} seconds\nQuite: {quite}")
         
         listener = keyboard.Listener(on_press=self.__on_press)
         listener.start()
