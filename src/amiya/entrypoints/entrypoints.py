@@ -255,7 +255,7 @@ def start_amiya():
         # If sync is needed, restrict all commands except 'sync'
         def blocked_func(args):
             text = colored('amiya sync', 'light_cyan')
-            aprint(f"Applications under Amiya's apps manager are not fully configured to run on this machine.\n\nTo sync the apps to this machine, run `{text}`")
+            aprint(f"Applications under Amiya's apps manager are not fully configured to run on this machine.\n\nTo sync the apps to this machine, run `{text}`\n")
             raise AmiyaExit()
 
         for name, subparser in subparsers.choices.items():
