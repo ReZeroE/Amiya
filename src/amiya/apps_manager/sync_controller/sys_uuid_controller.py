@@ -14,6 +14,6 @@ class SysUUIDController:
     @staticmethod
     def print_uuid():
         aprint(f"System UUID: {SysUUIDController.get_system_uuid()}")
-        
-    # Must come last
-    system_uuid = get_system_uuid()
+
+
+SYSTEM_UUID = SysUUIDController.get_system_uuid()

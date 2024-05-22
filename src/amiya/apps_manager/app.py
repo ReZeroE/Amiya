@@ -9,7 +9,7 @@ from amiya.utils.constants import APPS_DIRECTORY, FOCUS_PID_EXE
 from amiya.exceptions.exceptions import *
 from amiya.utils.helper import WindowUtils, aprint
 from amiya.automation_handler.automation_controller import AutomationController
-from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
+from amiya.apps_manager.sync_controller.sys_uuid_controller import SYSTEM_UUID
 
 APP_AUTOMATION_DIRNAME          = "automation"
 APP_CONFIG_FILENAME             = "app-config.json"
@@ -20,7 +20,7 @@ class App:
         name        : str, 
         exe_path    : str, 
         tags        : list = [], 
-        sys_uuid    : str = SysUUIDController.system_uuid,
+        sys_uuid    : str = SYSTEM_UUID,
         new         : bool = False
     ):
         self.id         = None      # Assigned automatically by the AppManager at creation
@@ -209,7 +209,7 @@ class App:
         self.verified = self.__verify_app_path()
     
     def set_new_uuid(self):
-        self.sys_uuid = SysUUIDController.get_system_uuid()
+        self.sys_uuid = SYSTEM_UUID
     
     # ==========================================
     # ==========| HELPER FUNCTIONS | ===========

@@ -14,7 +14,7 @@ from amiya.automation_handler.units.sequence import AutomationSequence
 from amiya.automation_handler.automation_viewer import AutomationViewer
 from amiya.apps_manager.safety_monitor import SafetyMonitor
 from amiya.apps_manager.sync_controller.sync_controller import AppSyncController
-from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
+from amiya.apps_manager.sync_controller.sys_uuid_controller import SYSTEM_UUID
 from amiya.module_utilities.power_controller import PowerUtils
 
 # from elevate import elevate; elevate()
@@ -518,7 +518,7 @@ class AppsManager:
         # Verify whether applications configured with Amiya's apps manager needs to be synced with the current machine.
         # Sync is only required when transferring the apps manager's configuration data (apps) on to a new machine.
         for app in self.apps.values():
-            if SysUUIDController.system_uuid != app.sys_uuid:
+            if SYSTEM_UUID != app.sys_uuid:
                 aprint(f"App not synced: {app.name} ({app.sys_uuid})")
                 return False
         return True
