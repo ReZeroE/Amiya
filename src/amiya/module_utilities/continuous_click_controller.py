@@ -1,78 +1,101 @@
 import time
 import pyautogui
+import random
 from pynput import keyboard
 from threading import Event
 
 from amiya.exceptions.exceptions import AmiyaExit
-from amiya.utils.helper import aprint
+from amiya.utils.helper import aprint, Printer
+
 
 class ContinuousClickController:
     def __init__(self):
         self.thread_event = Event()
         self.pause = False
-    
+        self.click_count = 0
+
+
     def click_continuously(
-        self, 
-        count: int = -1, 
-        interval: float = 1.0, 
-        hold_time: float = 0.1, 
-        start_after: float = 5.0,
-        quite: bool = False
+        self,
+        count: int          = -1,
+        interval: float     = 1.0,
+        randomize_by: float = 0.0,
+        hold_time: float    = 0.1,
+        start_after: float  = 5.0,
+        quiet: bool         = False
     ):
-        count_text = "INF" if count == -1 else count
-        aprint(f"Uniform clicking starting in {start_after} seconds, press ESC key anytime to stop...\nClick count: {count_text}\Interval between clicks: {interval} seconds\nTime between press and release: {hold_time} seconds\nQuite: {quite}")
-        
+        self.__verbose_start(count, interval, randomize_by, hold_time, start_after, quiet)
+
         listener = keyboard.Listener(on_press=self.__on_press)
         listener.start()
-        
+
         time.sleep(start_after)
-        
         try:
-            click_count = 0
             while True:
-                if click_count == count:
+                if self.click_count == count or self.thread_event.is_set():
                     break
-                
-                if self.thread_event.is_set():
-                    break
-                
-                if self.pause:
+                elif self.pause:
                     time.sleep(0.1)
                     continue
-                
-                if not quite:
-                    buffer = " " * 10
-                    x, y = pyautogui.position()
-                    count_text = "INF" if count == -1 else count
-                    aprint(f"[{click_count+1}/{count_text}] Clicking ({x}, {y})...{buffer}", end="\r")
-                
-                pyautogui.mouseDown()
-                self.__click(hold_time, interval)
-                click_count += 1
-                
-                
-                
+
+                if not quiet:
+                    self.__verbose_click(count)
+
+                self.__click(hold_time, interval, randomize_by)
+
         except KeyboardInterrupt:
             print("")
             listener.stop()
+            time.sleep(1)
             raise AmiyaExit()
-    
-    def __click(self, hold_time, interval):
+
+
+    def __click(self, hold_time, interval, randomize_interval):
+        self.click_count += 1
+        
         pyautogui.mouseDown()
         time.sleep(hold_time)
         pyautogui.mouseUp()
+        
         time.sleep(interval)
-                
+        time.sleep(random.uniform(0, randomize_interval))
+
+
+    def __verbose_start(self, count, interval, randomize_by, hold_time, start_after, quiet):
+        title_text = Printer.to_lightblue(f"Uniform clicking starting in {start_after} seconds, press CTRL+C or the ESC key anytime to stop...")
+        count_text = "INFINITE" if count == -1 else count
+        count_text = Printer.to_purple("Total clicks:   ") + count_text
+        interval_text = Printer.to_purple("Click interval: ") + f"{interval} seconds"
+        if randomize_by > 0:
+            interval_text += f" + random(0, {randomize_by}) seconds"
+        hold_time_text = Printer.to_purple("Hold duration:  ") + f"{hold_time} seconds"
+        
+        aprint(
+            f"{title_text} \
+            \n{count_text} \
+            \n{hold_time_text} \
+            \n{interval_text}"
+        )
+
+    def __verbose_click(self, max_count):
+        buffer          = " " * 10
+        x, y            = pyautogui.position()
+        max_count_text  = "INF" if max_count == -1 else max_count
+        aprint(f"[Count {self.click_count + 1}/{max_count_text}] Clicking ({x}, {y})...{buffer}", end="\r")
+
+
     def __on_press(self, button):
         if button == keyboard.Key.esc:
-            aprint("\nEsc key pressed, stopping...")
+            if self.click_count > 0:
+                print("")
+            aprint("Esc key pressed, stopping...")
             self.thread_event.set()
-            
+
         if button == keyboard.Key.space:
             self.pause = not self.pause
-            
+
             buffer = " " * 7
-            if self.pause == True:
+            if self.pause:
                 aprint(f"Clicks paused. Press space again to start.{buffer}", end="\r")
             else:
                 aprint(f"Clicks unpaused. Press space again to pause.{buffer}", end="\r")

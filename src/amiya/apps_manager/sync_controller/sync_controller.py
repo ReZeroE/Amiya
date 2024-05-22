@@ -96,7 +96,6 @@ class AppSyncController:
             exe_name = os.path.basename(app.exe_path)
             exe_hash = app.exe_hash
     
-            print(exe_name)
             if exe_hash == None:
                 return app
             new_path = self.find_app(exe_name, exe_hash)

@@ -187,7 +187,7 @@ class AmiyaEntrypointHandler:
 
     def click_continuously(self, args):
         cc_controller = ContinuousClickController()
-        cc_controller.click_continuously(args.count, args.interval, args.hold_time, args.start_after, args.quite)
+        cc_controller.click_continuously(args.count, args.interval, args.randomize_by, args.hold_time, args.start_after, args.quiet)
 
     def elevate(self, args):
         if is_admin():

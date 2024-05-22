@@ -51,6 +51,9 @@ class AppsManager:
             if curr_app_exe_hash != app.exe_hash:
                 app.exe_hash = curr_app_exe_hash
                 app.save_app_config()
+        else:
+            app.exe_hash = None
+
         return app
    
    
@@ -521,10 +524,9 @@ class AppsManager:
         
         self.print_apps()
         
-        found = len([app for app in apps if app.verified == True])
+        found = len([app for app in self.apps.values() if app.verified == True])
         cmd = color_cmd("amiya cleanup")
-        aprint(f"Sync Complete - successfully synced {found}/{len(apps)} applications.\n\nTo cleanup unverified applications (unavailable on this machine), run '{cmd}'")
-        print("")
+        aprint(f"Sync Complete - successfully synced {found}/{len(apps)} applications.\n\nTo cleanup unverified applications (unavailable on this machine), run '{cmd}'\n")
         
     def verify_apps_synced(self) -> bool: 
         # Verify whether applications configured with Amiya's apps manager needs to be synced with the current machine.

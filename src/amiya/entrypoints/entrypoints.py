@@ -10,7 +10,7 @@ import subprocess
 from termcolor import colored
 from amiya.entrypoints.entrypoint_handler import AmiyaEntrypointHandler
 from amiya.entrypoints.help_format_handler import HelpFormatHandler
-from amiya.utils.helper import aprint, atext, verify_platform, is_admin, Printer, color_cmd
+from amiya.utils.helper import aprint, verify_platform, is_admin, Printer, color_cmd
 from amiya.utils.constants import COMMAND
 from amiya.exceptions.exceptions import AmiyaOSNotSupported, AmiyaExit
 
@@ -214,6 +214,7 @@ def start_amiya():
     click_parser = subparsers.add_parser('click', help='Continuously click mouse.', description='Continuously click mouse.')
     click_parser.add_argument('--count', '-c', type=int, default=-1, help='Number of clicks. Leave empty (default) to run forever')
     click_parser.add_argument('--interval', '-d', type=int, default=1, help='Interval delay (seconds) between clicks')
+    click_parser.add_argument('--randomize-by', type=float, default=0.0, help='Randomize the click interval by added 0 to x seconds to the interval specification.')
     click_parser.add_argument('--hold-time', '-ht', type=int, default=0.1, help='Delay (seconds) between click press and release')
     click_parser.add_argument('--start-after', '-sa', type=int, default=3, help='Delay (seconds) before the clicks start')
     click_parser.add_argument('--quiet', '-q', action='store_true', default=False, help='Run without verbosing progress')
