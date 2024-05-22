@@ -313,7 +313,7 @@ class AppsManager:
             aprint(f"Expected an ID (such as 0 or 1) but got '{user_input_id}'.", log_type=LogType.ERROR); raise AmiyaExit()
         return app
     
-    def get_app_by_tag(self, tag) -> App | None:
+    def get_app_by_tag(self, tag) -> App:
         for _, app in self.apps.items():
             if tag in app.tags:
                 return app
