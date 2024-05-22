@@ -1,3 +1,5 @@
+
+
 import argparse
 from amiya.utils.helper import *
 
@@ -6,9 +8,12 @@ class HelpFormatHandler:
         for group in parser.groups:
             
             if group['description']:
-                print(f"\n{Printer.to_lightred("\u2606 " + group['title'])}{Printer.to_lightgrey(" : " + group['description'])}")
-            else:
-                print(f"\n{Printer.to_lightred("\u2606 " + group['title'])}")
+                title = Printer.to_lightred(u"\u2606 " + group['title'])
+                description = Printer.to_lightgrey(" : " + group['description'])
+                print(f"\n{title}{description}")
+            else:   
+                title = Printer.to_lightred(u"\u2606 " + group['title'])
+                print(f"\n{title}")
                 
             for subparser in group['parsers']:
                 prog_cmd = Printer.to_lightblue(subparser.prog)
