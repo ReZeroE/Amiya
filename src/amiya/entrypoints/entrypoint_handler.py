@@ -53,6 +53,8 @@ class AmiyaEntrypointHandler:
             self.dev_controller.open_dev_env()
         if args.isadmin:
             self.dev_controller.is_admin()
+        if args.home_dir:
+            self.dev_controller.verbose_home_dir()
     
     
     # =================================================

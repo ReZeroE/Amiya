@@ -58,6 +58,7 @@ def start_amiya():
     dev_parser.add_argument('--refresh', '-ref', action='store_true', help='Refresh all controller objects.')
     dev_parser.add_argument('--code', '-c', action='store_true', help='Open development environment with VSCode.')
     dev_parser.add_argument('--isadmin', '-ia', action='store_true', help='Show whether the main thread has admin access.')
+    dev_parser.add_argument('--home-dir', '-dir', action='store_true', help='Verbose module home directroy')
     dev_parser.set_defaults(func=entrypoint_handler.DEV)
     parser.add_parser_to_group(dev_group, dev_parser)
 
@@ -234,7 +235,6 @@ def start_amiya():
     parser.add_parser_to_group(utility_group, track_url_parser)
 
     
-    
     # # =================================================
     # # ================| SCHEDULER | ===================
     # # =================================================
@@ -300,8 +300,8 @@ def start_amiya():
             
 
 
-def start_amiya_cli_as_admin():
-    start_amiya()
+# def start_amiya_cli_as_admin():
+#     start_amiya()
     
     # # If process already have admin access
     # if is_admin():

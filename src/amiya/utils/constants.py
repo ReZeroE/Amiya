@@ -25,7 +25,15 @@ REPOSITORY      = "https://github.com/ReZeroE/Amiya"
 # ==================================
 HOME_DIRECTORY      = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-__AMIYA_DIRECTORY   = os.path.join(HOME_DIRECTORY, "src", "amiya")
+PYTHON_MODULE_PATH = os.path.join(HOME_DIRECTORY, "site-packages", "amiya")
+if os.path.exists(PYTHON_MODULE_PATH):
+    # If the module is built using `pip install .`, then the path would be something like C:/PythonXXX/Lib/site-packages/<package_name>
+    HOME_DIRECTORY = PYTHON_MODULE_PATH
+    __AMIYA_DIRECTORY = PYTHON_MODULE_PATH
+else:
+    # Else if the module is built locally using `pip install -e .`, then the path will be the local directory structure
+    __AMIYA_DIRECTORY   = os.path.join(HOME_DIRECTORY, "src", "amiya")
+
 APPS_DIRECTORY      = os.path.join(__AMIYA_DIRECTORY, "apps")
 BIN_DIRECTORY       = os.path.join(__AMIYA_DIRECTORY, "bin")
 
