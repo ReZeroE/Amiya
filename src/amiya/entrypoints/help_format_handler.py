@@ -6,9 +6,9 @@ class HelpFormatHandler:
         for group in parser.groups:
             
             if group['description']:
-                print(f"\n{Printer.to_lightred("☆ " + group['title'])}{Printer.to_lightgrey(" : " + group['description'])}")
+                print(f"\n{Printer.to_lightred("\u2606 " + group['title'])}{Printer.to_lightgrey(" : " + group['description'])}")
             else:
-                print(f"\n{Printer.to_lightred("☆ " + group['title'])}")
+                print(f"\n{Printer.to_lightred("\u2606 " + group['title'])}")
                 
             for subparser in group['parsers']:
                 prog_cmd = Printer.to_lightblue(subparser.prog)
