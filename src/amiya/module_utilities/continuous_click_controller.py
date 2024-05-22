@@ -33,6 +33,7 @@ class ContinuousClickController:
         try:
             while True:
                 if self.click_count == count or self.thread_event.is_set():
+                    listener.stop()
                     break
                 elif self.pause:
                     time.sleep(0.1)
