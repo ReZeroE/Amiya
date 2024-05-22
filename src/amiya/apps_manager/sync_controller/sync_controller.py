@@ -14,55 +14,57 @@ class AppSyncController:
         available_drives = ['%s:' % d for d in string.ascii_uppercase if os.path.exists('%s:' % d)]
         return available_drives
 
-    def find_app(self, name, paths=[]):
-        
-        def find_app_in_path(path, name, stop_flag):
-            for root, _, files in os.walk(path):
-                if stop_flag.value: # Check the shared flag value.
-                    return None
-                if name in files:
-                    return os.path.join(root, name)
-            return None
+
+    # def find_app_in_path(self, path, name, stop_flag):
+    #         for root, _, files in os.walk(path):
+    #             if stop_flag.value: # Check the shared flag value.
+    #                 return None
+    #             if name in files:
+    #                 return os.path.join(root, name)
+    #         return None
+
+    # def find_app(self, name, paths=[]):
+    #     for p in paths:
+    #         if not os.path.exists(p):
+    #             raise AmiyaBaseException(f"Path does not exist. [{p}]")
+
+    #     if len(paths) == 0:
+    #         paths = self.get_local_drives()
+
+    #     paths = [f"{path}\\" if path.endswith(":") and len(path) == 2 else path for path in paths]
+
+    #     worker_threads = 1
+    #     if os.cpu_count() > 1:
+    #         worker_threads = os.cpu_count() - 1
+
+    #     with futures.ProcessPoolExecutor(max_workers=worker_threads) as executor, Manager() as manager:
+    #         stop_flag = manager.Value('b', False)   # Create a boolean shared flag.
+    #         future_to_path = {executor.submit(self.find_app_in_path, path, name, stop_flag): path for path in paths}
+    #         for future in futures.as_completed(future_to_path):
+    #             result = future.result()
+    #             if result is not None:
+    #                 stop_flag.value = True # Set the flag to true when a result is found.
+    #                 return result
+    #     return None
+    
+    
+    def find_app_in_path(self, path, name, hash, stop_flag):
+        for root, _, files in os.walk(path):
+            if stop_flag.value == True:
+                return None
             
-        for p in paths:
-            if not os.path.exists(p):
-                raise AmiyaBaseException(f"Path does not exist. [{p}]")
-
-        if len(paths) == 0:
-            paths = self.get_local_drives()
-
-        paths = [f"{path}\\" if path.endswith(":") and len(path) == 2 else path for path in paths]
-
-        worker_threads = 1
-        if os.cpu_count() > 1:
-            worker_threads = os.cpu_count() - 1
-
-        with futures.ProcessPoolExecutor(max_workers=worker_threads) as executor, Manager() as manager:
-            stop_flag = manager.Value('b', False)   # Create a boolean shared flag.
-            future_to_path = {executor.submit(find_app_in_path, path, name, stop_flag): path for path in paths}
-            for future in futures.as_completed(future_to_path):
-                result = future.result()
-                if result is not None:
-                    stop_flag.value = True # Set the flag to true when a result is found.
-                    return result
+            if name in files:
+                the_file =  os.path.join(root, name)
+                try:
+                    file_hash = HashCalculator.calculate_file_hash(the_file)
+                except PermissionError:
+                    continue
+                if file_hash == hash:
+                    return os.path.join(root, name)  
         return None
     
 
-    def find_app_with_hash(self, expected_hash, paths=[]):
-        
-        def find_app(path, expected_hash, stop_flag):
-            if stop_flag.value:
-                return None
-            for root, _, files in os.walk(path):
-                for file in files:
-                    if stop_flag.value:
-                        return None
-                    full_path = os.path.join(root, file)
-                    if os.path.isfile(full_path):
-                        file_hash = HashCalculator.calculate_file_hash(full_path)
-                        if file_hash == expected_hash:
-                            return full_path
-            
+    def find_app(self, name, hash, paths=[]):
         for p in paths:
             if not os.path.exists(p):
                 raise AmiyaBaseException(f"Path does not exist. [{p}]")
@@ -78,7 +80,7 @@ class AppSyncController:
 
         with futures.ProcessPoolExecutor(max_workers=worker_threads) as executor, Manager() as manager:
             stop_flag = manager.Value('b', False)   # Create a boolean shared flag.
-            future_to_path = {executor.submit(find_app, path, expected_hash, stop_flag): path for path in paths}
+            future_to_path = {executor.submit(self.find_app_in_path, path, name, hash, stop_flag): path for path in paths}
             for future in futures.as_completed(future_to_path):
                 result = future.result()
                 if result is not None:
@@ -91,10 +93,13 @@ class AppSyncController:
         # If app's path verification failed
         if app.verified == False:
             
-            app_hash = app.exe_hash
-            if app_hash == None:
+            exe_name = os.path.basename(app.exe_path)
+            exe_hash = app.exe_hash
+    
+            print(exe_name)
+            if exe_hash == None:
                 return app
-            new_path = self.find_app_with_hash(app.exe_hash)
+            new_path = self.find_app(exe_name, exe_hash)
             
             # If app exist on the new machine
             if new_path != None:

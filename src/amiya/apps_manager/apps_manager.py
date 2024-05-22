@@ -513,10 +513,11 @@ class AppsManager:
         sync_controller = AppSyncController()
         
         apps = list(self.apps.values())
-        for i in progressbar(range(len(apps)), f"Syncing: ", 40):
-            app: App = apps[i]
+        for app in apps:
+            aprint(f"Syncing application `{app.name}`... ", end="\r")
             synced_app = sync_controller.sync(app)
             self.apps[app.id] = synced_app
+            aprint("Done")
         
         self.print_apps()
         
