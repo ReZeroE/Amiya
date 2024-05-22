@@ -43,7 +43,8 @@ class ContinuousClickController:
                 if not quite:
                     buffer = " " * 10
                     x, y = pyautogui.position()
-                    aprint(f"[{click_count+1}/{"INF" if count == -1 else count}] Clicking ({x}, {y})...{buffer}", end="\r")
+                    count_text = "INF" if count == -1 else count
+                    aprint(f"[{click_count+1}/{count_text}] Clicking ({x}, {y})...{buffer}", end="\r")
                 
                 pyautogui.mouseDown()
                 self.__click(hold_time, interval)
