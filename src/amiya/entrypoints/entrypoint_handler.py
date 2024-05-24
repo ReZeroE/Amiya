@@ -53,6 +53,8 @@ class AmiyaEntrypointHandler:
             self.dev_controller.open_dev_env()
         if args.isadmin:
             self.dev_controller.is_admin()
+        if args.home_dir:
+            self.dev_controller.verbose_home_dir()
     
     
     # =================================================
@@ -187,7 +189,7 @@ class AmiyaEntrypointHandler:
 
     def click_continuously(self, args):
         cc_controller = ContinuousClickController()
-        cc_controller.click_continuously(args.count, args.interval, args.hold_time, args.start_after, args.quite)
+        cc_controller.click_continuously(args.count, args.interval, args.randomize_by, args.hold_time, args.start_after, args.quiet)
 
     def elevate(self, args):
         if is_admin():
@@ -350,9 +352,9 @@ r"""
                         args.func(args)
                     except AmiyaExit:
                         continue
-                    except Exception as ex:
-                        aprint(f"{type(ex)}: {ex}. Exiting...", log_type=LogType.ERROR)
-                        exit()
+                    # except Exception as ex:
+                    #     aprint(f"{type(ex)}: {ex}. Exiting...", log_type=LogType.ERROR)
+                    #     exit()
                 else:
                     parser.print_help()
             

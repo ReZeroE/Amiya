@@ -10,8 +10,8 @@ try:
     from bs4 import BeautifulSoup
     import time
 except ImportError as ex:
-    aprint("The following packages/external-drivers are required to run the URLTracker:\n- selenium\n- bs4\n- webdriver-manager", log_type=LogType.ERROR)
-
+    # aprint("The following packages/external-drivers are required to run the URLTracker:\n- selenium\n- bs4\n- webdriver-manager", log_type=LogType.ERROR)
+    pass
 
 class URLTracker:
 

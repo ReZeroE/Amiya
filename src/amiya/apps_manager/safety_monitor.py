@@ -53,7 +53,7 @@ class SafetyMonitor:
     
     
     @staticmethod
-    def get_focused_pid(tries: int = 3) -> int|None:
+    def get_focused_pid(tries: int = 3) -> int:
         # :param tries: specifies how many times to try on failed PID fetch attempts
         if tries <= 0:
             aprint(f"ERROR: get_focuse_pid() cannot be called with {tries} tries.", log_type=LogType.ERROR)

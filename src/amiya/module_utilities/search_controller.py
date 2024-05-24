@@ -6,7 +6,7 @@ class SearchController:
     def __init__(self):
         self.SERACH_URL = f"https://www.google.com.tr/search?q="
     
-    def search(self, search_content: str|list[str]):
+    def search(self, search_content):
         search_str = None
         if isinstance(search_content, str):
             search_str = search_content

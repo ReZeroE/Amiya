@@ -9,7 +9,8 @@ from amiya.utils.constants import APPS_DIRECTORY, FOCUS_PID_EXE
 from amiya.exceptions.exceptions import *
 from amiya.utils.helper import WindowUtils, aprint
 from amiya.automation_handler.automation_controller import AutomationController
-from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
+from amiya.apps_manager.sync_controller.sys_uuid_controller import SYSTEM_UUID
+from amiya.utils.helper import HashCalculator
 
 APP_AUTOMATION_DIRNAME          = "automation"
 APP_CONFIG_FILENAME             = "app-config.json"
@@ -18,18 +19,17 @@ class App:
     def __init__(
         self, 
         name        : str, 
-        exe_path    : str, 
-        tags        : list = [], 
-        sys_uuid    : str = SysUUIDController.system_uuid,
+        exe_path    : str,
         new         : bool = False
     ):
         self.id         = None      # Assigned automatically by the AppManager at creation
         self.name       = name
         self.exe_path   = Path(self.__parse_exe_path(exe_path))
-        self.tags       = tags
         self.verified   = self.__verify_app_path()
-        self.sys_uuid   = sys_uuid  # Used to identify whether the application is synced with the current machine
-        
+        self.exe_hash   = HashCalculator.calculate_file_hash(self.exe_path) if self.verified else None
+        self.tags       = []
+        self.sys_uuid   = SYSTEM_UUID  # Used to identify whether the application is synced with the current machine
+
         # Note that the process variable is a snapshot of the application's process. 
         # It is not always (and most likely not) up-to-date as the program continues to run. 
         # This variable is only updated when is_running() is called and therefore this variable 
@@ -139,7 +139,6 @@ class App:
                     raise AmiyaBaseException(f"Failed to identify the app's process due to an unknown error ({ex}).")
         return None
     
-    
     def bring_to_foreground(self):
         try:
             TIMEOUT = 10
@@ -165,6 +164,7 @@ class App:
             "id"        : self.id,
             "name"      : self.name,
             "exe_path"  : str(self.exe_path),
+            "exe_hash"  : str(self.exe_hash),
             "tags"      : self.tags,
             "verified"  : self.verified,
             "sys_uuid"  : self.sys_uuid
@@ -177,11 +177,14 @@ class App:
                 config = json.load(rf)
                 app = App(
                     config["name"], 
-                    config["exe_path"], 
-                    config["tags"],
-                    config["sys_uuid"]
+                    config["exe_path"],
+                    new = False
                 )
-                app.id = int(config["id"])
+                app.id       = int(config["id"])
+                app.tags     = config["tags"]
+                app.exe_hash = config["exe_hash"]
+                app.sys_uuid = config["sys_uuid"]
+                
                 return app
         except Exception as ex:
             raise ex
@@ -209,7 +212,7 @@ class App:
         self.verified = self.__verify_app_path()
     
     def set_new_uuid(self):
-        self.sys_uuid = SysUUIDController.get_system_uuid()
+        self.sys_uuid = SYSTEM_UUID
     
     # ==========================================
     # ==========| HELPER FUNCTIONS | ===========

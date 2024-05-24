@@ -10,7 +10,7 @@ import subprocess
 from termcolor import colored
 from amiya.entrypoints.entrypoint_handler import AmiyaEntrypointHandler
 from amiya.entrypoints.help_format_handler import HelpFormatHandler
-from amiya.utils.helper import aprint, atext, verify_platform, is_admin, Printer, color_cmd
+from amiya.utils.helper import aprint, verify_platform, is_admin, Printer, color_cmd
 from amiya.utils.constants import COMMAND
 from amiya.exceptions.exceptions import AmiyaOSNotSupported, AmiyaExit
 
@@ -58,6 +58,7 @@ def start_amiya():
     dev_parser.add_argument('--refresh', '-ref', action='store_true', help='Refresh all controller objects.')
     dev_parser.add_argument('--code', '-c', action='store_true', help='Open development environment with VSCode.')
     dev_parser.add_argument('--isadmin', '-ia', action='store_true', help='Show whether the main thread has admin access.')
+    dev_parser.add_argument('--home-dir', '-dir', action='store_true', help='Verbose module home directroy')
     dev_parser.set_defaults(func=entrypoint_handler.DEV)
     parser.add_parser_to_group(dev_group, dev_parser)
 
@@ -213,9 +214,10 @@ def start_amiya():
     
     click_parser = subparsers.add_parser('click', help='Continuously click mouse.', description='Continuously click mouse.')
     click_parser.add_argument('--count', '-c', type=int, default=-1, help='Number of clicks. Leave empty (default) to run forever')
-    click_parser.add_argument('--interval', '-d', type=int, default=1, help='Interval delay (seconds) between clicks')
-    click_parser.add_argument('--hold-time', '-ht', type=int, default=0.1, help='Delay (seconds) between click press and release')
-    click_parser.add_argument('--start-after', '-sa', type=int, default=3, help='Delay (seconds) before the clicks start')
+    click_parser.add_argument('--interval', '-d', type=float, default=1, help='Interval delay (seconds) between clicks')
+    click_parser.add_argument('--randomize-by', type=float, default=0.0, help='Randomize the click interval by added 0 to x seconds to the interval specification.')
+    click_parser.add_argument('--hold-time', '-ht', type=float, default=0.1, help='Delay (seconds) between click press and release')
+    click_parser.add_argument('--start-after', '-sa', type=float, default=3, help='Delay (seconds) before the clicks start')
     click_parser.add_argument('--quiet', '-q', action='store_true', default=False, help='Run without verbosing progress')
     click_parser.set_defaults(func=entrypoint_handler.click_continuously)
     parser.add_parser_to_group(utility_group, click_parser)
@@ -232,7 +234,6 @@ def start_amiya():
     track_url_parser.set_defaults(func=entrypoint_handler.track_url)
     parser.add_parser_to_group(utility_group, track_url_parser)
 
-    
     
     # # =================================================
     # # ================| SCHEDULER | ===================
@@ -254,8 +255,8 @@ def start_amiya():
     if sync_needed:
         # If sync is needed, restrict all commands except 'sync'
         def blocked_func(args):
-            text = colored('amiya sync', 'light_cyan')
-            aprint(f"Applications under Amiya's apps manager are not fully configured to run on this machine.\n\nTo sync the apps to this machine, run `{text}`")
+            text = color_cmd('amiya sync')
+            aprint(f"Applications under Amiya's apps manager are not fully configured to run on this machine.\n\nTo sync the apps to this machine, run `{text}`\n")
             raise AmiyaExit()
 
         for name, subparser in subparsers.choices.items():
@@ -299,8 +300,8 @@ def start_amiya():
             
 
 
-def start_amiya_cli_as_admin():
-    start_amiya()
+# def start_amiya_cli_as_admin():
+#     start_amiya()
     
     # # If process already have admin access
     # if is_admin():

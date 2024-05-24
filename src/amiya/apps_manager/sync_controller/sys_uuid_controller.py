@@ -10,9 +10,10 @@ class SysUUIDController:
             return uuid
         except Exception as e:
             return str(e)
-    
-    system_uuid = get_system_uuid()
 
     @staticmethod
     def print_uuid():
         aprint(f"System UUID: {SysUUIDController.get_system_uuid()}")
+
+
+SYSTEM_UUID = SysUUIDController.get_system_uuid()

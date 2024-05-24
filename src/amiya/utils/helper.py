@@ -129,6 +129,10 @@ class Printer:
     @staticmethod
     def to_purple(text):
         return Printer.hex_text(text, "#a471bf")
+    
+    @staticmethod
+    def to_lightpurple(text):
+        return Printer.hex_text(text, "#c38ef5")
         
     @staticmethod
     def to_skyblue(text):
@@ -140,11 +144,15 @@ class Printer:
 
     @staticmethod
     def to_blue(text):
-        return Printer.hex_text(text, "#6aa5fc")
+        return Printer.hex_text(text, "#3c80f0")
 
     @staticmethod
     def to_lightblue(text):
         return Printer.hex_text(text, "#8ab1f2")
+    
+    @staticmethod
+    def to_darkblue(text):
+        return Printer.hex_text(text, "#2a9bc3")
     
     @staticmethod
     def to_lightgreen(text):
@@ -397,3 +405,15 @@ class ProcessHandler:
         for pid in pids:
             if pid not in excluding_pids:
                 ProcessHandler.kill_pid(pid)
+
+         
+import hashlib
+class HashCalculator:
+    
+    @staticmethod
+    def calculate_file_hash(file_path: str):
+        sha256_hash = hashlib.sha256()
+        with open(file_path, "rb") as f:
+            for byte_block in iter(lambda: f.read(4096), b""):
+                sha256_hash.update(byte_block)
+        return sha256_hash.hexdigest()

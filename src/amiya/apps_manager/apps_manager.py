@@ -14,7 +14,7 @@ from amiya.automation_handler.units.sequence import AutomationSequence
 from amiya.automation_handler.automation_viewer import AutomationViewer
 from amiya.apps_manager.safety_monitor import SafetyMonitor
 from amiya.apps_manager.sync_controller.sync_controller import AppSyncController
-from amiya.apps_manager.sync_controller.sys_uuid_controller import SysUUIDController
+from amiya.apps_manager.sync_controller.sys_uuid_controller import SYSTEM_UUID
 from amiya.module_utilities.power_controller import PowerUtils
 
 # from elevate import elevate; elevate()
@@ -39,10 +39,35 @@ class AppsManager:
             app_config = os.path.join(APPS_DIRECTORY, app_name, APP_CONFIG_FILENAME)
             if os.path.isfile(app_config):
                 app = App.read_json(app_config)
+                app = self.__update_hash(app)
                 apps_dict[app.id] = app
-                
+
         return apps_dict
     
+    def __update_hash(self, app: App):
+        # Updates application executable's hash value automatically every time when the apps are loaded.
+        # 
+        # Syncing logic with hash:
+        # If the hash is different, path is the same: auto update exe hash
+        # Elif hash is the same, path is different (exe_name the same): force `sync`
+        # Elif both the hash and path are different (exe_name the same): force `sync`
+        # Elif hash is null: unable to `sync`
+        
+        if app.verified:
+            curr_app_exe_hash = HashCalculator.calculate_file_hash(app.exe_path)
+            if curr_app_exe_hash != app.exe_hash:
+                app.exe_hash = curr_app_exe_hash
+                app.save_app_config()
+        else:
+            # If the application's path does not exist on the current machine, do nothing.
+            # When the apps are loaded, if a path doesn't exist, then the previous hash should
+            # presist until the path is corrected and then the hash will automatically reset.
+            # If the hash is set to None on app load, then the application won't be synced 
+            # properly the next run. 
+            pass
+
+        return app
+   
    
     # ======================================
     # ===========| CREATE APPS | ===========
@@ -293,6 +318,7 @@ class AppsManager:
         text += f"\nApp ID: {app.id}"  
         text += f"\nApp Tags: {app.tags}"
         text += f"\nApp Config Directory: {app.app_config_dirpath}" 
+        text += f"\nApp Executable Hash: {app.exe_hash}"
         text += f"\nApp Configuration System UUID: {app.sys_uuid}"  
         aprint(text)
         
@@ -302,6 +328,8 @@ class AppsManager:
             os.mkdir(APPS_DIRECTORY)
             
     def __get_next_app_id(self) -> int:
+        if len(self.apps) == 0:
+            return 1
         return max(self.apps.keys()) + 1
 
     def get_app_with_id(self, user_input_id: str) -> App:
@@ -313,7 +341,7 @@ class AppsManager:
             aprint(f"Expected an ID (such as 0 or 1) but got '{user_input_id}'.", log_type=LogType.ERROR); raise AmiyaExit()
         return app
     
-    def get_app_by_tag(self, tag) -> App | None:
+    def get_app_by_tag(self, tag) -> App:
         for _, app in self.apps.items():
             if tag in app.tags:
                 return app
@@ -496,29 +524,28 @@ class AppsManager:
         self.__verify_non_empty_apps_dir()
         
         if verbose:
-            aprint(f"Sync all {len(self.apps)} applications on this machine? (This may take a while) [y/n] ", log_type=LogType.WARNING, end="")
+            aprint(f"Sync {len(self.apps)} applications on this machine? (This may take a while) [y/n] ", log_type=LogType.WARNING, end="")
             if input().strip().lower() != "y": return
         
         sync_controller = AppSyncController()
-        
+
         apps = list(self.apps.values())
-        for i in progressbar(range(len(apps)), f"Syncing: ", 40):
-            app: App = apps[i]
+        for app in apps:
+            aprint(f"Syncing application `{app.name}`... ", end="")
             synced_app = sync_controller.sync(app)
             self.apps[app.id] = synced_app
-            
+            print("Done")
         self.print_apps()
         
-        found = len([app for app in apps if app.verified == True])
+        found = len([app for app in self.apps.values() if app.verified == True])
         cmd = color_cmd("amiya cleanup")
-        aprint(f"Sync Complete - successfully synced {found}/{len(apps)} applications.\n\nTo cleanup unverified applications (unavailable on this machine), run '{cmd}'")
-        print("")
+        aprint(f"Sync Complete - successfully synced {found}/{len(apps)} applications.\n\nTo cleanup unverified applications (unavailable on this machine), run '{cmd}'\n")
         
     def verify_apps_synced(self) -> bool: 
         # Verify whether applications configured with Amiya's apps manager needs to be synced with the current machine.
         # Sync is only required when transferring the apps manager's configuration data (apps) on to a new machine.
         for app in self.apps.values():
-            if SysUUIDController.system_uuid != app.sys_uuid:
+            if SYSTEM_UUID != app.sys_uuid:
                 aprint(f"App not synced: {app.name} ({app.sys_uuid})")
                 return False
         return True

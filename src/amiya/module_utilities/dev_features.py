@@ -28,3 +28,6 @@ class DevController:
     def is_admin(self):
         isadmin = bool_to_str(is_admin(), true_text="Admin", false_text="User")
         aprint(f"Persmissions: {isadmin}")
+        
+    def verbose_home_dir(self):
+        aprint(f"Home directory: {HOME_DIRECTORY}")

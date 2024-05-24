@@ -18,7 +18,7 @@ class ResolutionDetector:
     windll.user32.SetProcessDPIAware()
     
     @staticmethod
-    def get_primary_monitor_size() -> dict|None:
+    def get_primary_monitor_size() -> dict:
         monitors = get_monitors()
         for m in monitors:
             if m.is_primary:
