@@ -73,6 +73,12 @@ class AmiyaOSNotSupported(Exception):
     def __init__(self):
         super().__init__(f"\n\n\tAs of version {VERSION} (BETA), the {BASENAME} package is only supported on the Windows OS.")
 
+class Amiya_AppStoppedUnexpectedly(Exception):
+    __module__ = 'builtins'
+    def __init__(self):
+        super().__init__(f"\n\n\tApplication stopped running unexpected.")
+
+
 # This is a special exception that is used in place of exit() to avoid IO read error in the CLI environment (to avoid closing STDOUT).
 # This error is caught and replaced with 'continue' in the CLI env and 'exit()' in the normal mode. 
 class AmiyaExit(Exception):
