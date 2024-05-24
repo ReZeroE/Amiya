@@ -26,7 +26,7 @@ class App:
         self.name       = name
         self.exe_path   = Path(self.__parse_exe_path(exe_path))
         self.verified   = self.__verify_app_path()
-        self.exe_hash   = HashCalculator.calculate_file_hash(exe_path) if self.verified else None
+        self.exe_hash   = HashCalculator.calculate_file_hash(self.exe_path) if self.verified else None
         self.tags       = []
         self.sys_uuid   = SYSTEM_UUID  # Used to identify whether the application is synced with the current machine
 
