@@ -7,7 +7,7 @@ import signal
 from termcolor import colored
 from amiya.apps_manager.app import App, APP_CONFIG_FILENAME
 from amiya.apps_manager.apps_viewer import AppsViewer
-from amiya.utils.constants import APPS_DIRECTORY, AMIYA_PID
+from amiya.utils.constants import APPS_DIRECTORY, BACKUP_APPS_DIRECTORY, AMIYA_PID, DEVELOPMENT
 from amiya.exceptions.exceptions import *
 from amiya.utils.helper import *
 from amiya.automation_handler.units.sequence import AutomationSequence
@@ -32,11 +32,18 @@ class AppsManager:
     # ============| READ APPS | ============
     # ======================================
     def __read_apps(self) -> dict[int, App]:
-        apps_name_list = os.listdir(APPS_DIRECTORY)
+        apps_dir = APPS_DIRECTORY
+        
         apps_dict: dict[int, App] = dict()
+        apps_name_list = os.listdir(apps_dir)
+        
+        if DEVELOPMENT and len(apps_name_list) == 0:
+            aprint("[DEV] Apps list empty, loading apps backup directory.", log_type=LogType.WARNING)
+            apps_name_list = os.listdir(apps_dir)
+            apps_dir = BACKUP_APPS_DIRECTORY
         
         for app_name in apps_name_list:
-            app_config = os.path.join(APPS_DIRECTORY, app_name, APP_CONFIG_FILENAME)
+            app_config = os.path.join(apps_dir, app_name, APP_CONFIG_FILENAME)
             if os.path.isfile(app_config):
                 app = App.read_json(app_config)
                 app = self.__update_hash(app)

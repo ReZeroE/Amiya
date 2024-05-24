@@ -7,7 +7,7 @@ import subprocess
 from pathlib import Path
 from amiya.utils.constants import APPS_DIRECTORY, FOCUS_PID_EXE
 from amiya.exceptions.exceptions import *
-from amiya.utils.helper import WindowUtils, aprint
+from amiya.utils.helper import WindowUtils, aprint, LogType, color_cmd, is_admin, Printer
 from amiya.automation_handler.automation_controller import AutomationController
 from amiya.apps_manager.sync_controller.sys_uuid_controller import SYSTEM_UUID
 from amiya.utils.helper import HashCalculator
@@ -90,9 +90,14 @@ class App:
     def run(self) -> bool:
         # If the application is already running
         if self.is_running():
-            self.bring_to_foreground()
-            return True
-        
+            if is_admin():
+                self.bring_to_foreground()
+                return True
+            else:
+                ctext = Printer.to_lightred("already running")
+                aprint(f"[PID {self.process.pid}] Application `{self.name}` is {ctext} in the background.")
+                raise AmiyaExit()
+
         # If the application is not running, then start the application
         if self.verified:
             process = subprocess.Popen([self.exe_path], shell=True)
@@ -139,21 +144,39 @@ class App:
                     raise AmiyaBaseException(f"Failed to identify the app's process due to an unknown error ({ex}).")
         return None
     
+    def get_app_process(self) -> psutil.Process:
+        APP_EXE_NAME = os.path.basename(self.exe_path)
+        for p in psutil.process_iter(['pid', 'name', 'exe']):
+            try:
+                if APP_EXE_NAME.replace(".exe", "") in p.info['name']:
+                    app_process = psutil.Process(p.info['pid'])
+                    if (app_process.is_running()) and (Path(app_process.exe()) == Path(self.exe_path)):
+                        self.process = app_process
+                        return app_process
+                        
+            except Exception as ex:
+                raise AmiyaBaseException(f"Failed to identify the app's process due to an unknown error ({ex}).")
+        return None
+    
     def bring_to_foreground(self):
         try:
             TIMEOUT = 10
             start_time = time.time()
             while time.time() - start_time < TIMEOUT:
                 if self.is_running():
+                    
                     success = WindowUtils.bring_to_foreground(self.process.pid)
                     if success:
                         return
+                    else:
+                        pass # Continue to try to focus on app
                 else:
-                    raise Exception()
-        except Exception as ex:
-            raise AmiyaBaseException(f"The app '{self.name}' is currently not running, therefore can't be brought to foreground ({ex}).")
+                    raise Amiya_AppStoppedUnexpectedly()
+        
+        except Amiya_AppStoppedUnexpectedly as ex:
+            raise AmiyaBaseException(f"The app '{self.name}' stopped unexpectedly. Therefore, it can't be brought to the foreground ({ex}).")
 
-        raise AmiyaBaseException(f"The app '{self.name}' cannot be brought to foreground due to an unknown error.") 
+        raise AmiyaBaseException(f"The app '{self.name}' cannot be brought to the foreground due to an unknown error.") 
 
     # ==========================================
     # ============| APP UTILITIES | ============
@@ -218,7 +241,10 @@ class App:
     # ==========| HELPER FUNCTIONS | ===========
     # ==========================================
     def __parse_exe_path(self, exe_path: str):
-        return exe_path.replace('"', "").strip()
+        exe_path = exe_path.replace('"', "").strip()
+        if not exe_path.endswith(".exe"):
+            aprint("The path should point to an executable ending with .exe\n> Example: E:/Star Rail/launcher.exe", log_type=LogType.ERROR); raise AmiyaExit()
+        return exe_path
     
     def __verify_app_path(self):
         return self.exe_path.exists()

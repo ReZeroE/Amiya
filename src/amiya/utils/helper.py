@@ -335,19 +335,20 @@ class WindowUtils:
 
     @staticmethod
     def bring_to_foreground(pid):
-        # Try to find the window associated with the PID
         for proc in psutil.process_iter(['pid', 'name']):
             if proc.info['pid'] == pid:
-                # Get all windows and check if any belong to the target process
                 for window in gw.getAllWindows():
-                    if window._hWnd == win32gui.FindWindow(None, window.title):
-                        _, window_pid = win32process.GetWindowThreadProcessId(window._hWnd)
-                        if window_pid == pid:
-                            if window.isMinimized:
-                                window.restore()
-                            window.activate()
-                            pyautogui.click(window.left + window.width // 2, window.top + window.height // 2)
-                            return True
+                    # To be fairly honest, I have no clue what are the consequences of not matching window handles.
+                    # But I'll leave this here just in case if someone figures out if something is wrong.
+                    # if window._hWnd == win32gui.FindWindow(None, window.title):
+                    
+                    _, window_pid = win32process.GetWindowThreadProcessId(window._hWnd)
+                    if window_pid == pid:
+                        if window.isMinimized:
+                            window.restore()
+                        win32gui.SetForegroundWindow(window._hWnd)
+                        pyautogui.click(window.left + window.width // 2, window.top + window.height // 2)
+                        return True
         return False
 
     @staticmethod
