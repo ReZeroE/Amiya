@@ -5,7 +5,7 @@ import os
 # ==================================
 BASENAME        = "Amiya"
 COMMAND         = "amiya"
-VERSION         = "0.0.3"
+VERSION         = "0.0.4"
 VERSION_DESC    = "Beta"
 DEVELOPMENT     = VERSION_DESC.lower() != "stable"
 
@@ -36,6 +36,9 @@ else:
 
 APPS_DIRECTORY      = os.path.join(__AMIYA_DIRECTORY, "apps")
 BIN_DIRECTORY       = os.path.join(__AMIYA_DIRECTORY, "bin")
+
+# Development Only
+BACKUP_APPS_DIRECTORY = os.path.join(__AMIYA_DIRECTORY, "apps_backup")
 
 # ==================================
 # =========| EXECUTABLES | =========

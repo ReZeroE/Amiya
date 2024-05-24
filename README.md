@@ -32,20 +32,20 @@ Designed to be lightweight and fully CLI-based, Amiya is perfect for users who n
 ## Installation Guide
 To install the beta version of the `amiya` package locally, run:
 ```bash
-$ pip install amiya==0.0.3
+$ pip install amiya==0.0.4
 ```
 OR
 ```bash
 $ git clone https://github.com/ReZeroE/Amiya.git
 $ cd Amiya/
-$ pip install .
+$ pip install -e .
 ```
 
 **Alternatively**, you may install the most up-to-date development version by cloning the `dev` branch (unstable):
 ```bash
 $ git clone -b dev https://github.com/ReZeroE/Amiya.git
 $ cd Amiya/
-$ pip install .
+$ pip install -e .
 ```
 ## Usage Guide
 Coming soon!

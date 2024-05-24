@@ -6,3 +6,4 @@ recursive-include src/amiya/apps *.json
 recursive-include src/amiya/resources *.png
 
 exclude test/test*.py
+exclude src/apps_backup
