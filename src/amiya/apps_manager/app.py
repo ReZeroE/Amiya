@@ -178,7 +178,7 @@ class App:
                 app = App(
                     config["name"], 
                     config["exe_path"],
-                    config["sys_uuid"]
+                    new = False
                 )
                 app.id       = int(config["id"])
                 app.tags     = config["tags"]

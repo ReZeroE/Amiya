@@ -352,9 +352,9 @@ r"""
                         args.func(args)
                     except AmiyaExit:
                         continue
-                    except Exception as ex:
-                        aprint(f"{type(ex)}: {ex}. Exiting...", log_type=LogType.ERROR)
-                        exit()
+                    # except Exception as ex:
+                    #     aprint(f"{type(ex)}: {ex}. Exiting...", log_type=LogType.ERROR)
+                    #     exit()
                 else:
                     parser.print_help()
             

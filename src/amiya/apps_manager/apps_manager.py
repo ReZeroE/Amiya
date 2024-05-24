@@ -328,6 +328,8 @@ class AppsManager:
             os.mkdir(APPS_DIRECTORY)
             
     def __get_next_app_id(self) -> int:
+        if len(self.apps) == 0:
+            return 1
         return max(self.apps.keys()) + 1
 
     def get_app_with_id(self, user_input_id: str) -> App:
