@@ -1,0 +1,12 @@
+{
+    "id": 6,
+    "name": "Persona 5 X",
+    "exe_path": "E:\\P5X\\P5XLaunch\\P5XGame.exe",
+    "exe_hash": "81609fe2204e2fb3e303b2439e3c108fa9aa814782fb602c7a71d14a58846ee7",
+    "tags": [
+        "persona-5-x",
+        "persona"
+    ],
+    "verified": true,
+    "sys_uuid": "ECB1B2E8-FB5D-C8CB-75DC-C87F545BE519"
+}

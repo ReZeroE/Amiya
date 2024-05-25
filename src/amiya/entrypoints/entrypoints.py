@@ -29,9 +29,20 @@ class AmiyaArgParser(argparse.ArgumentParser):
         group['parsers'].append(parser)
         
     def error(self, message):
-        command = message.split("'")[1] if "invalid choice:" in message else None
-        helpt = Printer.to_purple("help")
-        aprint(f"Command not recognized: {command}\nType '{helpt}' for commands list")
+        if "invalid choice:" in message:
+            command = message.split("'")[1]
+            helpt = Printer.to_purple("help")
+            aprint(f"Command not recognized: {command}\nType '{helpt}' for the commands list")
+        else:
+            parts = message.split("'")
+            if len(parts) > 1:
+                command = parts[1]
+                helpt = Printer.to_purple(f"{command} --help")
+                aprint(f"{message.capitalize()}\nType '{helpt}' for its arguments list")
+            else:
+                helpt = Printer.to_purple("<command> --help")
+                aprint(f"{message.capitalize()}\nType '{helpt}' for its arguments list")
+        
         self.exit(2)
 
 

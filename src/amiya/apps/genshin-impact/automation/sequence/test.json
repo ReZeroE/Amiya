@@ -1,0 +1,28 @@
+{
+    "metadata": {
+        "sequence_name": "test",
+        "date_created": "2024-05-18 00:18:22",
+        "monitor_info": {
+            "width": 3840,
+            "height": 2160
+        },
+        "other_data": null
+    },
+    "actions_sequence": [
+        {
+            "coordinate": {
+                "x": 5312,
+                "y": 1290
+            },
+            "delay": 1.3876368999481201,
+            "click": true,
+            "window_info": {
+                "left": 7368,
+                "top": 1822,
+                "width": 1490,
+                "height": 779,
+                "is_fullscreen": false
+            }
+        }
+    ]
+}

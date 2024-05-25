@@ -1,0 +1,12 @@
+{
+    "id": 10,
+    "name": "Wuthering Waves US",
+    "exe_path": "E:\\Wuthering Waves US\\Wuthering Waves\\launcher.exe",
+    "exe_hash": "ec17a9182c30785d776f8e36688026dcaad0a296e3848221d3053650cf030a86",
+    "tags": [
+        "wuthering-waves-us",
+        "wwus"
+    ],
+    "verified": true,
+    "sys_uuid": "ECB1B2E8-FB5D-C8CB-75DC-C87F545BE519"
+}
