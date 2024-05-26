@@ -28,6 +28,10 @@ class AutomationRecorder():
         self.is_recording = False
         self.sequence.actions = self.sequence.actions[:-1]    # Remove the last key click (user clicks on the Stop Recording button)
         root.quit()
+        
+    def pause_or_resume_recording(self):
+        self.is_recording = not self.is_recording
+        self.on_pause_action_update_window()
     
     def create_indicator_window(self):
         LENGTH = 300
@@ -64,8 +68,11 @@ class AutomationRecorder():
         self.label.place(relx=0.5, rely=0.4, anchor='center')
 
         stop_button = tk.Button(canvas, text='Stop Recording', command=lambda: self.stop_recording(root), bg='#14628c', fg='#FFFFFF')
-        stop_button.place(relx=0.5, rely=0.8, anchor='center', width=200)
-
+        stop_button.place(relx=0.5, rely=0.8, anchor='center', width=100)
+        
+        # pause_button = tk.Button(canvas, text='Pause Recording', command=lambda: self.pause_or_resume_recording(), bg='#14628c', fg='#FFFFFF')
+        # pause_button.place(relx=0.5, rely=0.8, anchor='center', width=100)
+ 
         # stop_button_2 = tk.Button(canvas, text='Terminate Recording', command=self.stop_recording, bg='#14628c', fg='#FFFFFF')
         # stop_button_2.place(relx=0.5, rely=0.95, anchor='center', width=200)
 
@@ -138,6 +145,10 @@ class AutomationRecorder():
         if key == keyboard.Key.up and self.is_recording == True:        # Stop listener on Enter key press
             self.stop_recording()
             return False
+        
+        elif key == keyboard.Key.space:                                 # Pause listener on Enter key press
+            self.pause_or_resume_recording()
+            return  # Return to not record this space key press
 
         if self.is_recording:                                           # Record only if is_recording is set to True
             now = time.time()
@@ -157,6 +168,13 @@ class AutomationRecorder():
                 self.update_label(text=f"Key Detected - '{key.char}'\nDelay: {round(delay, 2)}")
             except AttributeError:
                 self.update_label(text=f"Key Detected - '{key}'\nDelay: {round(delay, 2)}")
+                
+    def on_pause_action_update_window(self):
+        if self.is_recording:
+            self.update_label(text=f"Recording resumed...")
+        else:
+            self.update_label(text=f"Recording paused...")
+            
 
 
     def update_label(self, text: str):

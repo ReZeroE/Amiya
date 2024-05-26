@@ -1,0 +1,43 @@
+{
+    "metadata": {
+        "sequence_name": "record-auto-starrail",
+        "date_created": "2024-05-25 16:55:07",
+        "monitor_info": {
+            "width": 3840,
+            "height": 2160
+        },
+        "other_data": null
+    },
+    "actions_sequence": [
+        {
+            "coordinate": {
+                "x": 2809,
+                "y": 652
+            },
+            "delay": 4.24666428565979,
+            "click": true,
+            "window_info": {
+                "left": 1650,
+                "top": 150,
+                "width": 1950,
+                "height": 1125,
+                "is_fullscreen": false
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2799,
+                "y": 624
+            },
+            "delay": 0.4913768768310547,
+            "click": true,
+            "window_info": {
+                "left": 1650,
+                "top": 150,
+                "width": 1950,
+                "height": 1125,
+                "is_fullscreen": false
+            }
+        }
+    ]
+}
