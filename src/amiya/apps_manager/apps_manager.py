@@ -122,7 +122,7 @@ class AppsManager:
         
         if tag == None:                             # If no application tag is inputted by user
             self.print_apps()
-            app_id_user_input = input(atext(f"Which app would you like to DELETE? (0-{len(self.apps)-1}) "))
+            app_id_user_input = input(atext(f"Which app would you like to DELETE? {self.__get_apps_id_range()}: "))
             app = self.get_app_with_id(app_id_user_input)
         else:                                       # If user inputted an application tag tag
             tag = self.__parse_tag(tag)
@@ -178,7 +178,7 @@ class AppsManager:
         
         if tag == None:                         # If user did not provide a tag
             self.print_apps()
-            user_input = input(atext(f"Which app would you like to run? (0-{len(self.apps)-1}) "))
+            user_input = input(atext(f"Which app would you like to run? {self.__get_apps_id_range()}: "))
             app = self.apps[int(user_input)]
         else:                                   # If user provided an application tag
             tag = self.__parse_tag(tag)
@@ -247,7 +247,7 @@ class AppsManager:
       
     def print_apps(self, format="fancy_grid"):
         tabulated_apps_table = AppsViewer.tabulate_apps(self.apps, tablefmt=format)
-        print(Printer.to_lightred("\n> Apps Table"))
+        print(Printer.to_lightred(">> Applications Table"))
         print(tabulated_apps_table)
         
     def print_apps_list(self, apps: list[App], format="fancy_grid"):
@@ -256,8 +256,17 @@ class AppsManager:
     
     def print_tags(self, app: App, format="fancy_grid"):
         tabulated_tags = AppsViewer.tabulate_tags(app.tags, tablefmt=format)
+        print(Printer.to_lightred(f"> [{app.name}] Tags Table"))
         print(tabulated_tags)
     
+    def __get_apps_id_range(self) -> str:
+        if len(self.apps) == 0:
+            return ""
+        
+        min_id = min(self.apps.keys())
+        max_id = max(self.apps.keys())
+        return f"[{min_id}-{max_id}]"
+
     
     # =======================================================
     # ============| ADD/REOVE TAGS TO/FROM APP | ============
@@ -273,15 +282,15 @@ class AppsManager:
                 return False
         
         self.print_apps()
-        app_id_user_input = input(atext(f"Which app would you like to ADD a tag to? (0-{len(self.apps)-1}) "))
+        app_id_user_input = input(atext(f"Which app would you like to ADD a tag to? {self.__get_apps_id_range()}: "))
         app = self.get_app_with_id(app_id_user_input)                        
         
         new_tag = input(atext(f"What would be the tag? (no spaces): "))
         new_tag = self.__parse_tag(new_tag)             # Parse tag to remove leading and trailing spaces 
         if tag_exists(new_tag) == True:   # If tag already exists (duplicate tag), raise exception.
             raise Amiya_DuplicateTagException(
-                    tag=new_tag, 
-                    tagged_app_name=app.name
+                tag=new_tag, 
+                tagged_app_name=app.name
             )
         
         app.add_tag(new_tag)
@@ -294,11 +303,16 @@ class AppsManager:
         self.__verify_non_empty_apps_dir()
         
         self.print_apps()
-        user_input = input(atext(f"Which app would you like to REMOVE a tag from? (0-{len(self.apps)-1}) "))
-        app = self.apps[int(user_input)]
+        user_input = input(atext(f"Which app would you like to REMOVE a tag from? {self.__get_apps_id_range()}: "))
+        app = self.get_app_with_id(user_input)
+        
+        if len(app.tags) == 0:
+            self.print_app(app)
+            aprint(f"App {app.name} does not have any tags.", log_type=LogType.ERROR)
+            raise AmiyaExit()
         
         self.print_tags(app)
-        tag_idx = input(atext(f"Which tag would you like to remove? (0-{len(app.tags)-1}): "))
+        tag_idx = input(atext(f"Which tag would you like to remove? {self.__get_app_tag_id_range()}: "))
         removing_tag = app.tags[int(tag_idx)]
         try:
             app.remove_tag(removing_tag)
@@ -317,24 +331,30 @@ class AppsManager:
         else:
             raise AmiyaBaseException(f"Cannot save {type(app)} to cache. Expecting app object.")
         
+    def __get_app_tag_id_range(self, app: App):
+        length = len(app.tags)
+        if length == 0:
+            return ""
+        return f"[0-{length-1}]"
+        
     # HELPER FUNCTIONS ======================
     def verbose_app_config(self, tag: str = None, show_all: bool = False):
         app = None
         if tag == None:                             # If no application tag is inputted by user
             self.print_apps()
-            user_input = input(atext(f"Which app would you like to DELETE? (0-{len(self.apps)-1}) "))
-            app = self.apps[int(user_input)]
+            user_input = input(atext(f"Which app would you like to DELETE? {self.__get_apps_id_range()}: "))
+            app = self.get_app_with_id(user_input)
         else:                                       # If user inputted an application tag tag
             tag = self.__parse_tag(tag)
             app = self.get_app_by_tag(tag)
             
-        text = f"Application Configuration:"
-        text += f"\nApp Name: {app.name}"
-        text += f"\nApp ID: {app.id}"  
-        text += f"\nApp Tags: {app.tags}"
-        text += f"\nApp Config Directory: {app.app_config_dirpath}" 
-        text += f"\nApp Executable Hash: {app.exe_hash}"
-        text += f"\nApp Configuration System UUID: {app.sys_uuid}"  
+        text = Printer.to_lightblue(f"Application Configuration:")
+        text += f"\n- {Printer.to_purple("App Name:")} {app.name}"
+        text += f"\n- {Printer.to_purple("App ID:")} {app.id}"  
+        text += f"\n- {Printer.to_purple("App Tags:")} {app.tags}"
+        text += f"\n- {Printer.to_purple("App Config Directory:")} {app.app_config_dirpath}" 
+        text += f"\n- {Printer.to_purple("App Exe Hash:")} {app.exe_hash}"
+        text += f"\n- {Printer.to_purple("App Configuration System UUID:")} {app.sys_uuid}"  
         aprint(text)
         
     
@@ -387,7 +407,7 @@ class AppsManager:
             app = self.get_app_by_tag(tag)
         else:
             self.print_apps()
-            user_input_id = input(atext(f"Which app would you like to see the automation sequences of? (0-{len(self.apps)-1}) "))
+            user_input_id = input(atext(f"Which app would you like to see the automation sequences of? {self.__get_apps_id_range()}: "))
             app = self.get_app_with_id(user_input_id)
         
         sequence_list = app.automation_controller.get_all_sequences()
@@ -405,7 +425,7 @@ class AppsManager:
             app = self.get_app_by_tag(tag)
         else:
             self.print_apps()
-            user_input_id = input(atext(f"Which app would you like to RECORD A NEW AUTOMATION SEQUENCE of? (0-{len(self.apps)-1}) "))
+            user_input_id = input(atext(f"Which app would you like to RECORD A NEW AUTOMATION SEQUENCE of? {self.__get_apps_id_range()}: "))
             app = self.get_app_with_id(user_input_id)
         
         new_sequence_name = input(atext(f"Name of the new automation sequence (i.e. start-game): "))
@@ -441,7 +461,7 @@ class AppsManager:
             app = self.get_app_by_tag(tag)
         else:
             self.print_apps()
-            user_input_id = input(atext(f"Which app would you like to RUN AN AUTOMATION SEQUENCE of? (0-{len(self.apps)-1}) "))
+            user_input_id = input(atext(f"Which app would you like to RUN AN AUTOMATION SEQUENCE of? {self.__get_apps_id_range()}: "))
             app = self.get_app_with_id(user_input_id)
         
         # ================ GET SEQUENCE ================

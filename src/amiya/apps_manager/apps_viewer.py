@@ -24,21 +24,30 @@ class AppsViewer:
     
     @staticmethod
     def tabulate_apps_list(apps_list: list[App], tablefmt) -> str:
-        table = [[app.name, app.exe_path, app.verified, ", ".join(app.tags)] for app in apps_list]
+        table = [[app.name, Printer.to_lightgrey(shorten_display_path(app.exe_path)), bool_to_str(app.verified), ", ".join(app.tags)] for app in apps_list]
         table = sorted(table, key=lambda x: x[0])
+        
         headers = ["App Name", "Executable Path", "Verified", "Tags"]
+        headers = [Printer.to_blue(title) for title in headers]
+        
         return tabulate(table, headers, tablefmt=tablefmt)
     
     @staticmethod
     def tabulate_app(app: App, tablefmt) -> str:
-        table = [[app.name, app.exe_path, app.verified, ", ".join(app.tags)]]
+        table = [[app.name, Printer.to_lightgrey(shorten_display_path(app.exe_path)), bool_to_str(app.verified), ", ".join(app.tags)]]
+        
         headers = ["App Name", "Executable Path", "Verified", "Tags"]
+        headers = [Printer.to_blue(title) for title in headers]
+        
         return tabulate(table, headers, tablefmt=tablefmt)
     
  
     @staticmethod
     def tabulate_tags(tags, tablefmt):
         table = [[idx, tag] for idx, tag in enumerate(tags)]
+        
         headers = ["Index", "Tag"]
+        headers = [Printer.to_blue(title) for title in headers]
+        
         return tabulate(table, headers, tablefmt=tablefmt)
         

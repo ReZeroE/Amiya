@@ -312,20 +312,19 @@ r"""
     
 
 
-    def setup_readline(self):
-        """Setup readline to handle custom key bindings."""
-        readline.parse_and_bind('"\C-w": backward-kill-word')
-        readline.parse_and_bind('"\C-a": beginning-of-line')
-        readline.parse_and_bind('"\C-e": end-of-line')
-        readline.parse_and_bind('"\C-u": unix-line-discard')
-        readline.parse_and_bind('"\C-k": kill-line')
-        readline.parse_and_bind('"\C-y": yank')
-        readline.parse_and_bind('"\C-b": backward-char')
-        readline.parse_and_bind('"\C-f": forward-char')
-        readline.parse_and_bind('"\C-p": previous-history')
-        readline.parse_and_bind('"\C-n": next-history')
-        readline.parse_and_bind('"\C-b": backward-word')
-        readline.parse_and_bind('"\C-f": forward-word')
+    def setup_key_bindings(self):
+        readline.parse_and_bind(r'"\C-w": backward-kill-word')
+        readline.parse_and_bind(r'"\C-a": beginning-of-line')
+        readline.parse_and_bind(r'"\C-e": end-of-line')
+        readline.parse_and_bind(r'"\C-u": unix-line-discard')
+        readline.parse_and_bind(r'"\C-k": kill-line')
+        readline.parse_and_bind(r'"\C-y": yank')
+        readline.parse_and_bind(r'"\C-b": backward-char')
+        readline.parse_and_bind(r'"\C-f": forward-char')
+        readline.parse_and_bind(r'"\C-p": previous-history')
+        readline.parse_and_bind(r'"\C-n": next-history')
+        readline.parse_and_bind(r'"\C-b": backward-word')
+        readline.parse_and_bind(r'"\C-f": forward-word')
 
 
     def start_cli(self, parser: argparse.ArgumentParser):
@@ -335,7 +334,7 @@ r"""
         
         
         # ============| SETUP READLINE |=============
-        self.setup_readline()
+        self.setup_key_bindings()
 
         
         # ==============| PRINT TITLE |==============
