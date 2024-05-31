@@ -14,13 +14,13 @@ class AppsViewer:
         table = sorted(table, key=lambda x: x[0])
         headers = ["ID", "App Name", "Executable Path", "Path Verified", "Tags"]
         headers = [Printer.to_blue(title) for title in headers]
-        tabulated_table =  tabulate(table, headers, tablefmt=tablefmt)
-        # tabulated_table = '\n'.join('  ' + line for line in tabulated_table.split('\n'))
-        
-        table_len = len(tabulated_table.split('\n')[0])
+        tabulated_apps_table =  tabulate(table, headers, tablefmt=tablefmt)
+        # tabulated_apps_table = '\n'.join('  ' + line for line in tabulated_apps_table.split('\n'))
+
+        table_len = len(tabulated_apps_table.split("\n")[0])
         resize_terminal(table_len, 5)
         
-        return tabulated_table
+        return tabulated_apps_table
     
     @staticmethod
     def tabulate_apps_list(apps_list: list[App], tablefmt) -> str:
@@ -35,6 +35,7 @@ class AppsViewer:
         headers = ["App Name", "Executable Path", "Verified", "Tags"]
         return tabulate(table, headers, tablefmt=tablefmt)
     
+ 
     @staticmethod
     def tabulate_tags(tags, tablefmt):
         table = [[idx, tag] for idx, tag in enumerate(tags)]

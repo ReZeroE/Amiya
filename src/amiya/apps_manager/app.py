@@ -19,8 +19,7 @@ class App:
     def __init__(
         self, 
         name        : str, 
-        exe_path    : str,
-        new         : bool = False
+        exe_path    : str
     ):
         self.id         = None      # Assigned automatically by the AppManager at creation
         self.name       = name
@@ -46,11 +45,9 @@ class App:
         self.app_config_filepath    = os.path.join(self.app_config_dirpath, APP_CONFIG_FILENAME)
         self.app_automation_dirpath = os.path.join(self.app_config_dirpath, APP_AUTOMATION_DIRNAME)
         
-        self.new = new
-        self.automation_controller = None
-        if not new:
+        # If app has been created (directory structure finallized)
+        if os.path.exists(self.app_config_dirpath):
             self.automation_controller = AutomationController(self.app_automation_dirpath)
-
 
 
     def __str__(self) -> str:
@@ -65,12 +62,13 @@ class App:
     # ========================================
     
     def create_app(self):
-        if self.new:
-            self.__create_app_dir_strucure()      # Create the app directory structure to hold all the configs (base config and automation config)
-            self.save_app_config()                # Write the base app config (creates the app)
-            self.automation_controller = AutomationController(self.app_automation_dirpath)
-        else:
-            AmiyaBaseException(f"Cannot create app when app instance is not defined as new (self.new=False).")
+        self.__verify_app_existance()
+        self.__verify_path_validity()
+        
+        self.__create_app_dir_strucure()      # Create the app directory structure to hold all the configs (base config and automation config)
+        self.save_app_config()                # Write the base app config (creates the app)
+        self.automation_controller = AutomationController(self.app_automation_dirpath)
+
         
     def save_app_config(self):
         try:
@@ -82,6 +80,16 @@ class App:
     def __create_app_dir_strucure(self):
         if not os.path.exists(self.app_config_dirpath):     # Create the base app directory (amiya/apps/<app_name>)
             os.mkdir(self.app_config_dirpath)
+
+    def __verify_app_existance(self):
+        if os.path.isfile(self.app_config_filepath):
+            raise Amiya_AppExistsException(self.name)
+    
+    def __verify_path_validity(self):
+        if self.verified == False:
+            aprint(f"The application's path failed to be verified (invalid path to .exe). Would you like to add this app anyways? [y/n] ", log_type=LogType.WARNING, end="")
+            if input("").lower()!= "y": 
+                raise AmiyaExit()
 
     # =======================================
     # ============| APP DRIVER | ============
@@ -130,19 +138,19 @@ class App:
             return self.get_app_process() != None
         return False
     
-    def get_app_process(self) -> psutil.Process:
-        APP_EXE_NAME = os.path.basename(self.exe_path)
-        for p in psutil.process_iter():
-            if APP_EXE_NAME.replace(".exe", "") in p.name():
-                try:
-                    app_process = psutil.Process(p.pid)
-                    if app_process.is_running():
-                        self.process = app_process
-                        return app_process
+    # def get_app_process(self) -> psutil.Process:
+    #     APP_EXE_NAME = os.path.basename(self.exe_path)
+    #     for p in psutil.process_iter():
+    #         if APP_EXE_NAME.replace(".exe", "") in p.name():
+    #             try:
+    #                 app_process = psutil.Process(p.pid)
+    #                 if app_process.is_running():
+    #                     self.process = app_process
+    #                     return app_process
                     
-                except Exception as ex:
-                    raise AmiyaBaseException(f"Failed to identify the app's process due to an unknown error ({ex}).")
-        return None
+    #             except Exception as ex:
+    #                 raise AmiyaBaseException(f"Failed to identify the app's process due to an unknown error ({ex}).")
+    #     return None
     
     def get_app_process(self) -> psutil.Process:
         APP_EXE_NAME = os.path.basename(self.exe_path)
@@ -200,8 +208,7 @@ class App:
                 config = json.load(rf)
                 app = App(
                     config["name"], 
-                    config["exe_path"],
-                    new = False
+                    config["exe_path"]
                 )
                 app.id       = int(config["id"])
                 app.tags     = config["tags"]

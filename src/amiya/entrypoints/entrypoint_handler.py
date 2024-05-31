@@ -4,6 +4,7 @@ import subprocess
 import tabulate, io
 from tabulate import tabulate
 import argparse
+import readline
 
 from amiya.apps_manager.apps_manager import AppsManager
 from amiya.module_utilities.search_controller import SearchController
@@ -93,6 +94,7 @@ class AmiyaEntrypointHandler:
     
     def show_app_config_dir(self, args):
         self.apps_manager.verbose_app_config(args.tag)
+    
     
     # =================================================
     # =================| START APPS | =================
@@ -197,14 +199,10 @@ class AmiyaEntrypointHandler:
             return
         
         if args.explain:
-            text = """Certain applications necessitate the 'amiya' process to have administrative 
+            text = """Certain applications requires the 'amiya' process to have admin 
 privileges to replay or record mouse and keyboard actions. To help with this, 
 the 'elevate' command is available to elevate amiya's permissions to an 
 administrative level.
-
-As an open-source project, `amiya` does not possess a Code Signing Certificate 
-due to the associated cost. Without this certificate, Windows will flag the 
-module's publisher as unknown.
 
 By invoking the elevate command, you are granting `amiya` admin access.
 """
@@ -216,8 +214,17 @@ By invoking the elevate command, you are granting `amiya` admin access.
         script = os.path.abspath(sys.argv[0])
         params = ' '.join([script])
         try:
-            subprocess.run(["powershell", "-Command", f"Start-Process -Verb runAs {params}"])
-            aprint("Permissions granted. Please use the new terminal with the Amiya-CLI that opened.")
+            # \k keeps the terminal open after the user exits the amiya cli env
+            cmd_command = f'cmd /k "{COMMAND}"'
+            result = subprocess.run(["powershell", "-Command", f'Start-Process cmd -ArgumentList \'/k {cmd_command}\' -Verb RunAs'])
+            
+            if result.returncode == 0:
+                aprint("Permissions granted. Please use the new terminal with the Amiya-CLI that opened.")
+            else:
+                aprint(f"Command 'amiya elevate' permission denied.", log_type=LogType.ERROR)
+            
+            # subprocess.run(["powershell", "-Command", f"Start-Process -Verb runAs {params}"])
+            
         except Exception as e:
             aprint(f"Failed to elevate privileges: {e}")
         raise AmiyaExit()
@@ -303,11 +310,33 @@ r"""
     
         return 0
     
-    import argparse
+
+
+    def setup_readline(self):
+        """Setup readline to handle custom key bindings."""
+        readline.parse_and_bind('"\C-w": backward-kill-word')
+        readline.parse_and_bind('"\C-a": beginning-of-line')
+        readline.parse_and_bind('"\C-e": end-of-line')
+        readline.parse_and_bind('"\C-u": unix-line-discard')
+        readline.parse_and_bind('"\C-k": kill-line')
+        readline.parse_and_bind('"\C-y": yank')
+        readline.parse_and_bind('"\C-b": backward-char')
+        readline.parse_and_bind('"\C-f": forward-char')
+        readline.parse_and_bind('"\C-p": previous-history')
+        readline.parse_and_bind('"\C-n": next-history')
+        readline.parse_and_bind('"\C-b": backward-word')
+        readline.parse_and_bind('"\C-f": forward-word')
+
+
     def start_cli(self, parser: argparse.ArgumentParser):
         
         # =============| SET CLI MODE |==============
         constants.CLI_MODE = True
+        
+        
+        # ============| SETUP READLINE |=============
+        self.setup_readline()
+
         
         # ==============| PRINT TITLE |==============
         clear_screen()
@@ -328,7 +357,6 @@ r"""
                 elif continue_loop == 2:
                     break
                 
-
                 # Verify that the stdout and stderr aren't closed
                 if sys.stdout.closed or sys.stderr.closed:
                     text = "STDOUT and STDERR" if sys.stdout.closed and sys.stderr.closed \
@@ -336,9 +364,8 @@ r"""
                         else "STDERR"
                     aprint(f"System {text} has been closed unexpectedly. Exiting Amiya CLI environment...")
                     sys.exit()
-
                 
-        # =============| PARSE ARGUMENT |=============
+                # =============| PARSE ARGUMENT |=============
                 if user_input.startswith(COMMAND):
                     user_input = user_input.lstrip(COMMAND).strip() 
                     
@@ -357,7 +384,6 @@ r"""
                     #     exit()
                 else:
                     parser.print_help()
-            
             
         # ==============| ON EXCEPTION |==============
             except KeyboardInterrupt:

@@ -1,0 +1,88 @@
+{
+    "metadata": {
+        "sequence_name": "test",
+        "date_created": "2024-05-27 16:54:30",
+        "monitor_info": {
+            "width": 3840,
+            "height": 2160
+        },
+        "other_data": null
+    },
+    "actions_sequence": [
+        {
+            "coordinate": {
+                "x": 1578,
+                "y": 516
+            },
+            "delay": 2.1071770191192627,
+            "click": true,
+            "window_info": {
+                "left": 959,
+                "top": 478,
+                "width": 1922,
+                "height": 1132,
+                "is_fullscreen": false
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1654,
+                "y": 517
+            },
+            "delay": 0.29320240020751953,
+            "click": true,
+            "window_info": {
+                "left": 959,
+                "top": 478,
+                "width": 1922,
+                "height": 1132,
+                "is_fullscreen": false
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1785,
+                "y": 514
+            },
+            "delay": 0.33919477462768555,
+            "click": true,
+            "window_info": {
+                "left": 959,
+                "top": 478,
+                "width": 1922,
+                "height": 1132,
+                "is_fullscreen": false
+            }
+        },
+        {
+            "coordinate": {
+                "x": 1909,
+                "y": 514
+            },
+            "delay": 0.31940364837646484,
+            "click": true,
+            "window_info": {
+                "left": 959,
+                "top": 478,
+                "width": 1922,
+                "height": 1132,
+                "is_fullscreen": false
+            }
+        },
+        {
+            "coordinate": {
+                "x": 2017,
+                "y": 514
+            },
+            "delay": 0.2205660343170166,
+            "click": true,
+            "window_info": {
+                "left": 959,
+                "top": 478,
+                "width": 1922,
+                "height": 1132,
+                "is_fullscreen": false
+            }
+        }
+    ]
+}

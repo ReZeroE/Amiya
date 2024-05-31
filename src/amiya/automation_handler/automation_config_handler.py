@@ -14,7 +14,6 @@ class SequenceConfigHandler(JSONConfigHandler):
     def validate_config(self):
         pass
     
-
 class PlateConfigHandler(JSONConfigHandler):
     def __init__(self, config_abs_path, config_type=list):
         super().__init__(

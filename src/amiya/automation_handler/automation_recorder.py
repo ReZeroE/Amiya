@@ -106,8 +106,8 @@ class AutomationRecorder():
         else:
             raise AmiyaBaseException("Record must start on callback. Other case not implemented.")
         
-        mouse_listener = mouse.Listener(on_click=self.__on_mouse_action)
-        keyboard_listener = keyboard.Listener(on_press=self.__on_keyboard_action)
+        # mouse_listener = mouse.Listener(on_click=self.__on_mouse_action)
+        # keyboard_listener = keyboard.Listener(on_press=self.__on_keyboard_action)
         
         with mouse.Listener(on_click=self.__on_mouse_action) as mouse_listener, \
             keyboard.Listener(on_press=self.__on_keyboard_action) as keyboard_listener:

@@ -48,7 +48,53 @@ $ cd Amiya/
 $ pip install -e .
 ```
 ## Usage Guide
-Coming soon!
+To activate the Amiya CLI environment after installation, simply run:
+```
+$ amiya
+```
+Then the CLI environment should be activated with the following being displayed.
+```
+
+                                          _    __  __ _____   __ _       ____ _     ___
+                                         / \  |  \/  |_ _\ \ / // \     / ___| |   |_ _|
+                                        / _ \ | |\/| || | \ V // _ \   | |   | |    | |
+                                       / ___ \| |  | || |  | |/ ___ \  | |___| |___ | |
+                                      /_/   \_\_|  |_|___| |_/_/   \_\  \____|_____|___|
+
+                            A lightweight cross-platform automation tool for games and daily tasks!
+                                               https://github.com/ReZeroE/Amiya
+                                                          By Kevin L.
+
+Welcome to the Amiya CLI Environment (Beta-0.0.4)
+  Type 'help' to display commands list
+  Type 'exit' to quit amiya CLI
+  Type 'clear' to clear terminal
+
+[02:12:34 Amiya-CLI] >
+```
+To list all commands currently supported, run:
+```
+[02:12:34 Amiya-CLI] > help
+```
+
+##### More Documentation Coming soon!
+
+## Amiya CLI Key Bindings
+Windows terminals' navigation and key bindings can often be cumbersome and less intuitive compared to Linux terminals. To address this, the Amiya CLI environment incorporates these familiar _**Linux-style key bindings**_ to make command-line navigation and editing easier and more efficient.
+
+#### Supported Key Bindings
+- Ctrl + W: Delete the word before the cursor.
+- Ctrl + A: Move the cursor to the beginning of the line.
+- Ctrl + E: Move the cursor to the end of the line.
+- Ctrl + U: Clear the line before the cursor.
+- Ctrl + K: Kill (cut) text from the cursor to the end of the line.
+- Ctrl + Y: Yank (paste) the most recently killed text.
+- Ctrl + B: Move backward one character.
+- Ctrl + F: Move forward one character.
+- Ctrl + P: Move to the previous line in the history.
+- Ctrl + N: Move to the next line in the history.
+- Ctrl + B: Move backward one word.
+- Ctrl + F: Move forward one word.
 
 
 ## Commands List
@@ -176,7 +222,6 @@ $ amiya --help
     --code, -c: Open development environment with VSCode.
     --isadmin, -ia: Show whether the main thread has admin access.
 ```
-
 
 
 

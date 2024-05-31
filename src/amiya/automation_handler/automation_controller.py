@@ -29,7 +29,6 @@ class AutomationController:
         self.__sequence_list: list[AutomationSequence] = self.__load_all_sequences()
         self.__plate_list: list[AutomationPlate] = None
     
-    
     def __create_automation_dir_structure(self):
         if not os.path.exists(self.automation_dir):         # Create the app automation top directory (amiya/apps/<app_name>/automation)
             os.mkdir(self.automation_dir)
