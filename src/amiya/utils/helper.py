@@ -40,7 +40,6 @@ def atext(text: str, log_type: LogType = LogType.NORMAL) -> str:
     rtext = colored(text, log_type.value)
     return f"[{prefix}] {rtext}"
 
-
 def aprint(
     text: str, 
     log_type: LogType   = LogType.NORMAL, 
@@ -63,6 +62,8 @@ def aprint(
     rtext = atext(text, log_type)
     print(rtext, end=end, file=file, flush=flush)
 
+def get_prefix_space():
+    return " " * (len(BASENAME)+2)
 
 def color_cmd(text: str, with_quotes: bool = False):
     text = text.lower()

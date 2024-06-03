@@ -13,6 +13,9 @@ from amiya.module_utilities.cursor_controller import CursorController
 from amiya.module_utilities.continuous_click_controller import ContinuousClickController
 from amiya.module_utilities.url_tracker import URLTracker
 from amiya.module_utilities.dev_features import DevController
+from amiya.module_utilities.internet_speed import InternetSpeedTest
+
+from amiya.raw_automation_manager.raw_auto_manager import RawAutoManager
 
 from amiya.exceptions.exceptions import *
 from amiya.utils.helper import *
@@ -27,9 +30,10 @@ from amiya.module_utilities.volume_controller import AmiyaVolumeControllerUI, st
 
 class AmiyaEntrypointHandler:
     def __init__(self):
-        self.apps_manager = AppsManager()
-        self.search_controller = SearchController()
-        self.power_utils = PowerUtils()
+        self.apps_manager       = AppsManager()
+        self.raw_auto_manager   = RawAutoManager()
+        self.search_controller  = SearchController()
+        self.power_utils        = PowerUtils()
        
         # self.scheduler = AmiyaScheduler()
 
@@ -235,12 +239,26 @@ By invoking the elevate command, you are granting `amiya` admin access.
         url_monitor.safe_track_changes(args.url, args.interval, args.open)
 
 
+    def internet_speed_test(self, args):
+        aprint("Command internet-speed is still in development.", LogType.WARNING)
+        if DEVELOPMENT:
+            InternetSpeedTest.run()
+
+
     # =================================================
     # ================| SCHEDULER | ===================
     # =================================================
 
     # def run_scheduler(self, args):
     #     self.scheduler.run_scheduler()
+    
+    
+    # =================================================
+    # =============| RAW AUTOMATIONS | ================
+    # =================================================
+    
+    def testrawauto(self, args):
+        assert(self.raw_auto_manager.raw_sequences_dict != None)
 
     # =================================================
     # ===============| OTHER HELPER | =================
@@ -285,7 +303,8 @@ r"""
         help_str = f"Type '{help_cmd}' to display commands list"
     
         print(f"{welcome_str}\n  {help_str}\n  {exit_str}\n  {cls_str}\n")
-        
+    
+    
     # =================================================
     # ===============| CLI DRIVERS | ==================
     # =================================================
@@ -310,7 +329,6 @@ r"""
     
         return 0
     
-
 
     def setup_key_bindings(self):
         readline.parse_and_bind(r'"\C-w": backward-kill-word')

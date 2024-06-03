@@ -35,6 +35,7 @@ else:
     __AMIYA_DIRECTORY   = os.path.join(HOME_DIRECTORY, "src", "amiya")
 
 APPS_DIRECTORY      = os.path.join(__AMIYA_DIRECTORY, "apps")
+RAW_AUTO_DIRECTORY  = os.path.join(__AMIYA_DIRECTORY, "raw_automations")
 BIN_DIRECTORY       = os.path.join(__AMIYA_DIRECTORY, "bin")
 
 # Development Only

@@ -245,6 +245,10 @@ def start_amiya():
     track_url_parser.set_defaults(func=entrypoint_handler.track_url)
     parser.add_parser_to_group(utility_group, track_url_parser)
 
+    internet_speed_parser = subparsers.add_parser('internet-speed', help='Test internet speed', description='Test internet speed')
+    internet_speed_parser.add_argument('--url', type=str, default="", help='Custom download URL for the internet speed test')
+    internet_speed_parser.set_defaults(func=entrypoint_handler.internet_speed_test)
+    parser.add_parser_to_group(utility_group, internet_speed_parser)
     
     # # =================================================
     # # ================| SCHEDULER | ===================
@@ -252,6 +256,16 @@ def start_amiya():
     
     # start_parser = subparsers.add_parser('run-scheduler', help='Start and run the scheduler')
     # start_parser.set_defaults(func=entrypoint_handler.run_scheduler)
+    
+    
+    # =================================================
+    # =============| RAW AUTOMATIONS | ================
+    # =================================================
+    standalone_auto_group = parser.add_group('Standalone Automation', 'Standalone automations features (currently in development)')
+    
+    standalone_auto_parser = subparsers.add_parser('testrawauto', help='Track URL to monitor anchor href changes.', description='Track URL to monitor anchor href changes.')
+    standalone_auto_parser.set_defaults(func=entrypoint_handler.testrawauto)
+    parser.add_parser_to_group(standalone_auto_group, standalone_auto_parser)
     
     
     

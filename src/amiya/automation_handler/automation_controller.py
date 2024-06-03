@@ -83,8 +83,8 @@ class AutomationController:
             config_handler = SequenceConfigHandler(AUTOMATION_FILE)
             if config_handler.config_exists():
             
-                raw_json_config = config_handler.load_config()              # Loads the sequence config file
-                sequence = self.parse_sequence_config(raw_json_config)    # Parses the json config into a sequence object
+                raw_json_config = config_handler.load_config()                          # Loads the sequence config file
+                sequence = AutomationController.parse_sequence_config(raw_json_config)  # Parses the json config into a sequence object
                 sequence_list.append(sequence)
                 
         sequence_list.sort(key=lambda seq: seq.date_created)
@@ -93,7 +93,8 @@ class AutomationController:
 
     # ===========| HELPER FUNCTIONS | ===========
     
-    def parse_sequence_config(self, raw_json_config: list):
+    @staticmethod
+    def parse_sequence_config(raw_json_config: list):
         metadata        = raw_json_config["metadata"]
         sequence_name   = metadata["sequence_name"]
         
