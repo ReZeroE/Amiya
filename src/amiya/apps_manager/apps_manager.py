@@ -1,10 +1,7 @@
 import os
 import sys
-import json
 import shutil
 import time
-import signal
-from termcolor import colored
 from amiya.apps_manager.app import App, APP_CONFIG_FILENAME
 from amiya.apps_manager.apps_viewer import AppsViewer
 from amiya.utils.constants import APPS_DIRECTORY, BACKUP_APPS_DIRECTORY, AMIYA_PID, DEVELOPMENT

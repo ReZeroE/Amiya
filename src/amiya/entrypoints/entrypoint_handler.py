@@ -1,8 +1,6 @@
 import multiprocessing
 import getpass
 import subprocess
-import tabulate, io
-from tabulate import tabulate
 import argparse
 import readline
 
@@ -172,7 +170,6 @@ class AmiyaEntrypointHandler:
     def shutdown(self, args, parser):
         self.power_utils.shutdown_pc(args.delay)
 
-
     def display_system_uuid(self, args):
        SysUUIDController.print_uuid()
 
@@ -183,7 +180,6 @@ class AmiyaEntrypointHandler:
         gui_process.start()
         gui_process.join()
     
-
     def track_cursor(self, args):
         if args.color:
             self.cursor_controller = CursorController(verbose_hex=True)
@@ -191,7 +187,6 @@ class AmiyaEntrypointHandler:
             self.cursor_controller = CursorController(verbose_hex=False)
         
         self.cursor_controller.track_cursor()
-
 
     def click_continuously(self, args):
         cc_controller = ContinuousClickController()
@@ -233,11 +228,9 @@ By invoking the elevate command, you are granting `amiya` admin access.
             aprint(f"Failed to elevate privileges: {e}")
         raise AmiyaExit()
 
-
     def track_url(self, args):
         url_monitor = URLTracker()
         url_monitor.safe_track_changes(args.url, args.interval, args.open)
-
 
     def internet_speed_test(self, args):
         aprint("Command internet-speed is still in development.", LogType.WARNING)

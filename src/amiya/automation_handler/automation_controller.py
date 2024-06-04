@@ -1,4 +1,3 @@
-import time
 import os
 from amiya.automation_handler.automation_config_handler import SequenceConfigHandler
 from amiya.automation_handler.units.action import Action, MouseAction, KeyboardAction

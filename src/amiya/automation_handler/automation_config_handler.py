@@ -1,6 +1,3 @@
-import os
-import json
-from amiya.automation_handler.units.action import Action, KeyboardAction, MouseAction
 from amiya.utils.json_handler import JSONConfigHandler
 from amiya.exceptions.exceptions import *
 

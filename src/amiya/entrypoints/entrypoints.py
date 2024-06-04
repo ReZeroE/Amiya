@@ -1,19 +1,18 @@
-import os
+print("Loading Amiya...", end="\r")
+
+
 import sys
 import time
-import psutil
 import argparse
+start_time = time.time()
 
-import ctypes
-import subprocess
-
-from termcolor import colored
 from amiya.entrypoints.entrypoint_handler import AmiyaEntrypointHandler
 from amiya.entrypoints.help_format_handler import HelpFormatHandler
 from amiya.utils.helper import aprint, verify_platform, is_admin, Printer, color_cmd
 from amiya.utils.constants import COMMAND
 from amiya.exceptions.exceptions import AmiyaOSNotSupported, AmiyaExit
 
+print(f"sys import time: {time.time() - start_time:.4f} seconds")
 
 class AmiyaArgParser(argparse.ArgumentParser):
     def __init__(self, *args, **kwargs):
