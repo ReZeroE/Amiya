@@ -42,6 +42,7 @@ class RawAutoManager:
         return raw_auto_dict
     
     
+    
     def __init_dir_structure(self):
         if not os.path.exists(RAW_AUTO_DIRECTORY):
             os.mkdir(RAW_AUTO_DIRECTORY)

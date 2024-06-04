@@ -317,7 +317,7 @@ def start_amiya():
             try:
                 args.func(args)
             except KeyboardInterrupt:
-                print("\nKeyboard Interrupt! Amiya Exiting.")
+                aprint("Keyboard Interrupt! Amiya Exiting.")
             except AmiyaExit:
                 exit()
         else:

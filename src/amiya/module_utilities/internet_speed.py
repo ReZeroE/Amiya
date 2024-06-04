@@ -8,14 +8,14 @@ from amiya.utils.helper import *
 class InternetSpeedTest:
     def __init__(self, test_url=None, chunk_size=1024*1024, runtime=15):  # Set smaller chunk size for frequent updates
         if test_url is None:
-            self.test_url = "https://www.thinkbroadband.com/download/2GB" #http://speedtest.tele2.net/1GB.zip"
+            self.test_url = "http://speedtest.tele2.net/1GB.zip" #http://speedtest.tele2.net/1GB.zip"
         else:
             self.test_url = test_url
             
         self.chunk_size = chunk_size
         self.runtime = runtime
         
-        self.max_speed = 50
+        self.max_speed = 100
         
         self.prefix_space = get_prefix_space()
 
@@ -50,7 +50,10 @@ class InternetSpeedTest:
     def print_speed_bar(self, speed_mbps):
         bar_length = 50  # Length of the horizontal bar
         filled_length = int(bar_length * speed_mbps / self.max_speed)
+        if filled_length > bar_length:
+            filled_length = bar_length
         bar = '█' * filled_length + '-' * (bar_length - filled_length)
+            
         print(f"{self.prefix_space} - Current speed:  |{bar}| {speed_mbps:.2f} Mbps{' ' * 8}")
 
     def download_speed(self, url):
@@ -105,7 +108,7 @@ class InternetSpeedTest:
 
 
 
-    def test_speed(self):
+    def test_speed(self) -> tuple:
         results = {}
         print(f"{self.prefix_space} {Printer.to_purple('> Testing URL')}: {Printer.to_lightgrey(self.test_url)}")
         print(f"{self.prefix_space} - Current speed:  starting...")
@@ -134,6 +137,7 @@ class InternetSpeedTest:
         speed_test = InternetSpeedTest()
         aprint(Printer.to_lightblue("Starting internet speed test. Press CTRL+C to stop anytime."))
         
+        results = tuple()
         try:
             # speed_test.show_downloads()
             results = speed_test.test_speed()
@@ -142,6 +146,6 @@ class InternetSpeedTest:
             raise KeyboardInterrupt()
 
         print("\n")
-        aprint(f"{Printer.to_lightblue("Results:")} Average Speed: {results[0]} Mbps, Packet Loss: {results[1]}%, Total Size: {results[2]} MB")
+        aprint(f"{Printer.to_lightblue("Results:")} Average Speed: {results[0]} Mbps, Packet Loss: {results[1]}%")
 
 
