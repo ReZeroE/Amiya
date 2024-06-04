@@ -25,7 +25,6 @@ from amiya.utils.constants import COMMAND, VERSION, VERSION_DESC, AUTHOR, AUTHOR
 from amiya.module_utilities.volume_controller import AmiyaVolumeControllerUI, start_volume_control_ui
 
 
-
 class AmiyaEntrypointHandler:
     def __init__(self):
         self.apps_manager       = AppsManager()

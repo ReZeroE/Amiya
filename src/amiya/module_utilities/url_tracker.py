@@ -2,20 +2,19 @@ from amiya.utils.helper import *
 from amiya.exceptions.exceptions import AmiyaExit
 import webbrowser
 
-try:
-    from selenium import webdriver
-    from selenium.webdriver.chrome.service import Service as ChromeService
-    from selenium.webdriver.chrome.options import Options
-    from webdriver_manager.chrome import ChromeDriverManager
-    from bs4 import BeautifulSoup
-    import time
-except ImportError as ex:
-    # aprint("The following packages/external-drivers are required to run the URLTracker:\n- selenium\n- bs4\n- webdriver-manager", log_type=LogType.ERROR)
-    pass
-
 class URLTracker:
 
     def __init__(self):
+        try:
+            from selenium import webdriver
+            from selenium.webdriver.chrome.service import Service as ChromeService
+            from selenium.webdriver.chrome.options import Options
+            from webdriver_manager.chrome import ChromeDriverManager
+            import time
+        except ImportError as ex:
+            aprint(f"Failed to import necessary modules: {str(ex)}", log_type=LogType.ERROR)
+            raise AmiyaExit()
+        
         options = Options()
         options.add_argument("--headless")
         options.add_argument("--log-level=2")
@@ -28,8 +27,11 @@ class URLTracker:
         ERROR_THRESHOLD = 10
         
         try:
+            import time
+            from bs4 import BeautifulSoup
+            
             self.driver.get(url)
-            time.sleep(5) # Wait for webpage to load
+            time.sleep(5)  # Wait for webpage to load
             soup = BeautifulSoup(self.driver.page_source, 'html.parser')
             anchors_data = [
                 {
@@ -51,13 +53,13 @@ class URLTracker:
                 self.driver.quit()
                 raise AmiyaExit()
             
-            aprint(f"Error occurred while fetching for the links: {str(e)}", log_type=LogType.ERROR)
-            time.sleep(60) # On error, wait for one min before trying again.
+            aprint(f"Error occurred while fetching the links: {str(e)}", log_type=LogType.ERROR)
+            time.sleep(60)  # On error, wait for one min before trying again.
             self.errors_count += 1
             return []
 
     def safe_track_changes(self, url: str, interval: int = 0, open_when_detected: bool = False):
-        if url == None or len(url) == 0:
+        if not url:
             aprint("URL must be specified with the `--url` argument.", log_type=LogType.ERROR)
         
         aprint(f"Starting tracker on URL `{url}`...", submodule_name="URL-Tracker")
@@ -67,7 +69,7 @@ class URLTracker:
             if self.rounds > 1:
                 print("")
             tx = Printer.to_lightred("this may take up to 30 seconds")
-            aprint(f"Keyboard interupted. Exiting the webdriver... ({tx})")
+            aprint(f"Keyboard interrupted. Exiting the webdriver... ({tx})")
         except Exception as ex:
             if self.rounds > 1:
                 print("")
@@ -84,20 +86,21 @@ class URLTracker:
         self.__print_new_anchors(original_anchors, initialization=True)
         
         while True:
+            import time
+            
             starting_time = time.time()
             new_anchors = []
             has_diff = False
             
-            # Fetch current links for iterate through the links
+            # Fetch current links and iterate through the links
             current_anchors = self.get_links(url)
             for curr_anchor in current_anchors:
-                
-                # If curr link is not in the original liks list, append to new_anchors to verbose later
+                # If curr link is not in the original links list, append to new_anchors to verbose later
                 if curr_anchor["href"] not in original_href_list:
                     new_anchors.append(curr_anchor)
                     has_diff = True    
             
-            if has_diff: # If there is a new anchor href, verbose and reset original anchor list
+            if has_diff:  # If there is a new anchor href, verbose and reset original anchor list
                 self.__print_new_anchors(new_anchors)
                 original_href_list = [curr_anchor["href"] for curr_anchor in current_anchors]
                 
@@ -114,6 +117,8 @@ class URLTracker:
             starting_time = time.time()
     
     def __print_new_anchors(self, new_anchors: list[dict], initialization: bool = False):
+        from amiya.utils.helper import DatetimeHandler, Printer
+        
         # Header
         datetime_str = Printer.to_lightblue(DatetimeHandler.get_datetime_str())
         text = f"[{datetime_str}] "
@@ -125,9 +130,9 @@ class URLTracker:
         
         # New anchors
         for anchor in new_anchors:
-            this_href   = anchor["href"]
-            this_cls    = anchor["class"]
-            this_id     = anchor["id"]
+            this_href = anchor["href"]
+            this_cls = anchor["class"]
+            this_id = anchor["id"]
         
             plussign = Printer.to_lightgreen("+")
             text += f" {plussign} <{this_href}> class={this_cls} id={this_id}\n"
@@ -136,4 +141,3 @@ class URLTracker:
             print("")
         text = text.rstrip("\n")
         print(text, flush=True)
-

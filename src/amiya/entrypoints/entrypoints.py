@@ -12,7 +12,7 @@ from amiya.utils.helper import aprint, verify_platform, is_admin, Printer, color
 from amiya.utils.constants import COMMAND
 from amiya.exceptions.exceptions import AmiyaOSNotSupported, AmiyaExit
 
-print(f"sys import time: {time.time() - start_time:.4f} seconds")
+print(f"{Printer.to_lightred("(Dev)")} Amiya load time: {time.time() - start_time:.4f} seconds")
 
 class AmiyaArgParser(argparse.ArgumentParser):
     def __init__(self, *args, **kwargs):
