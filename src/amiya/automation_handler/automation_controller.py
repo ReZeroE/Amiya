@@ -1,4 +1,3 @@
-import time
 import os
 from amiya.automation_handler.automation_config_handler import SequenceConfigHandler
 from amiya.automation_handler.units.action import Action, MouseAction, KeyboardAction
@@ -28,7 +27,6 @@ class AutomationController:
         # This needss to be changed into a dictionary with sequence name as the key
         self.__sequence_list: list[AutomationSequence] = self.__load_all_sequences()
         self.__plate_list: list[AutomationPlate] = None
-    
     
     def __create_automation_dir_structure(self):
         if not os.path.exists(self.automation_dir):         # Create the app automation top directory (amiya/apps/<app_name>/automation)
@@ -84,8 +82,8 @@ class AutomationController:
             config_handler = SequenceConfigHandler(AUTOMATION_FILE)
             if config_handler.config_exists():
             
-                raw_json_config = config_handler.load_config()              # Loads the sequence config file
-                sequence = self.parse_sequence_config(raw_json_config)    # Parses the json config into a sequence object
+                raw_json_config = config_handler.load_config()                          # Loads the sequence config file
+                sequence = AutomationController.parse_sequence_config(raw_json_config)  # Parses the json config into a sequence object
                 sequence_list.append(sequence)
                 
         sequence_list.sort(key=lambda seq: seq.date_created)
@@ -94,7 +92,8 @@ class AutomationController:
 
     # ===========| HELPER FUNCTIONS | ===========
     
-    def parse_sequence_config(self, raw_json_config: list):
+    @staticmethod
+    def parse_sequence_config(raw_json_config: list):
         metadata        = raw_json_config["metadata"]
         sequence_name   = metadata["sequence_name"]
         

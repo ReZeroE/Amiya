@@ -3,7 +3,6 @@ from pynput import mouse
 import pyautogui
 from amiya.utils.helper import aprint, LogType
 from amiya.exceptions.exceptions import AmiyaExit
-import pyscreeze
 from screeninfo import get_monitors
 
 class CursorController:

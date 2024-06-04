@@ -11,3 +11,4 @@ screeninfo
 customtkinter
 pycaw
 Pillow
+pyreadline3

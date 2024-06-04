@@ -1,0 +1,13 @@
+{
+    "id": 3,
+    "name": "Genshin Impact",
+    "exe_path": "E:\\Genshin Impact\\launcher.exe",
+    "exe_hash": "5c2c2666fb9a8daf68ba84cef8930829018f324f430639bb48cc3ec56aed45ca",
+    "tags": [
+        "genshin-impact",
+        "genshin",
+        "gi"
+    ],
+    "verified": true,
+    "sys_uuid": "ECB1B2E8-FB5D-C8CB-75DC-C87F545BE519"
+}

@@ -1,5 +1,11 @@
 # Amiya
-Amiya - a lightweight cross-platform automation tool that allows scheduled start and automation of any application from the CLI.
+![PyPI - Downloads](https://img.shields.io/pypi/dm/amiya) ![GitHub License](https://img.shields.io/github/license/rezeroe/amiya) ![PyPI - Format](https://img.shields.io/pypi/format/amiya) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/rezeroe/amiya)
+
+
+
+A lightweight cross-platform automation tool that allows scheduled start and automation of any application from the CLI.
+
+_This project is currently in development (`Development Status :: 4 - Beta`)._
 
 
 <div align="center">
@@ -11,9 +17,8 @@ Amiya - a lightweight cross-platform automation tool that allows scheduled start
 
 
 ## Overview
-_This project is currently in development (`Development Status :: 4 - Beta`)._
 
-Amiya is a easy-to-use and versatile cross-platform application and game automation tool designed for efficiency and ease of use directly from the CLI. This package offers automation capabilities for any applications (including games), enabling users to start and control any application with simple CLI commands.
+Amiya is a easy-to-use and versatile cross-platform application and game automation tool designed for efficiency and ease of use directly from the command-line interface (CLI). This package offers automation capabilities for any applications (including games), enabling users to start and control any application with simple CLI commands.
 
 
 The primary features supported by the `amiya` package are:
@@ -26,8 +31,9 @@ The primary features supported by the `amiya` package are:
     - Internet speed test (CLI), etc.
 
 
-Designed to be lightweight and fully CLI-based, Amiya is perfect for users who need a reliable and scalable solution for managing and automating their software applications or games.
+Designed to be lightweight and fully CLI-based with Linux key-bindings even on Windows, Amiya is perfect for users who need a reliable and scalable solution for managing and automating their software applications or games.
 
+***
 
 ## Installation Guide
 To install the beta version of the `amiya` package locally, run:
@@ -47,9 +53,61 @@ $ git clone -b dev https://github.com/ReZeroE/Amiya.git
 $ cd Amiya/
 $ pip install -e .
 ```
-## Usage Guide
-Coming soon!
 
+***
+
+## Usage Guide
+To activate the Amiya CLI environment after installation, simply run:
+```
+$ amiya
+```
+Then the CLI environment should be activated with the following being displayed.
+```
+
+                                          _    __  __ _____   __ _       ____ _     ___
+                                         / \  |  \/  |_ _\ \ / // \     / ___| |   |_ _|
+                                        / _ \ | |\/| || | \ V // _ \   | |   | |    | |
+                                       / ___ \| |  | || |  | |/ ___ \  | |___| |___ | |
+                                      /_/   \_\_|  |_|___| |_/_/   \_\  \____|_____|___|
+
+                            A lightweight cross-platform automation tool for games and daily tasks!
+                                               https://github.com/ReZeroE/Amiya
+                                                          By Kevin L.
+
+Welcome to the Amiya CLI Environment (Beta-0.0.4)
+  Type 'help' to display commands list
+  Type 'exit' to quit amiya CLI
+  Type 'clear' to clear terminal
+
+[02:12:34 Amiya-CLI] >
+```
+To list all commands currently supported, run:
+```
+[02:12:34 Amiya-CLI] > help
+```
+
+##### More Documentation Coming soon!
+
+***
+
+## CLI Key Bindings
+Windows terminals' navigation and key bindings can often be cumbersome and less intuitive compared to Linux terminals. To address this, the Amiya CLI environment incorporates these familiar _**Linux-style key bindings**_ to make command-line navigation and editing easier and more efficient.
+
+#### Supported Key Bindings
+- Ctrl + W: Delete the word before the cursor.
+- Ctrl + A: Move the cursor to the beginning of the line.
+- Ctrl + E: Move the cursor to the end of the line.
+- Ctrl + U: Clear the line before the cursor.
+- Ctrl + K: Kill (cut) text from the cursor to the end of the line.
+- Ctrl + Y: Yank (paste) the most recently killed text.
+- Ctrl + B: Move backward one character.
+- Ctrl + F: Move forward one character.
+- Ctrl + P: Move to the previous line in the history.
+- Ctrl + N: Move to the next line in the history.
+- Ctrl + B: Move backward one word.
+- Ctrl + F: Move forward one word.
+
+***
 
 ## Commands List
 ```
@@ -177,7 +235,8 @@ $ amiya --help
     --isadmin, -ia: Show whether the main thread has admin access.
 ```
 
+***
 
+## Developer's Note
 
-
-
+This project title is inspired by the character Amiya from Arknights.

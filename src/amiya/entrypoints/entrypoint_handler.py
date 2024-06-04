@@ -1,9 +1,8 @@
 import multiprocessing
 import getpass
 import subprocess
-import tabulate, io
-from tabulate import tabulate
 import argparse
+import readline
 
 from amiya.apps_manager.apps_manager import AppsManager
 from amiya.module_utilities.search_controller import SearchController
@@ -12,6 +11,9 @@ from amiya.module_utilities.cursor_controller import CursorController
 from amiya.module_utilities.continuous_click_controller import ContinuousClickController
 from amiya.module_utilities.url_tracker import URLTracker
 from amiya.module_utilities.dev_features import DevController
+from amiya.module_utilities.internet_speed import InternetSpeedTest
+
+from amiya.raw_automation_manager.raw_auto_manager import RawAutoManager
 
 from amiya.exceptions.exceptions import *
 from amiya.utils.helper import *
@@ -23,12 +25,12 @@ from amiya.utils.constants import COMMAND, VERSION, VERSION_DESC, AUTHOR, AUTHOR
 from amiya.module_utilities.volume_controller import AmiyaVolumeControllerUI, start_volume_control_ui
 
 
-
 class AmiyaEntrypointHandler:
     def __init__(self):
-        self.apps_manager = AppsManager()
-        self.search_controller = SearchController()
-        self.power_utils = PowerUtils()
+        self.apps_manager       = AppsManager()
+        self.raw_auto_manager   = RawAutoManager()
+        self.search_controller  = SearchController()
+        self.power_utils        = PowerUtils()
        
         # self.scheduler = AmiyaScheduler()
 
@@ -93,6 +95,7 @@ class AmiyaEntrypointHandler:
     
     def show_app_config_dir(self, args):
         self.apps_manager.verbose_app_config(args.tag)
+    
     
     # =================================================
     # =================| START APPS | =================
@@ -166,7 +169,6 @@ class AmiyaEntrypointHandler:
     def shutdown(self, args, parser):
         self.power_utils.shutdown_pc(args.delay)
 
-
     def display_system_uuid(self, args):
        SysUUIDController.print_uuid()
 
@@ -177,7 +179,6 @@ class AmiyaEntrypointHandler:
         gui_process.start()
         gui_process.join()
     
-
     def track_cursor(self, args):
         if args.color:
             self.cursor_controller = CursorController(verbose_hex=True)
@@ -185,7 +186,6 @@ class AmiyaEntrypointHandler:
             self.cursor_controller = CursorController(verbose_hex=False)
         
         self.cursor_controller.track_cursor()
-
 
     def click_continuously(self, args):
         cc_controller = ContinuousClickController()
@@ -197,14 +197,10 @@ class AmiyaEntrypointHandler:
             return
         
         if args.explain:
-            text = """Certain applications necessitate the 'amiya' process to have administrative 
+            text = """Certain applications requires the 'amiya' process to have admin 
 privileges to replay or record mouse and keyboard actions. To help with this, 
 the 'elevate' command is available to elevate amiya's permissions to an 
 administrative level.
-
-As an open-source project, `amiya` does not possess a Code Signing Certificate 
-due to the associated cost. Without this certificate, Windows will flag the 
-module's publisher as unknown.
 
 By invoking the elevate command, you are granting `amiya` admin access.
 """
@@ -216,16 +212,29 @@ By invoking the elevate command, you are granting `amiya` admin access.
         script = os.path.abspath(sys.argv[0])
         params = ' '.join([script])
         try:
-            subprocess.run(["powershell", "-Command", f"Start-Process -Verb runAs {params}"])
-            aprint("Permissions granted. Please use the new terminal with the Amiya-CLI that opened.")
+            # \k keeps the terminal open after the user exits the amiya cli env
+            cmd_command = f'cmd /k "{COMMAND}"'
+            result = subprocess.run(["powershell", "-Command", f'Start-Process cmd -ArgumentList \'/k {cmd_command}\' -Verb RunAs'])
+            
+            if result.returncode == 0:
+                aprint("Permissions granted. Please use the new terminal with the Amiya-CLI that opened.")
+            else:
+                aprint(f"Command 'amiya elevate' permission denied.", log_type=LogType.ERROR)
+            
+            # subprocess.run(["powershell", "-Command", f"Start-Process -Verb runAs {params}"])
+            
         except Exception as e:
             aprint(f"Failed to elevate privileges: {e}")
         raise AmiyaExit()
 
-
     def track_url(self, args):
         url_monitor = URLTracker()
         url_monitor.safe_track_changes(args.url, args.interval, args.open)
+
+    def internet_speed_test(self, args):
+        aprint("Command internet-speed is still in development.", LogType.WARNING)
+        if DEVELOPMENT:
+            InternetSpeedTest.run()
 
 
     # =================================================
@@ -234,6 +243,14 @@ By invoking the elevate command, you are granting `amiya` admin access.
 
     # def run_scheduler(self, args):
     #     self.scheduler.run_scheduler()
+    
+    
+    # =================================================
+    # =============| RAW AUTOMATIONS | ================
+    # =================================================
+    
+    def testrawauto(self, args):
+        assert(self.raw_auto_manager.raw_sequences_dict != None)
 
     # =================================================
     # ===============| OTHER HELPER | =================
@@ -278,7 +295,8 @@ r"""
         help_str = f"Type '{help_cmd}' to display commands list"
     
         print(f"{welcome_str}\n  {help_str}\n  {exit_str}\n  {cls_str}\n")
-        
+    
+    
     # =================================================
     # ===============| CLI DRIVERS | ==================
     # =================================================
@@ -303,11 +321,31 @@ r"""
     
         return 0
     
-    import argparse
+
+    def setup_key_bindings(self):
+        readline.parse_and_bind(r'"\C-w": backward-kill-word')
+        readline.parse_and_bind(r'"\C-a": beginning-of-line')
+        readline.parse_and_bind(r'"\C-e": end-of-line')
+        readline.parse_and_bind(r'"\C-u": unix-line-discard')
+        readline.parse_and_bind(r'"\C-k": kill-line')
+        readline.parse_and_bind(r'"\C-y": yank')
+        readline.parse_and_bind(r'"\C-b": backward-char')
+        readline.parse_and_bind(r'"\C-f": forward-char')
+        readline.parse_and_bind(r'"\C-p": previous-history')
+        readline.parse_and_bind(r'"\C-n": next-history')
+        readline.parse_and_bind(r'"\C-b": backward-word')
+        readline.parse_and_bind(r'"\C-f": forward-word')
+
+
     def start_cli(self, parser: argparse.ArgumentParser):
         
         # =============| SET CLI MODE |==============
         constants.CLI_MODE = True
+        
+        
+        # ============| SETUP READLINE |=============
+        self.setup_key_bindings()
+
         
         # ==============| PRINT TITLE |==============
         clear_screen()
@@ -328,7 +366,6 @@ r"""
                 elif continue_loop == 2:
                     break
                 
-
                 # Verify that the stdout and stderr aren't closed
                 if sys.stdout.closed or sys.stderr.closed:
                     text = "STDOUT and STDERR" if sys.stdout.closed and sys.stderr.closed \
@@ -336,9 +373,8 @@ r"""
                         else "STDERR"
                     aprint(f"System {text} has been closed unexpectedly. Exiting Amiya CLI environment...")
                     sys.exit()
-
                 
-        # =============| PARSE ARGUMENT |=============
+                # =============| PARSE ARGUMENT |=============
                 if user_input.startswith(COMMAND):
                     user_input = user_input.lstrip(COMMAND).strip() 
                     
@@ -357,7 +393,6 @@ r"""
                     #     exit()
                 else:
                     parser.print_help()
-            
             
         # ==============| ON EXCEPTION |==============
             except KeyboardInterrupt:

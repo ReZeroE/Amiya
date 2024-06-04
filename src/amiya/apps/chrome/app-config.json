@@ -1,0 +1,12 @@
+{
+    "id": 2,
+    "name": "Chrome",
+    "exe_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "exe_hash": "8b1c64f2938d58be80cc2bedfc9dd3b4028a44cd71e4088e838a7fda4aac5f06",
+    "tags": [
+        "chrome",
+        "crm"
+    ],
+    "verified": true,
+    "sys_uuid": "ECB1B2E8-FB5D-C8CB-75DC-C87F545BE519"
+}

@@ -41,19 +41,23 @@ class PowerUtils:
             if not confirmed:
                 return
              
-            self.wait(delay, PowerType.Sleep)
-            
-            ret = 0
-            try:
-                ret = self.__sleep()
-            except Exception as ex:
-                raise AmiyaBaseException(f"Sleep failed to execute due to {ex} with error code {ret}")
+        self.wait(delay, PowerType.Sleep)
+        
+        ret = 0
+        try:
+            ret = self.__sleep()
+        except Exception as ex:
+            raise AmiyaBaseException(f"Sleep failed to execute due to {ex} with error code {ret}")
 
         
-    def shutdown_pc(self, delay: int):
-        if self.run_confirmation(delay, PowerType.Shutdown) == True:
-            self.wait(delay, PowerType.Shutdown)
-            self.__shutdown()
+    def shutdown_pc(self, delay: int, no_confirmation: bool = False):
+        if not no_confirmation:
+            confirmed = self.run_confirmation(delay, PowerType.Shutdown)
+            if not confirmed:
+                return
+            
+        self.wait(delay, PowerType.Shutdown)
+        self.__shutdown()
 
 
     def __sleep(self) -> int:

@@ -4,9 +4,9 @@ import time
 import pyautogui
 import pynput
 from pynput import keyboard
+from pynput.keyboard import Key
 from abc import ABC, abstractclassmethod
-from amiya.utils.pynput_mapping import PYNPUT_KEY_MAPPING
-
+from amiya.utils.constants import PYNPUT_KEY_MAPPING
 '''
 Action: A single mouse of keyboard action.
 
@@ -23,6 +23,7 @@ class Action(ABC):
     @abstractclassmethod
     def __init__(self, *args):
         self.delay = ...
+        from pynput.keyboard import Key
     
     @abstractclassmethod
     def __repr__(self):

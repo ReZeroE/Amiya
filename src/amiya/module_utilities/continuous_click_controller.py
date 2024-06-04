@@ -5,8 +5,8 @@ from pynput import keyboard
 from threading import Event
 
 from amiya.exceptions.exceptions import AmiyaExit
-from amiya.utils.helper import aprint, Printer
-
+from amiya.utils.helper import aprint, Printer, is_admin, color_cmd
+from amiya.utils.constants import BASENAME
 
 class ContinuousClickController:
     def __init__(self):
@@ -28,7 +28,7 @@ class ContinuousClickController:
 
         listener = keyboard.Listener(on_press=self.__on_press)
         listener.start()
-
+        
         time.sleep(start_after)
         try:
             while True:
@@ -63,19 +63,26 @@ class ContinuousClickController:
 
 
     def __verbose_start(self, count, interval, randomize_by, hold_time, start_after, quiet):
-        title_text = Printer.to_lightblue(f"Uniform clicking starting in {start_after} seconds, press CTRL+C or the ESC key anytime to stop...")
-        count_text = "INFINITE" if count == -1 else count
-        count_text = Printer.to_purple("Total clicks:   ") + count_text
-        interval_text = Printer.to_purple("Click interval: ") + f"{interval} seconds"
+        title_text = Printer.to_lightblue(f"Uniform clicking starting in {start_after} seconds. Press CTRL+C or the ESC key anytime to stop...")
+        count_text = "INFINITE" if count == -1 else str(count)
+        count_text = Printer.to_purple(" - Total clicks:   ") + count_text
+        interval_text = Printer.to_purple(" - Click interval: ") + f"{interval} seconds"
         if randomize_by > 0:
             interval_text += f" + random(0, {randomize_by}) seconds"
-        hold_time_text = Printer.to_purple("Hold duration:  ") + f"{hold_time} seconds"
+        hold_time_text = Printer.to_purple(" - Hold duration:  ") + f"{hold_time} seconds"
+        
+        warning_text = ""
+        if not is_admin():
+            warning_text = Printer.to_lightred(f"\n\nNote: Currently not running {BASENAME} as admin. Clicks will not work in full-screened applications.")
+            ccmd = color_cmd("amiya elevate", with_quotes=True)
+            warning_text += Printer.to_lightred(f"\n      Run ") + ccmd + Printer.to_lightred(f" to elevate permissions to admin.")
         
         aprint(
             f"{title_text} \
             \n{count_text} \
             \n{hold_time_text} \
-            \n{interval_text}"
+            \n{interval_text} \
+            {warning_text}\n"
         )
 
     def __verbose_click(self, max_count):

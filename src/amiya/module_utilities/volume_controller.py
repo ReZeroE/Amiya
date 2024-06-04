@@ -1,7 +1,7 @@
+import os
 import sys
 import customtkinter as ctk
 from pycaw.pycaw import AudioUtilities
-import multiprocessing
 import subprocess
 
 from amiya.exceptions.exceptions import AmiyaExit
@@ -63,7 +63,8 @@ class AmiyaVolumeControllerUI(ctk.CTk):
     def __init__(self, spin_msg: SpinnerMessage):
         self.volumes = dict()
         self.spin_msg = spin_msg
-        
+        self.auto_reload_enabled = True  # Flag to control auto reload
+
         super().__init__()
         self.title('Application Volume Control')
 
@@ -75,18 +76,28 @@ class AmiyaVolumeControllerUI(ctk.CTk):
 
         self.apps = self.init_volume_controls()
         
-        self.after_id = self.after(1000, self.scheduled_update)  # Schedule an update every 1000ms
+        # self.after_id = self.after(1000, self.scheduled_update)  # Schedule an update every 1000ms
 
         # Dynamically set the window size based on the number of applications
-        window_height = min(600, max(200, 90 * len(self.apps)))
+        window_height = min(500, max(250, 95 * len(self.apps) + 50))
         self.geometry(f'400x{window_height}')
+
+        # Add refresh button at the bottom
+        self.refresh_button = ctk.CTkButton(self, text="Refresh", command=self.refresh_apps)
+        self.refresh_button.pack(pady=(10, 20))
 
         # Bind the close event to a custom handler
         self.protocol("WM_DELETE_WINDOW", self.on_close)
         self.attributes('-topmost', True)
         
+        self.set_icon()
         self.spin_msg.verbose_start()
-        
+
+    def set_icon(self):
+        icon_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources', "amiya.ico")
+        print(icon_path)
+        if os.path.exists(icon_path):
+            self.iconbitmap(icon_path)
 
     def init_volume_controls(self):
         sessions = AudioUtilities.GetAllSessions()
@@ -134,16 +145,19 @@ class AmiyaVolumeControllerUI(ctk.CTk):
                     self.after_cancel(self.after_id)
                 self.destroy()
 
-
-    def scheduled_update(self):
-        try:
-            if self.winfo_exists():
-                self.update_apps()  # Update the list of apps
-                self.after_id = self.after(1000, self.scheduled_update)  # Schedule the next update
-        except Exception as e:
-            print(f"Error during scheduled update: {e}")
-            self.after_cancel(self.after_id)
+    # def scheduled_update(self):
+    #     try:
+    #         if self.winfo_exists() and self.auto_reload_enabled:
+    #             self.update_apps()  # Update the list of apps
+    #             self.after_id = self.after(1000, self.scheduled_update)  # Schedule the next update
+    #     except Exception as e:
+    #         print(f"Error during scheduled update: {e}")
+    #         self.after_cancel(self.after_id)
             
+    def refresh_apps(self):
+        self.auto_reload_enabled = False  # Disable auto-reload
+        self.update_apps()  # Manually refresh the list of apps
+        self.auto_reload_enabled = True  # Enable auto-reload after refresh
 
     def update_apps(self):
         current_apps = set(self.apps)
@@ -163,12 +177,11 @@ class AmiyaVolumeControllerUI(ctk.CTk):
                     volume_control.pack(pady=5)
                     self.volumes[session.Process.name()] = (volume_control, volume)
 
-        
-
         stopped_apps = set()
         for app_name in current_apps:
             if app_name not in [session.Process.name() for session in sessions if session.Process]:
                 stopped_apps.add(app_name)
+                
                 # Find and remove the label and slider for the inactive app
                 for widget in self.frame.winfo_children():
                     if isinstance(widget, ctk.CTkLabel) and widget.cget("text") == app_name:
@@ -182,7 +195,7 @@ class AmiyaVolumeControllerUI(ctk.CTk):
             for app_name in stopped_apps:
                 self.apps.remove(app_name)
             
-            window_height = min(600, max(200, 90 * len(self.apps)))
+            window_height = min(500, max(250, 95 * len(self.apps) + 50))
             self.geometry(f'400x{window_height}')
 
             # Refresh the UI
@@ -202,6 +215,9 @@ def start_volume_control_ui():
         spin_msg.verbose_end()
         app_ui.destroy()
 
+if __name__ == "__main__":
+    start_volume_control_ui()
+
 
 ## DON"T USE THIS FOR NOW
 def start_volume_control_ui_detached():
@@ -209,7 +225,6 @@ def start_volume_control_ui_detached():
     python_executable = sys.executable
     creation_flags = subprocess.DETACHED_PROCESS
     subprocess.Popen([python_executable, __file__], creationflags=creation_flags)
-
 
 
 # if __name__ == '__main__':

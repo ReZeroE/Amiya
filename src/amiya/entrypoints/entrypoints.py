@@ -1,19 +1,18 @@
-import os
+print("Loading Amiya...", end="\r")
+
+
 import sys
 import time
-import psutil
 import argparse
+start_time = time.time()
 
-import ctypes
-import subprocess
-
-from termcolor import colored
 from amiya.entrypoints.entrypoint_handler import AmiyaEntrypointHandler
 from amiya.entrypoints.help_format_handler import HelpFormatHandler
 from amiya.utils.helper import aprint, verify_platform, is_admin, Printer, color_cmd
 from amiya.utils.constants import COMMAND
 from amiya.exceptions.exceptions import AmiyaOSNotSupported, AmiyaExit
 
+print(f"{Printer.to_lightred("(Dev)")} Amiya load time: {time.time() - start_time:.4f} seconds")
 
 class AmiyaArgParser(argparse.ArgumentParser):
     def __init__(self, *args, **kwargs):
@@ -29,9 +28,20 @@ class AmiyaArgParser(argparse.ArgumentParser):
         group['parsers'].append(parser)
         
     def error(self, message):
-        command = message.split("'")[1] if "invalid choice:" in message else None
-        helpt = Printer.to_purple("help")
-        aprint(f"Command not recognized: {command}\nType '{helpt}' for commands list")
+        if "invalid choice:" in message:
+            command = message.split("'")[1]
+            helpt = Printer.to_purple("help")
+            aprint(f"Command not recognized: {command}\nType '{helpt}' for the commands list")
+        else:
+            parts = message.split("'")
+            if len(parts) > 1:
+                command = parts[1]
+                helpt = Printer.to_purple(f"{command} --help")
+                aprint(f"{message.capitalize()}\nType '{helpt}' for its arguments list")
+            else:
+                helpt = Printer.to_purple("<command> --help")
+                aprint(f"{message.capitalize()}\nType '{helpt}' for its arguments list")
+        
         self.exit(2)
 
 
@@ -234,6 +244,10 @@ def start_amiya():
     track_url_parser.set_defaults(func=entrypoint_handler.track_url)
     parser.add_parser_to_group(utility_group, track_url_parser)
 
+    internet_speed_parser = subparsers.add_parser('internet-speed', help='Test internet speed', description='Test internet speed')
+    internet_speed_parser.add_argument('--url', type=str, default="", help='Custom download URL for the internet speed test')
+    internet_speed_parser.set_defaults(func=entrypoint_handler.internet_speed_test)
+    parser.add_parser_to_group(utility_group, internet_speed_parser)
     
     # # =================================================
     # # ================| SCHEDULER | ===================
@@ -241,6 +255,16 @@ def start_amiya():
     
     # start_parser = subparsers.add_parser('run-scheduler', help='Start and run the scheduler')
     # start_parser.set_defaults(func=entrypoint_handler.run_scheduler)
+    
+    
+    # =================================================
+    # =============| RAW AUTOMATIONS | ================
+    # =================================================
+    standalone_auto_group = parser.add_group('Standalone Automation', 'Standalone automations features (currently in development)')
+    
+    standalone_auto_parser = subparsers.add_parser('testrawauto', help='Track URL to monitor anchor href changes.', description='Track URL to monitor anchor href changes.')
+    standalone_auto_parser.set_defaults(func=entrypoint_handler.testrawauto)
+    parser.add_parser_to_group(standalone_auto_group, standalone_auto_parser)
     
     
     
@@ -292,7 +316,7 @@ def start_amiya():
             try:
                 args.func(args)
             except KeyboardInterrupt:
-                print("\nKeyboard Interrupt! Amiya Exiting.")
+                aprint("Keyboard Interrupt! Amiya Exiting.")
             except AmiyaExit:
                 exit()
         else:
