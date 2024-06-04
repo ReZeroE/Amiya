@@ -9,10 +9,32 @@ start_time = time.time()
 from amiya.entrypoints.entrypoint_handler import AmiyaEntrypointHandler
 from amiya.entrypoints.help_format_handler import HelpFormatHandler
 from amiya.utils.helper import aprint, verify_platform, is_admin, Printer, color_cmd
-from amiya.utils.constants import COMMAND
+from amiya.utils.constants import COMMAND, DEVELOPMENT
 from amiya.exceptions.exceptions import AmiyaOSNotSupported, AmiyaExit
 
-print(f"{Printer.to_lightred("(Dev)")} Amiya load time: {time.time() - start_time:.4f} seconds")
+# start_time = time.time()
+# from amiya.entrypoints.entrypoint_handler import AmiyaEntrypointHandler
+# print(f"AmiyaEntrypointHandler import time: {time.time() - start_time:.4f} seconds")
+
+# start_time = time.time()
+# from amiya.entrypoints.help_format_handler import HelpFormatHandler
+# print(f"HelpFormatHandler import time: {time.time() - start_time:.4f} seconds")
+
+# start_time = time.time()
+# from amiya.utils.helper import aprint, verify_platform, is_admin, Printer, color_cmd
+# print(f"amiya.utils.helper import time: {time.time() - start_time:.4f} seconds")
+
+# start_time = time.time()
+# from amiya.utils.constants import COMMAND, DEVELOPMENT
+# print(f"COMMAND import time: {time.time() - start_time:.4f} seconds")
+
+# start_time = time.time()
+# from amiya.exceptions.exceptions import AmiyaOSNotSupported, AmiyaExit
+# print(f"amiya.exceptions.exceptions import time: {time.time() - start_time:.4f} seconds")
+
+
+if DEVELOPMENT:
+    print(f"{Printer.to_lightred(f"(Dev={DEVELOPMENT})")} Amiya load time: {time.time() - start_time:.4f} seconds")
 
 class AmiyaArgParser(argparse.ArgumentParser):
     def __init__(self, *args, **kwargs):

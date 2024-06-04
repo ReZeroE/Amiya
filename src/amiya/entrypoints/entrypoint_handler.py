@@ -289,12 +289,16 @@ r"""
         cls_cmd = Printer.to_purple("clear")
         help_cmd = Printer.to_purple("help")
         
+        dev_str = ""
+        # if DEVELOPMENT:
+        #     dev_str = f"({Printer.to_lightred("Dev=True")}) {Printer.to_lightgrey("Development commands available.")}\n"
+            
         welcome_str = f"Welcome to the Amiya CLI Environment ({VERSION_DESC}-{VERSION})"
         exit_str = f"Type '{quit_cmd}' to quit amiya CLI"
         cls_str = f"Type '{cls_cmd}' to clear terminal"
         help_str = f"Type '{help_cmd}' to display commands list"
     
-        print(f"{welcome_str}\n  {help_str}\n  {exit_str}\n  {cls_str}\n")
+        print(f"{dev_str}{welcome_str}\n  {help_str}\n  {exit_str}\n  {cls_str}\n")
     
     
     # =================================================
