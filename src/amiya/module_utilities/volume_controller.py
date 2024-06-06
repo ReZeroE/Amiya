@@ -95,7 +95,6 @@ class AmiyaVolumeControllerUI(ctk.CTk):
 
     def set_icon(self):
         icon_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources', "amiya.ico")
-        print(icon_path)
         if os.path.exists(icon_path):
             self.iconbitmap(icon_path)
 

@@ -149,6 +149,7 @@ def start_amiya():
     
     start_parser = subparsers.add_parser('start', help='Start an application', description='Start an application')
     start_parser.add_argument('tag', nargs='?', default=None, help='Tag of the application to start')
+    start_parser.add_argument('--force', '-f', default=False, action='store_true', help='Force start application (shutdown and restart app if app is already running)')
     start_parser.set_defaults(func=entrypoint_handler.start)
     parser.add_parser_to_group(start_apps_group, start_parser)
     
@@ -270,6 +271,11 @@ def start_amiya():
     internet_speed_parser.add_argument('--url', type=str, default="", help='Custom download URL for the internet speed test')
     internet_speed_parser.set_defaults(func=entrypoint_handler.internet_speed_test)
     parser.add_parser_to_group(utility_group, internet_speed_parser)
+    
+    ip_parser = subparsers.add_parser('ip', help='Verbose IPv4 and IPv6 addresses (both connected and unconnected)', description='Verbose IPv4 and IPv6 addresses (both connected and unconnected)')
+    ip_parser.add_argument('--connected', '-c', action='store_true', default=False, help='Only show connected IP interfaces.')
+    ip_parser.set_defaults(func=entrypoint_handler.verbose_ip)
+    parser.add_parser_to_group(utility_group, ip_parser)
     
     # # =================================================
     # # ================| SCHEDULER | ===================

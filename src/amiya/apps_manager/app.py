@@ -184,7 +184,10 @@ class App:
         except Amiya_AppStoppedUnexpectedly as ex:
             raise AmiyaBaseException(f"The app '{self.name}' stopped unexpectedly. Therefore, it can't be brought to the foreground ({ex}).")
 
-        raise AmiyaBaseException(f"The app '{self.name}' cannot be brought to the foreground due to an unknown error.") 
+        # raise AmiyaBaseException(f"The app '{self.name}' cannot be brought to the foreground due to an unknown error.")
+        
+        aprint(f"The app '{self.name}' cannot be brought to the foreground due to an unknown error.\nThough the app might have been started successfully.", log_type=LogType.ERROR)
+
 
     # ==========================================
     # ============| APP UTILITIES | ============

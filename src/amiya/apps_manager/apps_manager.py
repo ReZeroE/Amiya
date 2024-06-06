@@ -168,27 +168,37 @@ class AppsManager:
     # ======================================
     # =============| RUN APP | =============
     # ======================================
-    def run_app(self, tag: str = None):
+    def run_app(self, tag: str = None, force: bool = False):
         self.__verify_non_empty_apps_dir()      # Verify that the apps dir is not empty
         
         app = None
         
         if tag == None:                         # If user did not provide a tag
             self.print_apps()
-            user_input = input(atext(f"Which app would you like to run? {self.__get_apps_id_range()}: "))
-            app = self.apps[int(user_input)]
+            user_input_id = input(atext(f"Which app would you like to run? {self.__get_apps_id_range()}: "))
+            app = self.get_app_with_id(user_input_id)
         else:                                   # If user provided an application tag
             tag = self.__parse_tag(tag)
             app = self.get_app_by_tag(tag)
         
-        self.__safe_start_app(app)
+        self.__safe_start_app(app, force)
     
     
-    def __safe_start_app(self, app: App):
-        aprint(f"Starting application {app.name}...", end="\r")
+    def __safe_start_app(self, app: App, force: bool = False):
+        if not force:
+            aprint(f"Starting application {app.name}...", end="\r")
+        else:
+            aprint(f"Starting application {app.name} (force=True)...")
         
         try:
+            if force and app.is_running():
+                aprint("App is running, terminating residual processes...")
+                ProcessHandler.kill_pid_and_residual(app.get_app_process().pid)
+                time.sleep(3)
+                aprint("Residual processes terminated... Starting application...")
+                
             ret = app.run()
+            
         except Amiya_AppInvalidPathException as ex:    # Application path invalid
             aprint(ex.message, log_type=LogType.ERROR); raise AmiyaExit()
         
@@ -204,12 +214,15 @@ class AppsManager:
     
     def __safe_terminate_current_app(self):
         pid = SafetyMonitor.get_focused_pid()
-        
+        self.safe_terminate_process(pid)
+
+
+    def safe_terminate_process(self, pid: int):
         try:
             app_process = psutil.Process(pid)
             app_name = app_process.name()
         except:
-            aprint("Unable to terminate application because it is already closed.", log_type=LogType.ERROR); raise AmiyaExit()
+            aprint("Unable to terminate process because it is already closed.", log_type=LogType.ERROR); raise AmiyaExit()
         
         try:
             if app_process.is_running():
@@ -244,7 +257,7 @@ class AppsManager:
       
     def print_apps(self, format="fancy_grid"):
         tabulated_apps_table = AppsViewer.tabulate_apps(self.apps, tablefmt=format)
-        print(Printer.to_lightred(">> Applications Table"))
+        print(Printer.to_lightred("""\n==============| APPLICATIONS TABLE |=============="""))
         print(tabulated_apps_table)
         
     def print_apps_list(self, apps: list[App], format="fancy_grid"):
@@ -294,8 +307,9 @@ class AppsManager:
         app.save_app_config()
         self.__saved_to_cache(app)
         
-        aprint(f"New tag `{new_tag}` has been added successfully.")
-    
+        self.print_app(app)
+        aprint(f"New tag `{new_tag}` has been added successfully.\nTo start this application, run:")
+            
     def remove_tag(self):
         self.__verify_non_empty_apps_dir()
         
@@ -309,7 +323,7 @@ class AppsManager:
             raise AmiyaExit()
         
         self.print_tags(app)
-        tag_idx = input(atext(f"Which tag would you like to remove? {self.__get_app_tag_id_range()}: "))
+        tag_idx = input(atext(f"Which tag would you like to remove? {self.__get_app_tag_id_range(app)}: "))
         removing_tag = app.tags[int(tag_idx)]
         try:
             app.remove_tag(removing_tag)
@@ -318,6 +332,10 @@ class AppsManager:
         app.save_app_config()
         
         self.__saved_to_cache(app)
+        
+        self.print_app(app)
+        aprint(f"The tag `{removing_tag}` has been removed successfully.")
+    
     
     def __parse_tag(self, tag: str):
         return tag.strip()

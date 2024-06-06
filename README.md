@@ -36,7 +36,7 @@ Designed to be lightweight and fully CLI-based with Linux key-bindings even on W
 ***
 
 ## Installation Guide
-To install the beta version of the `amiya` package locally, run:
+**To install** the beta version of the `amiya` package locally, run:
 ```bash
 $ pip install amiya==0.0.4
 ```
@@ -47,11 +47,9 @@ $ cd Amiya/
 $ pip install -e .
 ```
 
-**Alternatively**, you may install the most up-to-date development version by cloning the `dev` branch (unstable):
-```bash
-$ git clone -b dev https://github.com/ReZeroE/Amiya.git
-$ cd Amiya/
-$ pip install -e .
+**To verify** that the installation was successful, run:
+```
+$ amiya version
 ```
 
 ***
@@ -87,6 +85,41 @@ To list all commands currently supported, run:
 ```
 
 ##### More Documentation Coming soon!
+
+
+<!-- ### Module Utilities
+The module `amiya` offers a list of easily-accessible utility features to help with daily tasks. 
+
+#### **1. Internet speed test**
+```
+$ amiya internet-speed
+OR
+$ amiya internet-speed --url <download_url>
+```
+<img src="src/amiya/resources/module_utilities_imgs/internet-speed.png" alt="Amiya Icon"/>
+
+
+
+#### **2. Volume Control By Application**
+```
+$ amiya volume
+```
+<img src="src/amiya/resources/module_utilities_imgs/pixel-color.png" alt="Amiya Icon"/>
+
+
+
+ -->
+
+
+
+
+
+
+
+
+
+
+
 
 ***
 

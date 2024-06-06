@@ -12,6 +12,7 @@ from amiya.module_utilities.continuous_click_controller import ContinuousClickCo
 from amiya.module_utilities.url_tracker import URLTracker
 from amiya.module_utilities.dev_features import DevController
 from amiya.module_utilities.internet_speed import InternetSpeedTest
+from amiya.module_utilities.network_controller import NetworkController
 
 from amiya.raw_automation_manager.raw_auto_manager import RawAutoManager
 
@@ -102,7 +103,7 @@ class AmiyaEntrypointHandler:
     # =================================================
     
     def start(self, args):
-        self.apps_manager.run_app(args.tag)
+        self.apps_manager.run_app(args.tag, args.force)
             
            
     # =================================================
@@ -236,6 +237,9 @@ By invoking the elevate command, you are granting `amiya` admin access.
         if DEVELOPMENT:
             InternetSpeedTest.run()
 
+    def verbose_ip(self, args):
+        network_controller = NetworkController()
+        network_controller.verbose_ip_addresses(connected_only=args.connected)
 
     # =================================================
     # ================| SCHEDULER | ===================

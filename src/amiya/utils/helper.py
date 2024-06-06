@@ -35,10 +35,16 @@ class LogType(Enum):
     WARNING = "yellow"
     ERROR   = "red"
 
+def __get_colored_prefix():
+    return f"[{colored(BASENAME, "cyan")}] "
+
+def __get_colored_submodule(submodule_name):
+    colored_submodule_name = Printer.to_purple(submodule_name)
+    return f"[{colored_submodule_name}] "
+
 def atext(text: str, log_type: LogType = LogType.NORMAL) -> str:
-    prefix = colored(BASENAME, "cyan")
     rtext = colored(text, log_type.value)
-    return f"[{prefix}] {rtext}"
+    return f"{__get_colored_prefix()}{rtext}"
 
 def aprint(
     text: str, 
@@ -54,13 +60,18 @@ def aprint(
     if "\n" in text and new_line_no_prefix == True:
         text = text.replace("\n", f"\n        ")
     
+    # Set colored submodule name if available
+    colored_submodule_name = ""
     if submodule_name:
-        submodule_name = Printer.to_purple(submodule_name)
-        submodule_name = f"[{submodule_name}] "
-        text = submodule_name + text
+        colored_submodule_name = __get_colored_submodule(submodule_name)
     
-    rtext = atext(text, log_type)
-    print(rtext, end=end, file=file, flush=flush)
+    # Get colored prefix and text
+    colored_text = colored(text, log_type.value)
+    colored_prefix = __get_colored_prefix()
+    
+    # Put all together and print
+    final_text = f"{colored_prefix}{colored_submodule_name}{colored_text}"
+    print(final_text, end=end, file=file, flush=flush)
 
 def get_prefix_space():
     return " " * (len(BASENAME)+2)
@@ -386,28 +397,55 @@ class ProcessHandler:
         return parent_procs, children_procs
     
     @staticmethod
-    def kill_pid(pid):
+    def kill_pid(pid, verbose_failure=True, is_child=False):
+        
+        process_info = f"process {pid}" if not is_child else f"child process {pid}"
         try:
             proc = psutil.Process(pid)
             if proc.is_running():
-                proc.kill()
+                proc.kill(); time.sleep(0.1)
+                
+                aprint(f"Process {proc.name()} (PID {proc.pid}) terminated successfully.", submodule_name="ProcHandler")
                 return True
         
         except psutil.NoSuchProcess:
-            if DEVELOPMENT:
-                aprint(f"[DEV] Unabled to kill proc {pid} because it's already closed.")
+            if verbose_failure:
+                aprint(f"Unabled to terminate {process_info} because it's already closed.", log_type=LogType.ERROR, submodule_name="ProcHandler")
         except Exception as ex:
-            if DEVELOPMENT:
-                aprint(f"[DEV] Unabled to kill proc {pid} ({ex}).")
+            if verbose_failure:
+                aprint(f"Unabled to terminate {process_info} ({ex}).", log_type=LogType.ERROR, submodule_name="ProcHandler")
         return False
 
     
     @staticmethod
-    def kill_pids(pids: list[int], excluding_pids: list[int] = []):
-        for pid in pids:
-            if pid not in excluding_pids:
-                ProcessHandler.kill_pid(pid)
+    def kill_pid_and_residual(pid):
+        try:
+            proc = psutil.Process(pid)
+            child_procs = []
+            try:
+               child_procs = proc.children(recursive=True)
+            except:
+                pass
+        except psutil.NoSuchProcess:
+            aprint(f"Unabled to terminate root process {pid} because it's already closed.", log_type=LogType.WARNING, submodule_name="ProcHandler")
+            return
+        
+        ProcessHandler.kill_pid(pid, verbose_failure=True)
+        
+        for cproc in child_procs:
+            if cproc.is_running():
+                ProcessHandler.kill_pid(cproc.pid, verbose_failure=False, is_child=True)
+                time.sleep(0.5)
 
+
+    
+    # @staticmethod
+    # def kill_pids(pids: list[int], excluding_pids: list[int] = []):
+    #     for pid in pids:
+    #         if pid not in excluding_pids:
+    #             ProcessHandler.kill_pid(pid)
+
+        
          
 import hashlib
 class HashCalculator:
